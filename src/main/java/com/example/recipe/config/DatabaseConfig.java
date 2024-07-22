@@ -1,4 +1,4 @@
-package com.example.recipe.utils;
+package com.example.recipe.config;
 
 import java.io.IOException;
 import java.io.InputStream;
