@@ -15,6 +15,6 @@ module com.example.recipe {
 
     opens com.example.recipe to javafx.fxml;
     exports com.example.recipe;
-    exports com.example.recipe.uicontrollers.common;
     opens com.example.recipe.uicontrollers.common to javafx.fxml;
+    exports com.example.recipe.uicontrollers.common;
 }
