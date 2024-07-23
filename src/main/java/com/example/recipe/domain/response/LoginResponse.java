@@ -7,14 +7,16 @@ public class LoginResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private boolean isAdmin;
 
-    public LoginResponse(String token, int id, String username, String email, String firstName, String lastName) {
+    public LoginResponse(String token, int id, String username, String email, String firstName, String lastName, boolean isAdmin) {
         this.token = token;
         this.id = id;
         this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isAdmin = isAdmin;
     }
 
     public String getToken() {
@@ -63,5 +65,26 @@ public class LoginResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+                "token='" + token + '\'' +
+                ", id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }

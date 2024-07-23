@@ -11,6 +11,7 @@ module com.example.recipe {
     requires java.sql;
     requires org.postgresql.jdbc;
     requires org.slf4j;
+    requires jbcrypt;
 
     opens com.example.recipe to javafx.fxml;
     exports com.example.recipe;
