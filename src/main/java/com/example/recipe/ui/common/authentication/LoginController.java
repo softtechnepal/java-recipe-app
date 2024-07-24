@@ -29,8 +29,6 @@ public class LoginController {
     @FXML
     private ImageView logoImageView;
     @FXML
-    private Label titleLabel;
-    @FXML
     private TextField usernameField;
     @FXML
     private PasswordField passwordField;
@@ -48,6 +46,7 @@ public class LoginController {
         });
     }
 
+    @FXML
     private void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -81,8 +80,6 @@ public class LoginController {
 
     @FXML
     private void handleRegister() {
-        // Navigate to registration screen
-        logger.info("Navigating to register-view.fxml");
         NavigationUtil.navigateTo("register-view.fxml");
     }
 

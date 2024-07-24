@@ -14,7 +14,7 @@
                 <Insets bottom="60" left="60" right="60" top="20"/>
             </padding>
             <ImageView fx:id="logoImageView" fitWidth="200.0" preserveRatio="true"/>
-            <Label fx:id="titleLabel" text="Welcome to My Recipe" textFill="#FFFFFF"/>
+            <Label text="Welcome to My Recipe" textFill="#FFFFFF"/>
             <VBox alignment="CENTER" spacing="10">
                 <TextField fx:id="usernameField" maxWidth="250.0" promptText="Username"
                            style="-fx-background-radius: 6;"/>
@@ -40,7 +40,8 @@
                     </effect>
                 </Button>
             </HBox>
-            <Label fx:id="registerLabel" alignment="CENTER" onMouseClicked="#handleRegister" text="Register"
+            <Label fx:id="registerLabel" alignment="CENTER" onMouseClicked="#handleRegister"
+                   text="Don't hava an account? Register"
                    textFill="#007bff"/>
 
             <Label fx:id="guestLabel" alignment="CENTER" onMouseClicked="#handleContinueAsGuest"
