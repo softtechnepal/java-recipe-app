@@ -6,15 +6,15 @@ public class UserRequest {
     private String password;
     private String firstName;
     private String lastName;
-    private boolean isAdmin;
+    private String confirmPassword;
 
-    public UserRequest(String email, String username, String password, String firstName, String lastName, boolean isAdmin) {
+    public UserRequest(String email, String username, String password, String firstName, String lastName, String confirmPassword) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.isAdmin = isAdmin;
+        this.confirmPassword = confirmPassword;
     }
 
     public String getEmail() {
@@ -57,11 +57,11 @@ public class UserRequest {
         this.lastName = lastName;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
