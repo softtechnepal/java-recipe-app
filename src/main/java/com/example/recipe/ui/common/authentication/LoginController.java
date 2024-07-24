@@ -1,7 +1,8 @@
-package com.example.recipe.ui.common.login;
+package com.example.recipe.ui.common.authentication;
 
 import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.services.AuthenticationService;
+import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.ViewUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+
+import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class LoginController {
     @FXML
@@ -79,6 +82,8 @@ public class LoginController {
     @FXML
     private void handleRegister() {
         // Navigate to registration screen
+        logger.info("Navigating to register-view.fxml");
+        NavigationUtil.navigateTo("register-view.fxml");
     }
 
     @FXML

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.common.authentication.RegisterController">
+    <BorderPane prefHeight="401.0" prefWidth="602.0">
+        <center>
+            <Button fx:id="btnLogin" mnemonicParsing="false" text="Login Page" BorderPane.alignment="CENTER"/>
+        </center>
+    </BorderPane>
+</AnchorPane>
