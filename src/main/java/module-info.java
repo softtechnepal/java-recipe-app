@@ -18,4 +18,6 @@ module com.example.recipe {
     exports com.example.recipe;
     exports com.example.recipe.ui.common.authentication;
     opens com.example.recipe.ui.common.authentication to javafx.fxml;
+    exports com.example.recipe.ui.user;
+    opens com.example.recipe.ui.user to javafx.fxml;
 }

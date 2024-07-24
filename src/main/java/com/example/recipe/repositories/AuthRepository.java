@@ -9,4 +9,6 @@ public interface AuthRepository {
     DbResponse<LoginResponse> login(LoginRequest request);
 
     DbResponse<String> register(UserRequest register);
+
+    DbResponse<String> forgotPassword(String email);
 }

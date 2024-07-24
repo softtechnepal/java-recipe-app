@@ -11,9 +11,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-
-import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class LoginController {
     @FXML
@@ -40,10 +37,12 @@ public class LoginController {
         Image logoImage = new Image("file:src/main/resources/assets/app_logo.png");
         logoImageView.setImage(logoImage);
 
+        //Test Data
+        usernameField.setText("prachan.ghale");
+        passwordField.setText("test");
+
         // Add event handlers for buttons here
-        loginButton.setOnAction(event -> {
-            handleLogin();
-        });
+        loginButton.setOnAction(event -> handleLogin());
     }
 
     @FXML
@@ -55,8 +54,10 @@ public class LoginController {
             AuthenticationService authenticationService = new AuthenticationService();
             var result = authenticationService.authenticate(loginRequest);
             if (result.isSuccess()) {
-                ViewUtil.setVisibility(usernameErrorLabel, false);
-                // Navigate to home screen
+                if (result.getData().isAdmin())
+                    NavigationUtil.navigateTo("admin-dashboard-view.fxml");
+                else
+                    NavigationUtil.navigateTo("dashboard-view.fxml");
             } else {
                 ViewUtil.setTextAndVisibility(passwordErrorLabel, result.getMessage(), true);
             }
@@ -88,7 +89,7 @@ public class LoginController {
         // Navigate to forgot password screen
     }
 
-    public void handleContinueAsGuest(MouseEvent mouseEvent) {
+    public void handleContinueAsGuest() {
         // Navigate to home screen as guest
     }
 }

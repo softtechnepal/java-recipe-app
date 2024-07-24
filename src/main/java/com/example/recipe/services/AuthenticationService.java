@@ -22,4 +22,8 @@ public class AuthenticationService {
         return authRepository.register(register);
     }
 
+    public DbResponse<String> forgotPassword(String email) {
+        return authRepository.forgotPassword(email);
+    }
+
 }

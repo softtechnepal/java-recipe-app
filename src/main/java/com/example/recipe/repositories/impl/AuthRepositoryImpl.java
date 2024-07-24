@@ -91,4 +91,9 @@ public class AuthRepositoryImpl implements AuthRepository {
             return new DbResponse.Failure<>(e.getMessage());
         }
     }
+
+    @Override
+    public DbResponse<String> forgotPassword(String email) {
+        return new DbResponse.Failure<>("Not implemented");
+    }
 }
