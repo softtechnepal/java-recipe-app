@@ -21,6 +21,9 @@ public class NavigationUtil {
             FXMLLoader loader = new FXMLLoader(NavigationUtil.class.getResource("/com/example/recipe/" + fxmlFile));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
+            stage.setHeight(480);
+            stage.setWidth(640);
+            stage.setResizable(false);
             stage.setTitle("Recipe App");
             stage.setMaximized(true);
             stage.show();

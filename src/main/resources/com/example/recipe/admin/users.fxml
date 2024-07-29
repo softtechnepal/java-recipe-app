@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.admin.UserController">
+    <TableView fx:id="userTable" prefHeight="480.0" prefWidth="500.0">
+        <columns>
+            <TableColumn fx:id="userId" prefWidth="31.999998450279236" text="ID">
+                <cellValueFactory>
+                    <PropertyValueFactory property="userId" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="firstNameColumn" prefWidth="72.0" text="First Name">
+                <cellValueFactory>
+                    <PropertyValueFactory property="firstName" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="lastNameColumn" prefWidth="68.00000762939453" text="Last Name">
+                <cellValueFactory>
+                    <PropertyValueFactory property="lastName" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="usernameColumn" prefWidth="70.4000244140625" text="Username">
+                <cellValueFactory>
+                    <PropertyValueFactory property="username" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="typeColumn" prefWidth="41.5999755859375" text="Type">
+                <cellValueFactory>
+                    <PropertyValueFactory property="type" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="statusColumn" prefWidth="50.4000244140625" text="Status">
+                <cellValueFactory>
+                    <PropertyValueFactory property="status" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="createdAtColumn" prefWidth="81.5999755859375" text="Created At">
+                <cellValueFactory>
+                    <PropertyValueFactory property="createdAt" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="actions" prefWidth="80.800048828125" text="Actions" />
+        </columns>
+    </TableView>
+</AnchorPane>
