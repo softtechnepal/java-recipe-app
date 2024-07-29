@@ -46,6 +46,9 @@
 
             <Label fx:id="guestLabel" alignment="CENTER" onMouseClicked="#handleContinueAsGuest"
                    text="Continue as Guest" textFill="#007bff"/>
+<!--            TODO:Prachan-->
+            <Label fx:id="adminLabel" alignment="CENTER" onMouseClicked="#handleContinueAsAdmin"
+                   text="Continue as Admin" textFill="#007bff"/>
         </VBox>
     </center>
     <style>
