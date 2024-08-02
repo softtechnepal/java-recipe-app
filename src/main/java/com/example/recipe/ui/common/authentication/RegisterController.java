@@ -6,10 +6,7 @@ import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.ViewUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -72,7 +69,7 @@ public class RegisterController {
         var result = authenticationService.register(request);
 
         if (result.isSuccess()) {
-            DialogUtil.showSuccessDialog("Registration successful", "You have successfully registered!");
+            DialogUtil.showDialog(Alert.AlertType.INFORMATION, "Registration successful", "You have successfully registered!");
             NavigationUtil.navigateTo("login-view.fxml");
         } else {
             ViewUtil.setTextAndVisibility(confirmPasswordErrorLabel, result.getMessage(), true);

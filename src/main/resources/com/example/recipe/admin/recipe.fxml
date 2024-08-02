@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.admin.RecipeController">
+    <TableView prefHeight="480.0" prefWidth="500.0" fx:id="recipeTable">
+      <columns>
+          <TableColumn fx:id="recipeId" text="Recipe ID"/>
+          <TableColumn fx:id="title" text="Title"/>
+<!--          <TableColumn prefWidth="100" fx:id="description" text="Description"/>-->
+<!--          <TableColumn fx:id="image" text="Image"/>-->
+<!--          <TableColumn fx:id="videoUrl" text="Video URL"/>-->
+          <TableColumn fx:id="user" text="Made By"/>
+          <TableColumn fx:id="createdAt" text="Created At"/>
+          <TableColumn prefWidth="100" fx:id="actions" text="Action"/>
+
+      </columns>
+    </TableView>
+</AnchorPane>

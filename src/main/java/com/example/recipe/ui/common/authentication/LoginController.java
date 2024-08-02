@@ -5,6 +5,7 @@ import com.example.recipe.services.AuthenticationService;
 import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.ViewUtil;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -91,5 +92,9 @@ public class LoginController {
 
     public void handleContinueAsGuest() {
         // Navigate to home screen as guest
+    }
+
+    public void handleContinueAsAdmin(MouseEvent mouseEvent){
+        NavigationUtil.navigateTo("admin/base-view.fxml");
     }
 }
