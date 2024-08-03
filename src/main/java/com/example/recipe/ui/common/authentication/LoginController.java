@@ -1,20 +1,17 @@
 package com.example.recipe.ui.common.authentication;
 
+import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.request.LoginRequest;
+import com.example.recipe.domain.response.LoginResponse;
 import com.example.recipe.services.AuthenticationService;
+import com.example.recipe.utils.DialogUtil;
+import com.example.recipe.utils.LoggerUtil;
 import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.ViewUtil;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import javax.swing.*;
-import java.awt.event.MouseEvent;
 
 public class LoginController {
     @FXML
@@ -42,8 +39,8 @@ public class LoginController {
         logoImageView.setImage(logoImage);
 
         //Test Data
-        usernameField.setText("prachan.ghale");
-        passwordField.setText("test");
+        usernameField.setText("adminadmin");
+        passwordField.setText("admin");
 
         // Add event handlers for buttons here
         loginButton.setOnAction(event -> handleLogin());
@@ -58,15 +55,21 @@ public class LoginController {
 
         if (validateLogin(loginRequest)) {
             AuthenticationService authenticationService = new AuthenticationService();
-            var result = authenticationService.authenticate(loginRequest);
-            if (result.isSuccess()) {
-                if (result.getData().isAdmin())
-                    NavigationUtil.navigateTo("admin-dashboard-view.fxml");
-                else
-                    NavigationUtil.navigateTo("dashboard-view.fxml");
-            } else {
-                ViewUtil.setTextAndVisibility(passwordErrorLabel, result.getMessage(), true);
+            authenticationService.authenticate(loginRequest, this::handleLoginResponse);
+        }
+    }
+
+
+    private void handleLoginResponse(DbResponse<LoginResponse> response) {
+        LoggerUtil.logger.error("Login response: {}", response instanceof DbResponse.Success ? "Success" : "Failure");
+        if (response instanceof DbResponse.Success) {
+            if (response.getData().isAdmin()) {
+                NavigationUtil.navigateTo("admin/dashboard.fxml");
+                return;
             }
+            NavigationUtil.navigateTo("dashboard-view.fxml");
+        } else if (response instanceof DbResponse.Failure) {
+            DialogUtil.showErrorDialog("Login Failed", response.getMessage());
         }
     }
 
@@ -98,5 +101,4 @@ public class LoginController {
     public void handleContinueAsGuest() {
         // Navigate to home screen as guest
     }
-
 }

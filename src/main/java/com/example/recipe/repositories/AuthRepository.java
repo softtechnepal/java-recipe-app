@@ -1,14 +1,15 @@
 package com.example.recipe.repositories;
 
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.domain.request.UserRequest;
 import com.example.recipe.domain.response.LoginResponse;
 
 public interface AuthRepository {
-    DbResponse<LoginResponse> login(LoginRequest request);
+    void login(LoginRequest request, DatabaseCallback<LoginResponse> result);
 
-    DbResponse<String> register(UserRequest register);
+    void register(UserRequest register, DatabaseCallback<String> result);
 
     DbResponse<String> forgotPassword(String email);
 }

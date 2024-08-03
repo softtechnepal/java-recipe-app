@@ -1,5 +1,6 @@
 package com.example.recipe.utils;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,32 +17,36 @@ public class NavigationUtil {
 
 
     public static void navigateTo(String fxmlFile) {
-        try {
-            Stage primaryStage = PrimaryStageUtil.getPrimaryStage();
-            if (primaryStage == null) {
-                logger.error("Primary stage is not set");
-                return;
-            }
+        // Ensure the following block runs on the JavaFX Application Thread
+        Platform.runLater(() -> {
+                    try {
+                        Stage primaryStage = PrimaryStageUtil.getPrimaryStage();
+                        if (primaryStage == null) {
+                            logger.error("Primary stage is not set");
+                            return;
+                        }
 
-            FXMLLoader loader = new FXMLLoader(NavigationUtil.class.getResource(FXML_PATH + fxmlFile));
-            Parent root = loader.load();
+                        FXMLLoader loader = new FXMLLoader(NavigationUtil.class.getResource(FXML_PATH + fxmlFile));
+                        Parent root = loader.load();
 
-            Scene scene = primaryStage.getScene();
-            if (scene == null) {
-                scene = new Scene(root);
-                primaryStage.setMinHeight(800);
-                primaryStage.setMinWidth(800);
-            } else {
-                scene.setRoot(root);
-            }
-            String css = Objects.requireNonNull(NavigationUtil.class.getResource(CSS_PATH)).toExternalForm();
-            scene.getStylesheets().add(css);
+                        Scene scene = primaryStage.getScene();
+                        if (scene == null) {
+                            scene = new Scene(root);
+                            primaryStage.setMinHeight(800);
+                            primaryStage.setMinWidth(800);
+                        } else {
+                            scene.setRoot(root);
+                        }
+                        String css = Objects.requireNonNull(NavigationUtil.class.getResource(CSS_PATH)).toExternalForm();
+                        scene.getStylesheets().add(css);
 
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("Recipe App");
-            primaryStage.show();
-        } catch (IOException e) {
-            logger.error("Error navigating to {}", fxmlFile, e);
-        }
+                        primaryStage.setScene(scene);
+                        primaryStage.setTitle("Recipe App");
+                        primaryStage.show();
+                    } catch (IOException e) {
+                        logger.error("Error navigating to {}", fxmlFile, e);
+                    }
+                }
+        );
     }
 }

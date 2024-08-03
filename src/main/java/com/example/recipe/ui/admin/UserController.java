@@ -2,7 +2,9 @@ package com.example.recipe.ui.admin;
 
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
-import static com.example.recipe.utils.DialogUtil.showDialog;
+
+import static com.example.recipe.utils.DialogUtil.showErrorDialog;
+import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 import com.example.recipe.services.admin_access.AdminUserService;
@@ -121,11 +123,11 @@ public class UserController {
         AdminUserService userService = new AdminUserService();
         DbResponse<User> response = userService.toggleUserStatus(userId, status);
         if (response.isSuccess()) {
-            showDialog(AlertType.INFORMATION, "Success", "User status changed to "+ status);
+            showInfoDialog("Success", "User status changed to " + status);
             loadTableData();
         } else {
             logger.error("Error changing status: " + response.getMessage());
-            showDialog(AlertType.ERROR, "Error", "Failed to change status: " + response.getMessage());
+            showErrorDialog("Error", "Failed to change status: " + response.getMessage());
         }
     }
 

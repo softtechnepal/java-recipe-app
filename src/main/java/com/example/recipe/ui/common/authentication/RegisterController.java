@@ -66,14 +66,14 @@ public class RegisterController {
             return;
         }
         AuthenticationService authenticationService = new AuthenticationService();
-        var result = authenticationService.register(request);
-
-        if (result.isSuccess()) {
-            DialogUtil.showDialog(Alert.AlertType.INFORMATION, "Registration successful", "You have successfully registered!");
-            NavigationUtil.navigateTo("login-view.fxml");
-        } else {
-            ViewUtil.setTextAndVisibility(confirmPasswordErrorLabel, result.getMessage(), true);
-        }
+        authenticationService.register(request, data -> {
+            if (data.isSuccess()) {
+                DialogUtil.showInfoDialog("Success", data.getMessage());
+                // NavigationUtil.navigateTo("login-view.fxml");
+            } else {
+                DialogUtil.showErrorDialog("Error", data.getMessage());
+            }
+        });
 
     }
 

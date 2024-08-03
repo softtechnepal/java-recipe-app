@@ -2,7 +2,7 @@
 
 
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefWidth="800" prefHeight="700" style="-fx-background-color: White;"
+<AnchorPane prefWidth="800" prefHeight="700"
             xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22"
             fx:controller="com.example.recipe.ui.user.DashboardController">
 

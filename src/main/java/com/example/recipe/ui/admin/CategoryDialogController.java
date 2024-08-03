@@ -11,7 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import static com.example.recipe.utils.DialogUtil.showDialog;
+import static com.example.recipe.utils.DialogUtil.showErrorDialog;
+import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 
 public class CategoryDialogController {
     @FXML
@@ -26,36 +27,36 @@ public class CategoryDialogController {
     private Stage dialogStage;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         categoryService = new AdminCategoryService();
     }
 
     public void handleSubmit(ActionEvent actionEvent) {
         String categoryName = categoryNameField.getText();
         if (categoryName == null || categoryName.trim().isEmpty()) {
-            showDialog(Alert.AlertType.ERROR, "Validation Error", "Category Name is required.");
+            showErrorDialog("Validation Error", "Category Name is required.");
             return;
         }
-        if (isEditMode){
+        if (isEditMode) {
             // Update the existing category
             category.setCategoryName(categoryName);
             DbResponse<Category> res = categoryService.updateCategory(category);
-            if(res.isSuccess()){
-                showDialog(Alert.AlertType.INFORMATION, "Success", "Category Updated Successfully");
+            if (res.isSuccess()) {
+                showErrorDialog("Success", "Category Updated Successfully");
                 dialogStage.close();
-            }else{
-                showDialog(Alert.AlertType.ERROR, "Error", "Failed to update the category");
+            } else {
+                showErrorDialog("Error", "Failed to update the category");
             }
-        }else{
+        } else {
             // Add a new category
             Category newCategory = new Category();
             newCategory.setCategoryName(categoryName);
             DbResponse<Category> res = categoryService.addCategory(newCategory);
-            if(res.isSuccess()){
-                showDialog(Alert.AlertType.INFORMATION, "Success", "Category added Successfully");
+            if (res.isSuccess()) {
+                showInfoDialog("Success", "Category added Successfully");
                 dialogStage.close();
-            }else{
-                showDialog(Alert.AlertType.ERROR, "Error", "Failed to add the category");
+            } else {
+                showErrorDialog("Error", "Failed to add the category");
             }
         }
 
@@ -65,7 +66,7 @@ public class CategoryDialogController {
         this.dialogStage = dialogStage;
     }
 
-        public void setCategory(Category category) {
+    public void setCategory(Category category) {
         this.category = category;
         this.isEditMode = true;
         dialogTitle.setText("Edit Category");
