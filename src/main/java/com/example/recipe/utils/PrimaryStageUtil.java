@@ -2,7 +2,7 @@ package com.example.recipe.utils;
 
 import javafx.stage.Stage;
 
-public class StageManager {
+public class PrimaryStageUtil {
     private static Stage primaryStage;
 
     public static void setPrimaryStage(Stage stage) {
@@ -12,6 +12,4 @@ public class StageManager {
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
-
-
 }
