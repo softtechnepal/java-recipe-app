@@ -55,7 +55,7 @@ public class RecipeController {
             return new SimpleStringProperty(getUserName(userId));
         });
         createdAt.setCellValueFactory(cellData -> {
-            String[] parts = cellData.getValue().getCreatedAt().toString().split(" ");
+            String[] parts = cellData.getValue().getCreatedAt().split(" ");
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
         });

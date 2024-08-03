@@ -33,13 +33,14 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
+    @FXML
     public void initialize() {
         // Load the logo image here
         Image logoImage = new Image("file:src/main/resources/assets/app_logo.png");
         logoImageView.setImage(logoImage);
 
         //Test Data
-        usernameField.setText("adminadmin");
+        usernameField.setText("admin");
         passwordField.setText("admin");
 
         // Add event handlers for buttons here
@@ -48,7 +49,6 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
-
         String username = usernameField.getText();
         String password = passwordField.getText();
         LoginRequest loginRequest = new LoginRequest(username, password);
@@ -59,12 +59,11 @@ public class LoginController {
         }
     }
 
-
     private void handleLoginResponse(DbResponse<LoginResponse> response) {
         LoggerUtil.logger.error("Login response: {}", response instanceof DbResponse.Success ? "Success" : "Failure");
         if (response instanceof DbResponse.Success) {
             if (response.getData().isAdmin()) {
-                NavigationUtil.navigateTo("admin/dashboard.fxml");
+                NavigationUtil.navigateTo("admin/base-view.fxml");
                 return;
             }
             NavigationUtil.navigateTo("dashboard-view.fxml");

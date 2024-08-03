@@ -4,9 +4,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
@@ -14,13 +17,13 @@ import static com.example.recipe.utils.LoggerUtil.logger;
 public class NavigationUtil {
     private static final String FXML_PATH = "/com/example/recipe/";
     private static final String CSS_PATH = "/com/example/recipe/css/main.css";
-
+    private static String currentScreen = ".";
 
     public static void navigateTo(String fxmlFile) {
         // Ensure the following block runs on the JavaFX Application Thread
         Platform.runLater(() -> {
                     try {
-                        Stage primaryStage = PrimaryStageUtil.getPrimaryStage();
+                        Stage primaryStage = SingletonObjects.getInstance().getPrimaryStage();
                         if (primaryStage == null) {
                             logger.error("Primary stage is not set");
                             return;
@@ -48,5 +51,25 @@ public class NavigationUtil {
                     }
                 }
         );
+    }
+
+
+    public static void insertChild(String fxmlFile) {
+        try {
+            if (fxmlFile.equals(currentScreen)) {
+                return;
+            }
+            currentScreen = fxmlFile;
+            HBox hBoxContainer = SingletonObjects.getInstance().getMainBox();
+            URL profile = NavigationUtil.class.getResource(FXML_PATH + fxmlFile);
+            assert profile != null;
+            AnchorPane pane = FXMLLoader.load(profile);
+            if (hBoxContainer.getChildren().size() > 1) {
+                hBoxContainer.getChildren().remove(1);
+            }
+            hBoxContainer.getChildren().add(pane);
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+        }
     }
 }
