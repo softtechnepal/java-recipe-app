@@ -13,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+
 public class LoginController {
     @FXML
     public Label forgotPasswordLabel;
@@ -48,9 +51,11 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
+
         String username = usernameField.getText();
         String password = passwordField.getText();
         LoginRequest loginRequest = new LoginRequest(username, password);
+
         if (validateLogin(loginRequest)) {
             AuthenticationService authenticationService = new AuthenticationService();
             var result = authenticationService.authenticate(loginRequest);
@@ -94,7 +99,4 @@ public class LoginController {
         // Navigate to home screen as guest
     }
 
-    public void handleContinueAsAdmin(MouseEvent mouseEvent){
-        NavigationUtil.navigateTo("admin/base-view.fxml");
-    }
 }
