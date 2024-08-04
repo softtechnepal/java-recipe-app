@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<AnchorPane prefHeight="700.0" prefWidth="562.0" style="-fx-background-color: blue;" HBox.hgrow="ALWAYS"
+<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS"
             xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.recipe.ui.user.RecipeController">
     <children>

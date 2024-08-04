@@ -1,4 +1,5 @@
-@import 'colors.css';
+@import "colors.css";
+@import "custom-menu-item.css";
 
 .root {
     -fx-background-color: -background-color;

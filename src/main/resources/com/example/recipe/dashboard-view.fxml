@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import com.example.recipe.components.CustomMenuItem?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
-
+<?import javafx.scene.layout.VBox?>
 <HBox fx:id="hBoxContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="700.0"
       prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.recipe.ui.user.DashboardController" style="-fx-background-color: red">
-    <children>
-        <AnchorPane fx:id="borderPane" prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: green;">
-            <children>
-                <Button fx:id="btnRecipe" layoutX="89.0" layoutY="140.0" mnemonicParsing="false" text="Recipes"/>
-                <Button fx:id="btnProfile" layoutX="93.0" layoutY="213.0" mnemonicParsing="false" text="Profile"/>
-            </children>
-        </AnchorPane>
-    </children>
+      fx:controller="com.example.recipe.ui.user.DashboardController">
+    <VBox prefHeight="200.0" minWidth="250.0" prefWidth="250.0"
+          style="-fx-background-color: #d2e1f1; -fx-padding: 16px" spacing="50"
+          alignment="TOP_CENTER">
+        <Label text="Dashboard" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black"/>
+        <VBox spacing="10" alignment="TOP_CENTER">
+            <CustomMenuItem
+                    fx:id="recipeMenuItem"
+                    navigateToPath="recipe-view.fxml"
+                    label="Recipe"
+                    iconPath="assets/category.png"/>
+            <CustomMenuItem
+                    fx:id="profileMenuItem"
+                    navigateToPath="profile-view.fxml"
+                    label="Profile"
+                    iconPath="assets/category.png"/>
+        </VBox>
+    </VBox>
 </HBox>

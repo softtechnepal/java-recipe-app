@@ -1,41 +1,43 @@
+// src/main/java/com/example/recipe/ui/user/DashboardController.java
 package com.example.recipe.ui.user;
 
-import com.example.recipe.utils.LoggerUtil;
-import com.example.recipe.utils.NavigationUtil;
+import com.example.recipe.components.CustomMenuItem;
 import com.example.recipe.utils.SingletonObjects;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
-import java.net.URL;
+import java.util.List;
 
 public class DashboardController {
     @FXML
-    public Button btnRecipe;
-    @FXML
-    public Button btnProfile;
-    @FXML
     public HBox hBoxContainer;
     @FXML
-    public AnchorPane borderPane;
+    public CustomMenuItem profileMenuItem;
+    @FXML
+    public CustomMenuItem recipeMenuItem;
+
+    private List<CustomMenuItem> menuItems;
+    private CustomMenuItem activeMenuItem;
 
     @FXML
     private void initialize() {
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
-        btnProfile.setOnAction(this::onPressProfile);
-        btnRecipe.setOnAction(this::onPress);
+
+        menuItems = List.of(recipeMenuItem, profileMenuItem);
+
+        for (CustomMenuItem menuItem : menuItems) {
+            menuItem.deactivate();
+            menuItem.setOnMouseClicked(event -> activateMenuItem(menuItem));
+        }
+
+        activateMenuItem(menuItems.get(0));
     }
 
-    public void onPress(Event event) {
-        NavigationUtil.insertChild("recipe-view.fxml");
-    }
-
-    public void onPressProfile(Event event) {
-        NavigationUtil.insertChild("profile-view.fxml");
+    private void activateMenuItem(CustomMenuItem menuItem) {
+        if (activeMenuItem != null) {
+            activeMenuItem.deactivate();
+        }
+        menuItem.activate();
+        activeMenuItem = menuItem;
     }
 }
