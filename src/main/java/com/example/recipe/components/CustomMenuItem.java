@@ -19,6 +19,7 @@ public class CustomMenuItem extends HBox {
     private final StringProperty navigateToPath = new SimpleStringProperty();
     private final StringProperty label = new SimpleStringProperty();
     private final StringProperty iconPath = new SimpleStringProperty();
+    private final StringProperty activeIconPath = new SimpleStringProperty();
 
 
     private final ImageView menuIcon = new ImageView();
@@ -51,12 +52,14 @@ public class CustomMenuItem extends HBox {
     public void activate() {
         this.getStyleClass().remove("inactive");
         this.getStyleClass().add("active");
+        loadImage(activeIconPath.getValue());
         NavigationUtil.insertChild(getNavigateToPath());
     }
 
     public void deactivate() {
         this.getStyleClass().remove("active");
         this.getStyleClass().add("inactive");
+        loadImage(iconPath.getValue());
     }
 
     // Getter for navigateTo
@@ -95,6 +98,20 @@ public class CustomMenuItem extends HBox {
 
     public StringProperty iconPathProperty() {
         return iconPath;
+    }
+
+    // Getter for activeIconPath
+    public String getActiveIconPath() {
+        return activeIconPath.getValue();
+    }
+
+    // Setter for activeIconPath
+    public void setActiveIconPath(String activeIconPath) {
+        this.activeIconPath.set(activeIconPath);
+    }
+
+    public StringProperty activeIconPathProperty() {
+        return activeIconPath;
     }
 }
 

@@ -1,19 +1,23 @@
 /* menu-item.css */
 .custom-menu-item {
-    -fx-padding: 8px;
-    -fx-spacing: 8px;
-    -fx-alignment: center-left;
-    -fx-min-width: 220px;
-    -fx-max-width: 220px;
-    -fx-background-radius: 8px;
+    -fx-background-color: -logout-color;
+    -fx-text-fill: -text-color;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-spacing: 16;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-fill-width: true;
+    -fx-max-width: 600px;
 }
 
 .custom-menu-item.active {
-    -fx-background-color: #60e34c;
+    -fx-background-color: #E9F5FE;
 }
 
 .custom-menu-item.inactive {
-    -fx-background-color: #74afe8;
+    -fx-background-color: #FFFFFF;
 }
 
 .custom-menu-item .image-view {
@@ -23,20 +27,20 @@
 
 .custom-menu-item.active .label {
     -fx-font-size: 14px;
-    -fx-text-fill: #0e0d0d;
+    -fx-text-fill: #0C7FDA;
 }
 
 .custom-menu-item.inactive .label {
     -fx-font-size: 14px;
-    -fx-text-fill: #424141;
+    -fx-text-fill: #5D7285;
 }
 
 .custom-menu-item.active:hover,
 .custom-menu-item.inactive:hover {
-    -fx-background-color: #3e8ee4;
+    -fx-background-color: #d8e3ed;
 }
 
 .custom-menu-item.active:hover .label,
 .custom-menu-item.inactive:hover .label {
-    -fx-text-fill: #080c08;
+    -fx-text-fill: #272b27;
 }

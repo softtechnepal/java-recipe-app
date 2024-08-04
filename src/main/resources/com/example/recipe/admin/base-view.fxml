@@ -32,7 +32,7 @@
                     <graphic>
                         <ImageView fitHeight="86.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../../../assets/dashboard.png"/>
+                                <Image url="@../../../../assets/ic_dashboard.png"/>
                             </image>
                         </ImageView>
                     </graphic>

@@ -15,15 +15,20 @@ public class DashboardController {
     public CustomMenuItem profileMenuItem;
     @FXML
     public CustomMenuItem recipeMenuItem;
+    @FXML
+    public CustomMenuItem myRecipeMenuItem;
+    @FXML
+    public CustomMenuItem logoutMenuItem;
+    @FXML
+    public CustomMenuItem savedRecipeMenuItem;
 
-    private List<CustomMenuItem> menuItems;
     private CustomMenuItem activeMenuItem;
 
     @FXML
     private void initialize() {
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
-        menuItems = List.of(recipeMenuItem, profileMenuItem);
+        List<CustomMenuItem> menuItems = List.of(recipeMenuItem, myRecipeMenuItem, savedRecipeMenuItem, profileMenuItem);
 
         for (CustomMenuItem menuItem : menuItems) {
             menuItem.deactivate();

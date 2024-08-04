@@ -5,6 +5,8 @@
     -fx-background-color: -background-color;
     -fx-pref-width: 100%;
     -fx-pref-height: 100%;
+    -fx-min-height: 800px;
+    -fx-min-width: 1000px;
 }
 
 .label {
@@ -51,4 +53,21 @@
 
 .clickable {
     -fx-cursor: hand;
+}
+
+.elevated-box {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 3, 0);
+}
+
+.logout-class {
+    -fx-background-color: -logout-color;
+    -fx-text-fill: -text-color;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-fill-width: true;
+    -fx-spacing: 16;
+    -fx-max-width: 600px;
 }
