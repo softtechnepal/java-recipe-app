@@ -38,9 +38,12 @@
 .custom-menu-item.active:hover,
 .custom-menu-item.inactive:hover {
     -fx-background-color: #d8e3ed;
+    -fx-scale-y: 1.1;
 }
 
 .custom-menu-item.active:hover .label,
 .custom-menu-item.inactive:hover .label {
     -fx-text-fill: #272b27;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }
