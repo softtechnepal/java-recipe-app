@@ -2,8 +2,6 @@ package com.example.recipe.components;
 
 import com.example.recipe.utils.LoggerUtil;
 import com.example.recipe.utils.NavigationUtil;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;

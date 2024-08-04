@@ -59,6 +59,34 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 3, 0);
 }
 
+.elevated-nav-bar {
+    -fx-min-width: 100%;
+    -fx-padding: 16px 24px;
+    -fx-min-height: 70px;
+}
+
+.elevated-card {
+    -fx-background-color: #ecf1eb;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-border-color: #e6e1e1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.image-border-radius {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.circle-image {
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+
+
 .logout-class {
     -fx-background-color: -logout-color;
     -fx-text-fill: -text-color;
@@ -71,3 +99,13 @@
     -fx-spacing: 16;
     -fx-max-width: 600px;
 }
+
+.no-scroll-bars .scroll-bar:vertical,
+.no-scroll-bars .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+}
+

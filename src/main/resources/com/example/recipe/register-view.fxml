@@ -4,8 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.scene.image.Image?>
 <BorderPane id="borderPane" prefWidth="800" prefHeight="700" xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.recipe.ui.common.authentication.RegisterController">

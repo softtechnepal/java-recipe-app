@@ -4,10 +4,7 @@ import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.domain.response.LoginResponse;
 import com.example.recipe.services.AuthenticationService;
-import com.example.recipe.utils.DialogUtil;
-import com.example.recipe.utils.LoggerUtil;
-import com.example.recipe.utils.NavigationUtil;
-import com.example.recipe.utils.ViewUtil;
+import com.example.recipe.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -66,6 +63,7 @@ public class LoginController {
                 NavigationUtil.navigateTo("admin/base-view.fxml");
                 return;
             }
+            SingletonUser.getInstance().setLoginResponse(response.getData());
             NavigationUtil.navigateTo("dashboard-view.fxml");
         } else if (response instanceof DbResponse.Failure) {
             DialogUtil.showErrorDialog("Login Failed", response.getMessage());
