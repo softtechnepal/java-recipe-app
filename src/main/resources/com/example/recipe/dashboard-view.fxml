@@ -30,7 +30,7 @@
                     activeIconPath="assets/ic_dashboard_active.png"/>
             <CustomMenuItem
                     fx:id="myRecipeMenuItem"
-                    navigateToPath="profile-view.fxml"
+                    navigateToPath="my-recipe-view.fxml"
                     label="My Recipes"
                     iconPath="assets/ic_recipe.png"
                     activeIconPath="assets/ic_recipe_active.png"
