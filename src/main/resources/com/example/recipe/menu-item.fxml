@@ -8,10 +8,10 @@
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="290.0"
-      prefWidth="305.0" xmlns="http://javafx.com/javafx/22"
+      prefWidth="320.0" xmlns="http://javafx.com/javafx/22"
       styleClass="elevated-card">
     <children>
-        <ImageView fitWidth="289" fitHeight="200">
+        <ImageView id="profileImage" fitWidth="289" fitHeight="200" cache="true" cacheHint="SCALE">
             <image>
                 <Image url="@../../../assets/img_food.jpg"/>
             </image>
@@ -20,7 +20,8 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="30.0" prefWidth="284.0" spacing="8.0">
                     <children>
-                        <Label prefHeight="34.0" prefWidth="229.0" text="Russian Salad" style="-fx-text-fill: black; -fx-font-size: 22; -fx-font-weight: bold"/>
+                        <Label id="recipeTitle" prefHeight="34.0" prefWidth="229.0" text="Russian Salad"
+                               style="-fx-text-fill: black; -fx-font-size: 22; -fx-font-weight: bold"/>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../../assets/ic_start.png"/>

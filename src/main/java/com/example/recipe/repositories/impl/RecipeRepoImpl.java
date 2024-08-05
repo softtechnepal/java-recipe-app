@@ -10,6 +10,7 @@ import com.example.recipe.utils.ImageUtil;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
@@ -126,7 +127,39 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     @Override
     public void getRecipeByUserId(long userId, DatabaseCallback<List<Recipe>> callback) {
+        final String SELECT_RECIPE_BY_ID_QUERY = "SELECT * FROM recipes WHERE user_id = ?";
 
+        DatabaseThread.runDataOperation(() -> {
+            try (
+                    Connection connection = DatabaseConfig.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_BY_ID_QUERY)
+            ) {
+                statement.setLong(1, userId);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<Recipe> recipes = new ArrayList<>();
+                    while (resultSet.next()) {
+                        Recipe recipe = mapResultSetToRecipe(resultSet);
+                        recipes.add(recipe);
+                    }
+                    return DbResponse.success("Recipes Listing", recipes);
+                }
+            } catch (Exception e) {
+                logger.error("Error while fetching recipe by ID", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    private Recipe mapResultSetToRecipe(ResultSet resultSet) throws SQLException {
+        Recipe recipe = new Recipe();
+        recipe.setRecipeId(resultSet.getLong("recipe_id"));
+        recipe.setTitle(resultSet.getString("title"));
+        recipe.setDescription(resultSet.getString("description"));
+        recipe.setImage(resultSet.getString("image"));
+        recipe.setVideoUrl(resultSet.getString("video_url"));
+        recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
+        recipe.setWarnings(resultSet.getString("warnings"));
+        return recipe;
     }
 
     @Override
