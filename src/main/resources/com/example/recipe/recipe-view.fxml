@@ -21,10 +21,10 @@
               HBox.hgrow="ALWAYS">
             <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                 <children>
-                    <Label style="-fx-text-fill: black; -fx-font-size: 24; -fx-font-weight: bold;" text="My Recipes"/>
+                    <Label style="-fx-text-fill: black; -fx-font-size: 24; -fx-font-weight: bold;"
+                           text="Explore Recipes"/>
                 </children>
             </VBox>
-            <Button fx:id="btnAddRecipe" mnemonicParsing="false" text="Add Recipe"/>
             <padding>
                 <Insets bottom="8.0" top="8.0"/>
             </padding>

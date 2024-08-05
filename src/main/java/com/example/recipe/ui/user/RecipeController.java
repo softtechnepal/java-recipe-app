@@ -27,8 +27,6 @@ public class RecipeController {
     @FXML
     public GridPane menuGrid;
     @FXML
-    public Button btnAddRecipe;
-    @FXML
     public VBox progressContainer;
 
     private Task<Void> loadingTask;
@@ -37,15 +35,8 @@ public class RecipeController {
 
     @FXML
     public void initialize() {
-        btnAddRecipe.setOnAction(this::onAddRecipe);
-        fetchRecipes();
-    }
 
-    private void onAddRecipe(ActionEvent actionEvent) {
-        if (loadingTask != null) {
-            loadingTask.cancel();
-        }
-        NavigationUtil.insertChild("add-recipe-view.fxml");
+        fetchRecipes();
     }
 
     private void fetchRecipes() {
