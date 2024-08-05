@@ -135,19 +135,21 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                     PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_BY_ID_QUERY)
             ) {
                 statement.setLong(1, userId);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    List<Recipe> recipes = new ArrayList<>();
-                    while (resultSet.next()) {
-                        Recipe recipe = mapResultSetToRecipe(resultSet);
-                        recipes.add(recipe);
-                    }
-                    return DbResponse.success("Recipes Listing", recipes);
-                }
+                return DbResponse.success("", mapResultSetToRecipes(statement.executeQuery()));
             } catch (Exception e) {
                 logger.error("Error while fetching recipe by ID", e);
                 return DbResponse.failure(e.getMessage());
             }
         }, callback);
+    }
+
+    private List<Recipe> mapResultSetToRecipes(ResultSet resultSet) throws SQLException {
+        List<Recipe> recipes = new ArrayList<>();
+        while (resultSet.next()) {
+            Recipe recipe = mapResultSetToRecipe(resultSet);
+            recipes.add(recipe);
+        }
+        return recipes;
     }
 
     private Recipe mapResultSetToRecipe(ResultSet resultSet) throws SQLException {
@@ -163,8 +165,20 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     }
 
     @Override
-    public void getAllRecipes(long userId, DatabaseCallback<List<Recipe>> callback) {
+    public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
+        final String SELECT_RECIPE_QUERY = "SELECT * FROM recipes";
 
+        DatabaseThread.runDataOperation(() -> {
+            try (
+                    Connection connection = DatabaseConfig.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_QUERY)
+            ) {
+                return DbResponse.success("", mapResultSetToRecipes(statement.executeQuery()));
+            } catch (Exception e) {
+                logger.error("Error while fetching recipe by ID", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
     }
 
     @Override

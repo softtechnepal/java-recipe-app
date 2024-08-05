@@ -21,4 +21,8 @@ public class UserRecipeService {
     public void getRecipeByUserId(long userId, DatabaseCallback<List<Recipe>> callback) {
         recipeRepository.getRecipeByUserId(userId, callback);
     }
+
+    public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
+        recipeRepository.getAllRecipes(callback);
+    }
 }

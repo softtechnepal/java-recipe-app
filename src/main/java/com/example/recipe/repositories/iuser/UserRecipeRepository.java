@@ -12,7 +12,7 @@ public interface UserRecipeRepository {
 
     void getRecipeByUserId(long userId, DatabaseCallback<List<Recipe>> callback);
 
-    void getAllRecipes(long userId, DatabaseCallback<List<Recipe>> callback);
+    void getAllRecipes(DatabaseCallback<List<Recipe>> callback);
 
     void updateRecipe(Recipe recipe, DatabaseCallback<Recipe> callback);
 
