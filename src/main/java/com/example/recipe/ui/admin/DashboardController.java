@@ -1,8 +1,8 @@
 package com.example.recipe.ui.admin;
 
-import com.example.recipe.services.admin_access.AdminCategoryService;
-import com.example.recipe.services.admin_access.AdminRecipeService;
-import com.example.recipe.services.admin_access.AdminUserService;
+import com.example.recipe.services.admin.AdminCategoryService;
+import com.example.recipe.services.admin.AdminRecipeService;
+import com.example.recipe.services.admin.AdminUserService;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 

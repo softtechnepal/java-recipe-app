@@ -3,8 +3,8 @@ package com.example.recipe.ui.admin;
 import com.example.recipe.domain.Recipe;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.services.admin_access.AdminRecipeService;
-import com.example.recipe.services.admin_access.AdminUserService;
+import com.example.recipe.services.admin.AdminRecipeService;
+import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,7 +14,8 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 
-import static com.example.recipe.utils.DialogUtil.showDialog;
+import static com.example.recipe.utils.DialogUtil.showErrorDialog;
+import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class RecipeController {
@@ -54,7 +55,7 @@ public class RecipeController {
             return new SimpleStringProperty(getUserName(userId));
         });
         createdAt.setCellValueFactory(cellData -> {
-            String[] parts = cellData.getValue().getCreatedAt().toString().split(" ");
+            String[] parts = cellData.getValue().getCreatedAt().split(" ");
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
         });
@@ -66,6 +67,7 @@ public class RecipeController {
                 return new TableCell<Recipe, Void>() {
                     private final Button deleteButton = new Button("Delete");
                     private final HBox hBox = new HBox(20, deleteButton);
+
                     {
                         deleteButton.setOnAction(event -> {
                             Recipe recipe = getTableView().getItems().get(getIndex());
@@ -74,6 +76,7 @@ public class RecipeController {
                             }
                         });
                     }
+
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -100,13 +103,13 @@ public class RecipeController {
     }
 
     private void handleDeleteAction(long recipeId) {
-       DbResponse<Recipe> res = recipeService.deleteRecipe(recipeId);
+        DbResponse<Recipe> res = recipeService.deleteRecipe(recipeId);
         if (res.isSuccess()) {
-            showDialog(Alert.AlertType.INFORMATION, "Success", "Recipe deleted successfully.");
+            showInfoDialog("Success", "Recipe deleted successfully.");
             loadTableData();
         } else {
             logger.error("Error deleting recipe: " + res.getMessage());
-            showDialog(Alert.AlertType.ERROR, "Error", "Failed to delete recipe: " + res.getMessage());
+            showErrorDialog("Error", "Failed to delete recipe: " + res.getMessage());
         }
     }
 

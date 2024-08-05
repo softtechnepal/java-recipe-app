@@ -23,4 +23,9 @@ module com.example.recipe {
 
     // Open the domain package to javafx.base for reflection
     opens com.example.recipe.domain to javafx.base;
+    exports com.example.recipe.ui.user;
+    opens com.example.recipe.ui.user to javafx.fxml;
+
+    opens com.example.recipe.components to javafx.fxml;
+    exports com.example.recipe.components;
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.example.recipe.components.CustomMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<HBox fx:id="hBoxContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="800.0"
+      prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      style="-fx-background-color: #FFFFFF"
+      fx:controller="com.example.recipe.ui.user.DashboardController">
+    <VBox prefHeight="200.0" minWidth="350.0" prefWidth="350.0"
+          style="-fx-background-color: #FFFFFF; -fx-padding: 16px" spacing="50"
+          alignment="TOP_CENTER"
+          styleClass="elevated-box">
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../../assets/app_logo.png"/>
+            </ImageView>
+            <Label text="Recipe" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black"/>
+        </HBox>
+        <VBox spacing="22" alignment="TOP_CENTER">
+            <CustomMenuItem
+                    fx:id="recipeMenuItem"
+                    navigateToPath="recipe-view.fxml"
+                    label="Explore"
+                    iconPath="assets/ic_dashboard.png"
+                    activeIconPath="assets/ic_dashboard_active.png"/>
+            <CustomMenuItem
+                    fx:id="myRecipeMenuItem"
+                    navigateToPath="my-recipe-view.fxml"
+                    label="My Recipes"
+                    iconPath="assets/ic_recipe.png"
+                    activeIconPath="assets/ic_recipe_active.png"
+            />
+            <CustomMenuItem
+                    fx:id="savedRecipeMenuItem"
+                    navigateToPath="profile-view.fxml"
+                    label="Saved Recipes"
+                    iconPath="assets/ic_saved.png"
+                    activeIconPath="assets/ic_saved_active.png"/>
+            <CustomMenuItem
+                    fx:id="profileMenuItem"
+                    navigateToPath="profile-view.fxml"
+                    label="Profile"
+                    iconPath="assets/ic_users.png"
+                    activeIconPath="assets/ic_users_active.png"/>
+        </VBox>
+        <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+            <CustomMenuItem
+                    fx:id="logoutMenuItem"
+                    navigateToPath="login-view.fxml"
+                    label="Logout"
+                    styleClass="logout-class"
+                    iconPath="assets/ic_log_out.png"/>
+        </VBox>
+    </VBox>
+</HBox>

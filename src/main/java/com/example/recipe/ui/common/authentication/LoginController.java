@@ -1,20 +1,14 @@
 package com.example.recipe.ui.common.authentication;
 
+import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.request.LoginRequest;
+import com.example.recipe.domain.response.LoginResponse;
 import com.example.recipe.services.AuthenticationService;
-import com.example.recipe.utils.NavigationUtil;
-import com.example.recipe.utils.ViewUtil;
+import com.example.recipe.utils.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-
-import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class LoginController {
     @FXML
@@ -36,15 +30,18 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
+    @FXML
     public void initialize() {
         // Load the logo image here
         Image logoImage = new Image("file:src/main/resources/assets/app_logo.png");
         logoImageView.setImage(logoImage);
 
+        //Test Data
+        usernameField.setText("admin");
+        passwordField.setText("admin");
+
         // Add event handlers for buttons here
-        loginButton.setOnAction(event -> {
-            handleLogin();
-        });
+        loginButton.setOnAction(event -> handleLogin());
     }
 
     @FXML
@@ -52,15 +49,24 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
         LoginRequest loginRequest = new LoginRequest(username, password);
+
         if (validateLogin(loginRequest)) {
             AuthenticationService authenticationService = new AuthenticationService();
-            var result = authenticationService.authenticate(loginRequest);
-            if (result.isSuccess()) {
-                ViewUtil.setVisibility(usernameErrorLabel, false);
-                // Navigate to home screen
-            } else {
-                ViewUtil.setTextAndVisibility(passwordErrorLabel, result.getMessage(), true);
+            authenticationService.authenticate(loginRequest, this::handleLoginResponse);
+        }
+    }
+
+    private void handleLoginResponse(DbResponse<LoginResponse> response) {
+        LoggerUtil.logger.error("Login response: {}", response instanceof DbResponse.Success ? "Success" : "Failure");
+        if (response instanceof DbResponse.Success) {
+            if (response.getData().isAdmin()) {
+                NavigationUtil.navigateTo("admin/base-view.fxml");
+                return;
             }
+            SingletonUser.getInstance().setLoginResponse(response.getData());
+            NavigationUtil.navigateTo("dashboard-view.fxml");
+        } else if (response instanceof DbResponse.Failure) {
+            DialogUtil.showErrorDialog("Login Failed", response.getMessage());
         }
     }
 
@@ -89,11 +95,7 @@ public class LoginController {
         // Navigate to forgot password screen
     }
 
-    public void handleContinueAsGuest(MouseEvent mouseEvent) {
+    public void handleContinueAsGuest() {
         // Navigate to home screen as guest
-    }
-
-    public void handleContinueAsAdmin(MouseEvent mouseEvent){
-        NavigationUtil.navigateTo("admin/base-view.fxml");
     }
 }

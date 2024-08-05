@@ -1,8 +1,8 @@
 package com.example.recipe.ui.admin;
 
-import com.example.recipe.domain.Category;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.services.admin_access.AdminCategoryService;
+import com.example.recipe.services.admin.AdminCategoryService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,9 +14,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
 import java.util.ArrayList;
 
-import static com.example.recipe.utils.DialogUtil.showDialog;
+import static com.example.recipe.utils.DialogUtil.showErrorDialog;
+import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class CategoryController {
@@ -96,11 +98,11 @@ public class CategoryController {
     private void handleDeleteAction(long categoryId) {
         DbResponse<Category> response = categoryService.deleteCategory(categoryId);
         if (response.isSuccess()) {
-            showDialog(Alert.AlertType.INFORMATION, "Success", "Category deleted successfully.");
+            showInfoDialog("Success", "Category deleted successfully.");
             loadTableData();
         } else {
             logger.error("Error deleting category: " + response.getMessage());
-            showDialog(Alert.AlertType.ERROR, "Error", "Failed to delete category: " + response.getMessage());
+            showErrorDialog("Error", "Failed to delete category: " + response.getMessage());
         }
     }
 
@@ -119,11 +121,11 @@ public class CategoryController {
             dialogController.setCategory(category);
             dialogStage.showAndWait();
             loadTableData();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error loading the add category dialog", e);
-            showDialog(Alert.AlertType.ERROR, "Error", "Failed to open the category dialog");
+            showErrorDialog("Error", "Failed to open the category dialog");
         }
-   }
+    }
 
     public void handleAddCategory(MouseEvent mouseEvent) {
         try {
@@ -142,7 +144,7 @@ public class CategoryController {
             loadTableData();
         } catch (Exception e) {
             logger.error("Error loading the add category dialog", e);
-            showDialog(Alert.AlertType.ERROR, "Error", "Failed to open the category dialog");
+            showErrorDialog("Error", "Failed to open the category dialog");
         }
     }
 }

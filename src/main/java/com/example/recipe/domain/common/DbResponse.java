@@ -23,6 +23,18 @@ public sealed class DbResponse<T> permits DbResponse.Failure, DbResponse.Loading
         return message;
     }
 
+    public static <T> DbResponse<T> loading() {
+        return new DbResponse.Loading<T>();
+    }
+
+    public static <T> DbResponse<T> success(String message, T data) {
+        return new DbResponse.Success<T>(message, data);
+    }
+
+    public static <T> DbResponse<T> failure(String message) {
+        return new DbResponse.Failure<T>(message);
+    }
+
     public static final class Loading<T> extends DbResponse<T> {
         public Loading() {
             super("Loading", null, false);

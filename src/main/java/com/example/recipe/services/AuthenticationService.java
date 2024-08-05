@@ -1,6 +1,7 @@
 package com.example.recipe.services;
 
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.domain.request.UserRequest;
 import com.example.recipe.domain.response.LoginResponse;
@@ -14,12 +15,16 @@ public class AuthenticationService {
         authRepository = new AuthRepositoryImpl();
     }
 
-    public DbResponse<LoginResponse> authenticate(LoginRequest request) {
-        return authRepository.login(request);
+    public void authenticate(LoginRequest request, DatabaseCallback<LoginResponse> result) {
+        authRepository.login(request, result);
     }
 
-    public DbResponse<String> register(UserRequest register) {
-        return authRepository.register(register);
+    public void register(UserRequest register, DatabaseCallback<String> result) {
+        authRepository.register(register, result);
+    }
+
+    public DbResponse<String> forgotPassword(String email) {
+        return authRepository.forgotPassword(email);
     }
 
 }

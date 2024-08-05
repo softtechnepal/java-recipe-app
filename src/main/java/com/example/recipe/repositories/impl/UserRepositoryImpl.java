@@ -3,7 +3,7 @@ package com.example.recipe.repositories.impl;
 import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.repositories.interface_admin_access.IAdminUserRepository;
+import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

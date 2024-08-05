@@ -1,0 +1,113 @@
+@import "colors.css";
+@import "custom-menu-item.css";
+
+.root {
+    -fx-background-color: -background-color;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-min-height: 800px;
+    -fx-min-width: 1000px;
+}
+
+.label {
+    -fx-text-fill: -text-color;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.error-label {
+    -fx-text-fill: -error-color;
+    -fx-font-size: 12px;
+    -fx-padding: 5;
+}
+
+/* TextField Styles */
+.text-field,
+.text-field-disabled {
+    -fx-background-color: -input-background-color;
+    -fx-border-color: -input-border-color;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-max-width: 600px;
+}
+
+
+/* Button Styles */
+.button {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -text-color;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-fill-width: true;
+    -fx-max-width: 600px;
+}
+
+.button:hover {
+    fx-background-color: -secondary-color;
+    -fx-max-width: 620px;
+    -fx-font-size: 16px;
+}
+
+.clickable {
+    -fx-cursor: hand;
+}
+
+.elevated-box {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 3, 0);
+}
+
+.elevated-nav-bar {
+    -fx-min-width: 100%;
+    -fx-padding: 16px 24px;
+    -fx-min-height: 70px;
+}
+
+.elevated-card {
+    -fx-background-color: #ecf1eb;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-border-color: #e6e1e1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.image-border-radius {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.circle-image {
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+
+
+.logout-class {
+    -fx-background-color: -logout-color;
+    -fx-text-fill: -text-color;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-fill-width: true;
+    -fx-spacing: 16;
+    -fx-max-width: 600px;
+}
+
+.no-scroll-bars .scroll-bar:vertical,
+.no-scroll-bars .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+}
+

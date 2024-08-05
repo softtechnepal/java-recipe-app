@@ -2,10 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<BorderPane id="borderPane" minHeight="800.0" minWidth="600.0" xmlns="http://javafx.com/javafx/22"
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane id="borderPane" prefWidth="800" prefHeight="700" xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.recipe.ui.common.authentication.LoginController">
     <center>
@@ -16,42 +16,22 @@
             <ImageView fx:id="logoImageView" fitWidth="200.0" preserveRatio="true"/>
             <Label text="Welcome to My Recipe" textFill="#FFFFFF"/>
             <VBox alignment="CENTER" spacing="10">
-                <TextField fx:id="usernameField" maxWidth="250.0" promptText="Username"
-                           style="-fx-background-radius: 6;"/>
-                <Label fx:id="usernameErrorLabel" textFill="red"
-                       visible="false" managed="false"/>
+                <TextField fx:id="usernameField" promptText="Username"/>
+                <Label fx:id="usernameErrorLabel" visible="false" managed="false" styleClass="error-label"/>
             </VBox>
             <VBox alignment="CENTER" spacing="10">
-                <PasswordField fx:id="passwordField" maxWidth="250.0" promptText="Password"
-                               style="-fx-background-radius: 6;"/>
-                <Label fx:id="passwordErrorLabel" textFill="red"
-                       visible="false" managed="false"/>
+                <PasswordField fx:id="passwordField" promptText="Password"/>
+                <Label fx:id="passwordErrorLabel" visible="false" managed="false" styleClass="error-label"/>
             </VBox>
             <Label fx:id="forgotPasswordLabel" onMouseClicked="#handleForgotPassword" text="Forgot Password?"
                    textFill="#007bff"/>
-            <HBox alignment="CENTER" spacing="10">
-                <Button fx:id="loginButton" contentDisplay="TOP" prefHeight="26.0" prefWidth="139.0"
-                        style="-fx-background-radius: 6;" text="Login">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <effect>
-                        <Blend/>
-                    </effect>
-                </Button>
-            </HBox>
+            <Button fx:id="loginButton" contentDisplay="CENTER" text="Login"/>
             <Label fx:id="registerLabel" alignment="CENTER" onMouseClicked="#handleRegister"
                    text="Don't hava an account? Register"
                    textFill="#007bff"/>
 
             <Label fx:id="guestLabel" alignment="CENTER" onMouseClicked="#handleContinueAsGuest"
                    text="Continue as Guest" textFill="#007bff"/>
-<!--            TODO:Prachan-->
-            <Label fx:id="adminLabel" alignment="CENTER" onMouseClicked="#handleContinueAsAdmin"
-                   text="Continue as Admin" textFill="#007bff"/>
         </VBox>
     </center>
-    <style>
-        -fx-background-color: #293846;
-    </style>
 </BorderPane>
