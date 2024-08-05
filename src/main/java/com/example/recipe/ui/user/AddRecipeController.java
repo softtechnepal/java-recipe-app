@@ -2,6 +2,7 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.services.user.UserCategoryService;
+import com.example.recipe.ui.dialogs.AddStepDialog;
 import com.example.recipe.ui.dialogs.AlertCallback;
 import com.example.recipe.ui.dialogs.CategoryDialog;
 import com.example.recipe.ui.dialogs.IngredientDialog;
@@ -14,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +120,27 @@ public class AddRecipeController {
     }
 
     public void onAddStep(ActionEvent actionEvent) {
+        var dialog = new AddStepDialog("Add Step", data -> {
+            if (data != null)
+                steps.add(data);
 
+            List<VBox> stepViews = new ArrayList<>();
+            steps.forEach(step -> {
+                VBox vBox = new VBox(10);
+                vBox.setStyle("-fx-background-radius: 10px; -fx-padding: 10px; -fx-background-color: #eae2e2; -fx-border-radius: 8px; -fx-max-width: 500px");
+                Label title = new Label(step.getStepName());
+                title.setStyle("-fx-font-weight: bold; -fx-font-size: 22px; -fx-text-fill: #3e8ee4");
+                Text description = new Text(step.getStepDescription());
+                description.setStyle("-fx-font-size: 16px; -fx-text-fill: #000000; -fx-wrap-text: true; max-width: 400px");
+                description.setWrappingWidth(480);
+                vBox.getChildren().addAll(title, description);
+                stepViews.add(vBox);
+            });
+
+            vBoxAddedSteps.getChildren().clear();
+            vBoxAddedSteps.getChildren().addAll(stepViews);
+        });
+        dialog.showAndWait();
     }
 
     public void onSelectImage(MouseEvent event) {

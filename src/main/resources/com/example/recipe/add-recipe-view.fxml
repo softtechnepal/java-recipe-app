@@ -70,7 +70,7 @@
                     </VBox>
                     <VBox prefWidth="528" spacing="6">
                         <Label text="Categories"/>
-                        <TextField fx:id="tfCategories" promptText="Ingredient Name"
+                        <TextField fx:id="tfCategories" promptText="Categories"
                                    styleClass="text-field-disabled"/>
                         <Label fx:id="categoriesError" visible="false" managed="false" styleClass="error-label"/>
                         <Button onAction="#onAddCategories" text="Add Categories"
@@ -79,20 +79,7 @@
                     <VBox prefWidth="528" spacing="6" fx:id="vBoxAddedSteps">
 
                     </VBox>
-                    <VBox prefWidth="528.0" spacing="4.0">
-                        <children>
-                            <Label text="Step Title"/>
-                            <TextField fx:id="tfStepTitle"/>
-                        </children>
-                    </VBox>
-                    <VBox prefWidth="528.0" spacing="4.0">
-                        <children>
-                            <Label text="Step Description"/>
-                            <TextField fx:id="tfStepDescription" maxHeight="150.0" minHeight="150.0"
-                                       prefHeight="150.0" prefWidth="482.0" alignment="TOP_LEFT"/>
-                            <Label fx:id="stepError" visible="false" managed="false" styleClass="error-label"/>
-                        </children>
-                    </VBox>
+
                     <Button onAction="#onAddStep" text="Add Step" style="-fx-max-width: 150px; "/>
                     <HBox>
                         <children>
