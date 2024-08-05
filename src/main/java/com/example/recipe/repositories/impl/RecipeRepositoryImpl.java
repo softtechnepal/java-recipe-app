@@ -2,21 +2,17 @@ package com.example.recipe.repositories.impl;
 
 import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.Recipe;
-import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.repositories.interface_admin_access.IAdminRecipeRepository;
-import com.example.recipe.repositories.interface_user_access.IUserRecipeRepository;
-import com.example.recipe.utils.DatabaseThread;
+import com.example.recipe.repositories.iadmin.IAdminRecipeRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
-public class RecipeRepositoryImpl implements IAdminRecipeRepository, IUserRecipeRepository {
+public class RecipeRepositoryImpl implements IAdminRecipeRepository {
 
     @Override
     public DbResponse<ArrayList<Recipe>> getAllRecipes() {
@@ -100,7 +96,7 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository, IUserRecipe
             return new DbResponse.Failure<>(e.getMessage());
         }
     }
-
+/*
     @Override
     public DbResponse<Recipe> addRecipe(Recipe recipe) {
         try (Connection conn = DatabaseConfig.getConnection()) {
@@ -161,7 +157,7 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository, IUserRecipe
             logger.error("Error while updating recipe", e);
             return new DbResponse.Failure<>(e.getMessage());
         }
-    }
+    }*/
 
     @Override
     public DbResponse<Recipe> deleteRecipe(long recipeId) {

@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
+import static com.example.recipe.utils.LoggerUtil.logger;
+
 public class DatabaseThread {
     // Create a cached thread pool to manage background threads
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
@@ -24,11 +26,13 @@ public class DatabaseThread {
 
         // Set the callback for when the task succeeds
         task.setOnSucceeded(event -> {
+            logger.info("Task succeeded {}", task.getValue());
             callback.onDbResponse(task.getValue());
         });
 
         // Set the callback for when the task fails
         task.setOnFailed(event -> {
+            logger.error("Task failed {}", task.getException().getLocalizedMessage());
             callback.onDbResponse(new DbResponse.Failure<T>(task.getException().getLocalizedMessage()));
         });
 

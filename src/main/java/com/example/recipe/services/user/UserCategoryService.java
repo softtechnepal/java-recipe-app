@@ -3,7 +3,7 @@ package com.example.recipe.services.user;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.repositories.interface_user_access.IUserCategoryRepository;
+import com.example.recipe.repositories.iuser.IUserCategoryRepository;
 import com.example.recipe.repositories.impl.CategoryRepositoryImpl;
 import com.example.recipe.utils.LoggerUtil;
 

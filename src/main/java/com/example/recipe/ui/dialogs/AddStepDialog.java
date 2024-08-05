@@ -49,7 +49,7 @@ public class AddStepDialog extends Stage {
         this.setMinHeight(300);
         this.setMinWidth(400);
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add("/com/example/recipe/css/main.css");
+//        scene.getStylesheets().add("/com/example/recipe/css/main.css");
         setScene(scene);
     }
 

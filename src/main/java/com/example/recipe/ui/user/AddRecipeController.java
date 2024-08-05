@@ -2,9 +2,11 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.services.user.UserCategoryService;
+import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.dialogs.AddStepDialog;
 import com.example.recipe.ui.dialogs.CategoryDialog;
 import com.example.recipe.ui.dialogs.IngredientDialog;
+import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.ValidationUtil;
 import com.example.recipe.utils.ViewUtil;
@@ -12,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class AddRecipeController {
     @FXML
     public TextField tfRecipeName;
     @FXML
-    public TextField tfRecipeDescription;
+    public TextArea tfRecipeDescription;
     @FXML
     public TextField tfVideoLink;
     @FXML
@@ -47,11 +49,6 @@ public class AddRecipeController {
     public TextField tfOther;
     @FXML
     public TextField tfWarnings;
-    @FXML
-    public TextField tfStepDescription;
-    @FXML
-    public TextField tfStepTitle;
-
     @FXML
     public VBox vBoxAddedSteps;
     @FXML
@@ -77,6 +74,7 @@ public class AddRecipeController {
     private final List<Steps> steps = new ArrayList<>();
 
     private final UserCategoryService userCategoryService = new UserCategoryService();
+    private final UserRecipeService userRecipeService = new UserRecipeService();
 
     @FXML
     private void initialize() {
@@ -97,7 +95,14 @@ public class AddRecipeController {
 
         if (validateRecipe(recipe)) {
             recipe.setNutritionalInformation(getNutritionalInformation());
-
+            userRecipeService.addRecipe(recipe, response -> {
+                if (response.isSuccess()) {
+                    DialogUtil.showInfoDialog("Success", "Recipe added successfully");
+                    // NavigationUtil.insertChild("my-recipe-view.fxml");
+                } else {
+                    DialogUtil.showErrorDialog("Error", response.getMessage());
+                }
+            });
         }
     }
 

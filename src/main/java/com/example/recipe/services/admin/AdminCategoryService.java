@@ -3,7 +3,7 @@ package com.example.recipe.services.admin;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.impl.CategoryRepositoryImpl;
-import com.example.recipe.repositories.interface_admin_access.IAdminCategoryRepository;
+import com.example.recipe.repositories.iadmin.IAdminCategoryRepository;
 
 import java.util.ArrayList;
 

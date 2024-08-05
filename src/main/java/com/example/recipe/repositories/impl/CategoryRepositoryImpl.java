@@ -4,8 +4,8 @@ import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.repositories.interface_admin_access.IAdminCategoryRepository;
-import com.example.recipe.repositories.interface_user_access.IUserCategoryRepository;
+import com.example.recipe.repositories.iadmin.IAdminCategoryRepository;
+import com.example.recipe.repositories.iuser.IUserCategoryRepository;
 import com.example.recipe.utils.DatabaseThread;
 
 import java.sql.Connection;
