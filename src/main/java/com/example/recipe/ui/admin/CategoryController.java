@@ -1,8 +1,8 @@
 package com.example.recipe.ui.admin;
 
-import com.example.recipe.domain.Category;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.services.admin_access.AdminCategoryService;
+import com.example.recipe.services.admin.AdminCategoryService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

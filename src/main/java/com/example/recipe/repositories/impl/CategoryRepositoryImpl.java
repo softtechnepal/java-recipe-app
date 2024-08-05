@@ -1,10 +1,12 @@
 package com.example.recipe.repositories.impl;
 
 import com.example.recipe.config.DatabaseConfig;
-import com.example.recipe.domain.Category;
+import com.example.recipe.domain.recipe.Category;
+import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.interface_admin_access.IAdminCategoryRepository;
 import com.example.recipe.repositories.interface_user_access.IUserCategoryRepository;
+import com.example.recipe.utils.DatabaseThread;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,6 +39,12 @@ public class CategoryRepositoryImpl implements IAdminCategoryRepository, IUserCa
         }
         return new DbResponse.Success<>("Get categories success", categories);
     }
+
+    @Override
+    public void getAllCategories(DatabaseCallback<ArrayList<Category>> callback) {
+        DatabaseThread.runDataOperation(this::getAllCategories, callback);
+    }
+
 
     @Override
     public DbResponse<Category> getCategoryById(long categoryId) {

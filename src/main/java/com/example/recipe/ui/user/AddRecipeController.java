@@ -1,6 +1,8 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.recipe.*;
+import com.example.recipe.services.user.UserCategoryService;
+import com.example.recipe.ui.dialogs.AlertCallback;
 import com.example.recipe.ui.dialogs.CategoryDialog;
 import com.example.recipe.ui.dialogs.IngredientDialog;
 import com.example.recipe.utils.NavigationUtil;
@@ -62,9 +64,12 @@ public class AddRecipeController {
     private final List<Ingredient> ingredients = new ArrayList<>();
     private final List<Steps> steps = new ArrayList<>();
 
+    private final UserCategoryService userCategoryService = new UserCategoryService();
+
     @FXML
     private void initialize() {
         tfIngredientName.setOnMouseClicked((event) -> onAddIngredient(null));
+        tfCategories.setOnMouseClicked((event) -> onAddCategories(null));
     }
 
     public void onAddRecipe(ActionEvent actionEvent) {
@@ -97,8 +102,19 @@ public class AddRecipeController {
     }
 
     public void onAddCategories(ActionEvent actionEvent) {
-        var dialog = new CategoryDialog("Add Categories", List.of("Breakfast", "Lunch", "Dinner", "Snack", "Dessert", "Appetizer", "Drink", "Other"));
-        dialog.showAndWait();
+        userCategoryService.getAllCategories(response -> {
+            if (response.isSuccess()) {
+                userCategoryService.setCategories(response.getData());
+                var dialog = new CategoryDialog("Add Categories", categories, response.getData(), data -> {
+                    categories.clear();
+                    categories.addAll(data);
+                    StringBuilder categoryNames = new StringBuilder();
+                    categories.forEach(category -> categoryNames.append(category.getCategoryName()).append(", "));
+                    tfCategories.setText(categoryNames.toString());
+                });
+                dialog.showAndWait();
+            }
+        });
     }
 
     public void onAddStep(ActionEvent actionEvent) {

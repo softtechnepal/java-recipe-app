@@ -7,12 +7,11 @@ import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
-import com.example.recipe.services.admin_access.AdminUserService;
+import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 

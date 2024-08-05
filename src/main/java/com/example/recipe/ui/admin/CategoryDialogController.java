@@ -1,11 +1,10 @@
 package com.example.recipe.ui.admin;
 
-import com.example.recipe.domain.Category;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DbResponse;
-import com.example.recipe.services.admin_access.AdminCategoryService;
+import com.example.recipe.services.admin.AdminCategoryService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

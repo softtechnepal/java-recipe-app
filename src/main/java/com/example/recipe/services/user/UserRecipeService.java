@@ -1,16 +1,16 @@
-package com.example.recipe.services.admin_access;
+package com.example.recipe.services.user;
 
 import com.example.recipe.domain.Recipe;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.impl.RecipeRepositoryImpl;
-import com.example.recipe.repositories.interface_admin_access.IAdminRecipeRepository;
+import com.example.recipe.repositories.interface_user_access.IUserRecipeRepository;
 
 import java.util.ArrayList;
 
-public class AdminRecipeService {
-    private final IAdminRecipeRepository recipeRepository;
+public class UserRecipeService {
+    private final IUserRecipeRepository recipeRepository;
 
-    public AdminRecipeService() {
+    public UserRecipeService() {
         recipeRepository = new RecipeRepositoryImpl();
     }
 
@@ -24,6 +24,14 @@ public class AdminRecipeService {
 
     public DbResponse<ArrayList<Recipe>> getRecipesByUserId(long userId) {
         return recipeRepository.getRecipeByUserId(userId);
+    }
+
+    public DbResponse<Recipe> addRecipe(Recipe recipe) {
+        return recipeRepository.addRecipe(recipe);
+    }
+
+    public DbResponse<Recipe> updateRecipe(Recipe recipe) {
+        return recipeRepository.updateRecipe(recipe);
     }
 
     public DbResponse<Recipe> deleteRecipe(long recipeId) {

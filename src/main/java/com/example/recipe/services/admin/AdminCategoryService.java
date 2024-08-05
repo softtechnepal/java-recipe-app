@@ -1,6 +1,6 @@
-package com.example.recipe.services.admin_access;
+package com.example.recipe.services.admin;
 
-import com.example.recipe.domain.Category;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.impl.CategoryRepositoryImpl;
 import com.example.recipe.repositories.interface_admin_access.IAdminCategoryRepository;

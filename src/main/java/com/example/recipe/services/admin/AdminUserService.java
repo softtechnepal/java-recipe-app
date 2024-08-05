@@ -1,4 +1,4 @@
-package com.example.recipe.services.admin_access;
+package com.example.recipe.services.admin;
 
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
