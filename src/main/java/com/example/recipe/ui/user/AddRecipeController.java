@@ -3,7 +3,6 @@ package com.example.recipe.ui.user;
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.services.user.UserCategoryService;
 import com.example.recipe.ui.dialogs.AddStepDialog;
-import com.example.recipe.ui.dialogs.AlertCallback;
 import com.example.recipe.ui.dialogs.CategoryDialog;
 import com.example.recipe.ui.dialogs.IngredientDialog;
 import com.example.recipe.utils.NavigationUtil;
@@ -11,14 +10,23 @@ import com.example.recipe.utils.ValidationUtil;
 import com.example.recipe.utils.ViewUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
+import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class AddRecipeController {
     @FXML
@@ -60,6 +68,8 @@ public class AddRecipeController {
     public Label categoriesError;
     @FXML
     public Label stepError;
+    @FXML
+    public HBox hBoxImageSection;
 
     private String imagePath;
     private final List<Category> categories = new ArrayList<>();
@@ -144,7 +154,27 @@ public class AddRecipeController {
     }
 
     public void onSelectImage(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+        if (selectedFile != null) {
 
+            imagePath = selectedFile.getAbsolutePath();
+            logger.info("Selected file: {}", imagePath);
+            Image image = new Image("file:" + imagePath);
+            ImageView imageView = new ImageView();
+            imageView.setId("recipe-image");
+            imageView.setImage(image);
+            imageView.setFitHeight(200);
+            imageView.setFitWidth(200);
+            imageView.setPreserveRatio(true);
+
+            hBoxImageSection.getChildren().clear();
+            hBoxImageSection.getChildren().add(imageView);
+        }
     }
 
     public void onBackPressed(MouseEvent event) {

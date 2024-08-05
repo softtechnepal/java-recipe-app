@@ -81,11 +81,16 @@
                     </VBox>
 
                     <Button onAction="#onAddStep" text="Add Step" style="-fx-max-width: 150px; "/>
-                    <HBox>
+                    <HBox spacing="20" alignment="CENTER_LEFT">
                         <children>
                             <VBox alignment="CENTER" spacing="6.0"
                                   style="-fx-background-color: #8bbdf3; -fx-background-radius: 12px"
-                                  onMouseClicked="#onSelectImage">
+                                  onMouseClicked="#onSelectImage"
+                                  maxHeight="100"
+                                  maxWidth="100"
+                                  minHeight="100"
+                                  minWidth="100"
+                            >
                                 <children>
                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"
                                                style="-fx-background-radius: 10;">
@@ -99,6 +104,7 @@
                                     <Insets bottom="6.0" left="6.0" right="6.0" top="6.0"/>
                                 </padding>
                             </VBox>
+                            <HBox fx:id="hBoxImageSection"/>
                         </children>
                     </HBox>
                     <VBox prefWidth="528.0" spacing="4.0">
