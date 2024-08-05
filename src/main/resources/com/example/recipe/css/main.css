@@ -22,7 +22,8 @@
 }
 
 /* TextField Styles */
-.text-field {
+.text-field,
+.text-field-disabled {
     -fx-background-color: -input-background-color;
     -fx-border-color: -input-border-color;
     -fx-border-radius: 5;
@@ -31,6 +32,7 @@
     -fx-font-size: 14px;
     -fx-max-width: 600px;
 }
+
 
 /* Button Styles */
 .button {
