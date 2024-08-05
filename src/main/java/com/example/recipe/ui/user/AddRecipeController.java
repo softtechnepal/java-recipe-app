@@ -1,14 +1,16 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.recipe.*;
+import com.example.recipe.ui.dialogs.CategoryDialog;
+import com.example.recipe.ui.dialogs.IngredientDialog;
 import com.example.recipe.utils.NavigationUtil;
+import com.example.recipe.utils.ValidationUtil;
 import com.example.recipe.utils.ViewUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -56,21 +58,13 @@ public class AddRecipeController {
     public Label stepError;
 
     private String imagePath;
-    private List<Category> categories = new ArrayList<>();
-    private List<Ingredient> ingredients = new ArrayList<>();
-    private List<Steps> steps = new ArrayList<>();
+    private final List<Category> categories = new ArrayList<>();
+    private final List<Ingredient> ingredients = new ArrayList<>();
+    private final List<Steps> steps = new ArrayList<>();
 
     @FXML
     private void initialize() {
-
-    }
-
-    public void onAddIngredient(ActionEvent actionEvent) {
-
-    }
-
-    public void onSelectImage(MouseEvent event) {
-
+        tfIngredientName.setOnMouseClicked((event) -> onAddIngredient(null));
     }
 
     public void onAddRecipe(ActionEvent actionEvent) {
@@ -90,12 +84,33 @@ public class AddRecipeController {
         }
     }
 
-    public void onBackPressed(MouseEvent event) {
-        NavigationUtil.insertChild("my-recipe-view.fxml");
+    public void onAddIngredient(ActionEvent actionEvent) {
+        var dialog = new IngredientDialog("Add Ingredient", data -> {
+            if (data != null)
+                ingredients.add(data);
+
+            StringBuilder ingredientNames = new StringBuilder();
+            ingredients.forEach(ingredient -> ingredientNames.append(ingredient.getIngredientName()).append(", "));
+            tfIngredientName.setText(ingredientNames.toString());
+        });
+        dialog.showAndWait();
+    }
+
+    public void onAddCategories(ActionEvent actionEvent) {
+        var dialog = new CategoryDialog("Add Categories", List.of("Breakfast", "Lunch", "Dinner", "Snack", "Dessert", "Appetizer", "Drink", "Other"));
+        dialog.showAndWait();
     }
 
     public void onAddStep(ActionEvent actionEvent) {
 
+    }
+
+    public void onSelectImage(MouseEvent event) {
+
+    }
+
+    public void onBackPressed(MouseEvent event) {
+        NavigationUtil.insertChild("my-recipe-view.fxml");
     }
 
     private NutritionalInformation getNutritionalInformation() {
@@ -127,59 +142,19 @@ public class AddRecipeController {
     }
 
     private boolean validateRecipe(Recipe recipe) {
-        return validateString(recipe.getTitle(), recipeNameError, "Recipe Name") &&
-                validateString(recipe.getDescription(), descriptionError, "Description") &&
-                validateListings(recipe.getIngredients(), ingredientError, "Ingredients") &&
-                validateListings(recipe.getCategory(), categoriesError, "Categories") &&
-                validateListings(recipe.getSteps(), stepError, "Steps") &&
+        return ValidationUtil.validateString(recipe.getTitle(), recipeNameError, "Recipe Name") &&
+                ValidationUtil.validateString(recipe.getDescription(), descriptionError, "Description") &&
+                ValidationUtil.validateListings(recipe.getIngredients(), ingredientError, "Ingredients") &&
+                ValidationUtil.validateListings(recipe.getCategory(), categoriesError, "Categories") &&
+                ValidationUtil.validateListings(recipe.getSteps(), stepError, "Steps") &&
                 validateNutritionalInformation(getNutritionalInformation());
     }
 
     private boolean validateNutritionalInformation(NutritionalInformation nutritionalInformation) {
-        return (nutritionalInformation.getCalories() == null || validateInt(String.valueOf(nutritionalInformation.getCalories()), recipeNameError, "Calories")) &&
-                (nutritionalInformation.getProtein() == null || validateDouble(String.valueOf(nutritionalInformation.getProtein()), recipeNameError, "Protein")) &&
-                (nutritionalInformation.getFat() == null || validateDouble(String.valueOf(nutritionalInformation.getFat()), recipeNameError, "Fat")) &&
-                (nutritionalInformation.getCarbohydrates() == null || validateDouble(String.valueOf(nutritionalInformation.getCarbohydrates()), recipeNameError, "Carbohydrates")) &&
-                (nutritionalInformation.getOther() == null || validateString(nutritionalInformation.getOther(), recipeNameError, "Other"));
-    }
-
-    private boolean validateListings(List<?> list, Label fieldName, String title) {
-        if (list.isEmpty()) {
-            ViewUtil.setTextAndVisibility(fieldName, title + " should be added.", true);
-            return false;
-        }
-        ViewUtil.setVisibility(fieldName, false);
-        return true;
-    }
-
-    private boolean validateString(String value, Label fieldName, String title) {
-        if (value == null || value.trim().isEmpty()) {
-            ViewUtil.setTextAndVisibility(fieldName, title + " should be added.", true);
-            return false;
-        }
-        ViewUtil.setVisibility(fieldName, false);
-        return true;
-    }
-
-    private boolean validateInt(String value, Label fieldName, String title) {
-        try {
-            Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            ViewUtil.setTextAndVisibility(fieldName, title + " should be valid number", true);
-            return false;
-        }
-        ViewUtil.setVisibility(fieldName, false);
-        return true;
-    }
-
-    private boolean validateDouble(String value, Label fieldName, String title) {
-        try {
-            Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            ViewUtil.setTextAndVisibility(fieldName, title + " should be valid number", true);
-            return false;
-        }
-        ViewUtil.setVisibility(fieldName, false);
-        return true;
+        return (nutritionalInformation.getCalories() == null || ValidationUtil.validateInt(String.valueOf(nutritionalInformation.getCalories()), recipeNameError, "Calories")) &&
+                (nutritionalInformation.getProtein() == null || ValidationUtil.validateDouble(String.valueOf(nutritionalInformation.getProtein()), recipeNameError, "Protein")) &&
+                (nutritionalInformation.getFat() == null || ValidationUtil.validateDouble(String.valueOf(nutritionalInformation.getFat()), recipeNameError, "Fat")) &&
+                (nutritionalInformation.getCarbohydrates() == null || ValidationUtil.validateDouble(String.valueOf(nutritionalInformation.getCarbohydrates()), recipeNameError, "Carbohydrates")) &&
+                (nutritionalInformation.getOther() == null || ValidationUtil.validateString(nutritionalInformation.getOther(), recipeNameError, "Other"));
     }
 }

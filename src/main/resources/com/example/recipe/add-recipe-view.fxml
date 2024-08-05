@@ -63,7 +63,7 @@
                     <VBox prefWidth="528" spacing="6">
                         <Label text="Ingredients"/>
                         <TextField fx:id="tfIngredientName" promptText="Ingredient Name"
-                                   styleClass="text-field-disabled"/>
+                                   styleClass="text-field-disabled" editable="false"/>
                         <Label fx:id="ingredientError" visible="false" managed="false" styleClass="error-label"/>
                         <Button onAction="#onAddIngredient" text="Add Ingredient"
                                 style="-fx-max-width: 150px;"/>
@@ -73,7 +73,7 @@
                         <TextField fx:id="tfCategories" promptText="Ingredient Name"
                                    styleClass="text-field-disabled"/>
                         <Label fx:id="categoriesError" visible="false" managed="false" styleClass="error-label"/>
-                        <Button onAction="#onAddIngredient" text="Add Categories"
+                        <Button onAction="#onAddCategories" text="Add Categories"
                                 style="-fx-max-width: 150px;"/>
                     </VBox>
                     <VBox prefWidth="528" spacing="6" fx:id="vBoxAddedSteps">
