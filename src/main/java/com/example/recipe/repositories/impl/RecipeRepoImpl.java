@@ -41,7 +41,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 "(user_id, title, description, image, video_url, warnings) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING recipe_id";
         try (PreparedStatement statement = connection.prepareStatement(insertRecipeQuery, Statement.RETURN_GENERATED_KEYS)) {
-            // todo(gprachan)
+            // todo(gprachan) set it do different place for better separation of concerns
             statement.setInt(1, 107);
             statement.setString(2, recipe.getTitle());
             statement.setString(3, recipe.getDescription());
@@ -121,7 +121,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     }
 
     @Override
-    public void getRecipeById(long recipeId, DatabaseCallback<Recipe> callback) {
+    public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
 
     }
 
@@ -152,6 +152,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
         return recipes;
     }
 
+    // todo make mapper class for this which maps all the database to its respective object
     private Recipe mapResultSetToRecipe(ResultSet resultSet) throws SQLException {
         Recipe recipe = new Recipe();
         recipe.setRecipeId(resultSet.getLong("recipe_id"));
