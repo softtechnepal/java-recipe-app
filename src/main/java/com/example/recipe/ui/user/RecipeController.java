@@ -51,4 +51,9 @@ public class RecipeController extends BaseRecipeListing {
     protected MenuListingType getMenuListingType() {
         return MenuListingType.ALL_RECIPE;
     }
+
+    @Override
+    protected String getScreenId() {
+        return this.getClass().getSimpleName();
+    }
 }

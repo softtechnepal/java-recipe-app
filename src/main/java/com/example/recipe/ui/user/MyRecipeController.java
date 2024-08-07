@@ -59,4 +59,9 @@ public class MyRecipeController extends BaseRecipeListing {
     protected MenuListingType getMenuListingType() {
         return MenuListingType.MY_RECIPE;
     }
+
+    @Override
+    protected String getScreenId() {
+        return this.getClass().getSimpleName();
+    }
 }
