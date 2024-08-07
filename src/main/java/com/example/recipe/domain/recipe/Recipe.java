@@ -22,6 +22,7 @@ public class Recipe {
 
     public Recipe() {
     }
+
     public Recipe(Long recipeId, Integer userId, String title, String description, String image, String warnings, String videoUrl, Timestamp createdAt, Timestamp updatedAt, NutritionalInformation nutritionalInformation, List<Category> category, List<Ingredient> ingredients, List<Steps> steps) {
         this.recipeId = recipeId;
         this.userId = userId;
@@ -63,6 +64,7 @@ public class Recipe {
     }
 
     public String getDescription() {
+        if (description == null) return "Description not available";
         return description;
     }
 

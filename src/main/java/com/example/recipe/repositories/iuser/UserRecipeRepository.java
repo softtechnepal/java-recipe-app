@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserRecipeRepository {
     void addRecipe(Recipe recipe, DatabaseCallback<Recipe> callback);
 
-    void getRecipeById(long recipeId, DatabaseCallback<Recipe> callback);
+    void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback);
 
     void getRecipeByUserId(long userId, DatabaseCallback<List<Recipe>> callback);
 
