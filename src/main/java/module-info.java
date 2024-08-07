@@ -28,4 +28,6 @@ module com.example.recipe {
 
     opens com.example.recipe.components to javafx.fxml;
     exports com.example.recipe.components;
+    opens com.example.recipe.domain.recipe to javafx.base;
+    exports com.example.recipe.domain.recipe;
 }

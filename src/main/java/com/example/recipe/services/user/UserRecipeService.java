@@ -25,4 +25,5 @@ public class UserRecipeService {
     public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
         recipeRepository.getAllRecipes(callback);
     }
+
 }
