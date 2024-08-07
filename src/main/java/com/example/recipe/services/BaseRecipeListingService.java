@@ -1,19 +1,18 @@
 package com.example.recipe.services;
 
-import com.example.recipe.domain.common.DatabaseCallback;
-import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.recipe.Recipe;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +62,10 @@ public abstract class BaseRecipeListingService {
     // Method to update VBox with recipe data
     private void updateCardBoxWithRecipe(VBox cardBox, Recipe recipe) {
         Label titleLabel = (Label) cardBox.lookup("#recipeTitle");
+        Text description = (Text) cardBox.lookup("#textDescription");
         ImageView imageView = (ImageView) cardBox.lookup("#profileImage");
         titleLabel.setText(recipe.getTitle());
+        description.setText(recipe.getDescription());
         imageView.setImage(new Image("file:" + recipe.getImage(), 200, 200, true, true));
     }
 
