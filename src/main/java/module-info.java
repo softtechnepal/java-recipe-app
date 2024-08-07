@@ -30,4 +30,6 @@ module com.example.recipe {
     exports com.example.recipe.components;
     opens com.example.recipe.domain.recipe to javafx.base;
     exports com.example.recipe.domain.recipe;
+    opens com.example.recipe.domain.enums to javafx.base;
+    exports com.example.recipe.domain.enums;
 }

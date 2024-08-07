@@ -1,6 +1,7 @@
 package com.example.recipe.ui.user;
 
-import com.example.recipe.services.BaseRecipeListingService;
+import com.example.recipe.domain.enums.MenuListingType;
+import com.example.recipe.services.BaseRecipeListing;
 import com.example.recipe.services.user.UserRecipeService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,7 +11,7 @@ import javafx.scene.layout.VBox;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 
-public class RecipeController extends BaseRecipeListingService {
+public class RecipeController extends BaseRecipeListing {
     @FXML
     public GridPane menuGrid;
     @FXML
@@ -44,5 +45,10 @@ public class RecipeController extends BaseRecipeListingService {
     @Override
     protected VBox getProgressContainer() {
         return progressContainer;
+    }
+
+    @Override
+    protected MenuListingType getMenuListingType() {
+        return MenuListingType.ALL_RECIPE;
     }
 }
