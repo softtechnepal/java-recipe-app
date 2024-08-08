@@ -3,6 +3,7 @@ package com.example.recipe.repositories.impl;
 import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.mappper.RecipeMapper;
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.repositories.iuser.UserRecipeRepository;
 import com.example.recipe.utils.DatabaseThread;
@@ -11,7 +12,9 @@ import com.example.recipe.utils.ImageUtil;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
@@ -42,7 +45,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING recipe_id";
         try (PreparedStatement statement = connection.prepareStatement(insertRecipeQuery, Statement.RETURN_GENERATED_KEYS)) {
             // todo(gprachan) set it do different place for better separation of concerns
-            statement.setInt(1, 107);
+            statement.setInt(1, 108);
             statement.setString(2, recipe.getTitle());
             statement.setString(3, recipe.getDescription());
             statement.setString(4, recipe.getImage());
@@ -167,14 +170,21 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     @Override
     public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
-        final String SELECT_RECIPE_QUERY = "SELECT * FROM recipes";
+        final String SELECT_RECIPE_QUERY = """
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                       c.category_id, c.category_name
+                FROM recipes r
+                         LEFT JOIN recipecategories rc ON r.recipe_id = rc.recipe_id
+                         LEFT JOIN categories c ON rc.category_id = c.category_id;
+                """;
 
         DatabaseThread.runDataOperation(() -> {
             try (
                     Connection connection = DatabaseConfig.getConnection();
                     PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_QUERY)
             ) {
-                return DbResponse.success("", mapResultSetToRecipes(statement.executeQuery()));
+                List<Recipe> recipes = RecipeMapper.mapResultSetToRecipes(statement.executeQuery());
+                return DbResponse.success("Success", recipes);
             } catch (Exception e) {
                 logger.error("Error while fetching recipe by ID", e);
                 return DbResponse.failure(e.getMessage());

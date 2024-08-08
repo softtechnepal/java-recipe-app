@@ -1,28 +1,30 @@
 package com.example.recipe.services;
 
+import com.example.recipe.domain.UiModel;
 import com.example.recipe.domain.enums.MenuListingType;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.recipe.Recipe;
-import com.example.recipe.utils.NavigationUtil;
+import com.example.recipe.ui.user.MenuItemController;
 import com.example.recipe.utils.TaskManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public abstract class BaseRecipeListing {
+    private static final Logger log = LoggerFactory.getLogger(BaseRecipeListing.class);
+
     protected abstract GridPane getMenuGrid();
 
     protected abstract VBox getProgressContainer();
@@ -56,10 +58,11 @@ public abstract class BaseRecipeListing {
                             // Create a new FXMLLoader for each item
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/recipe/menu-item.fxml"));
                             VBox cardBox = fxmlLoader.load();
-
+                            MenuItemController controller = fxmlLoader.getController();
+                            controller.setData(recipe);
                             // Update the cardBox with recipe data
-                            updateCardBoxWithRecipe(cardBox, recipe);
-                            menuComponentStore.addMenuComponent(cardBox, getMenuListingType());
+                            // updateCardBoxWithRecipe(cardBox, recipe);
+                            menuComponentStore.addMenuComponent(new UiModel(controller, cardBox), getMenuListingType());
                         }
                         updateMessage("Loading completed");
                     } catch (IOException e) {
@@ -92,6 +95,7 @@ public abstract class BaseRecipeListing {
         return false;
     }
 
+    // todo () Method to update VBox with recipe data
     private List<Recipe> getNewRecipes(List<Recipe> data) {
         List<Recipe> newRecipes = new ArrayList<>();
         /*for (Recipe recipe : data) {
@@ -102,24 +106,42 @@ public abstract class BaseRecipeListing {
         return newRecipes;
     }
 
+    public void addFilter(List<Category> categories) {
+        if (categories.isEmpty()) {
+            updateGridPane(getCurrentRecipes());
+            return;
+        }
+        List<UiModel> filteredResult = menuComponentStore.getAllMenuModel().stream().filter(vBox -> {
+            MenuItemController controller = vBox.getMenuItemController();
+            List<Category> recipe = controller.getRecipe().getCategory();
+            if (recipe == null || recipe.isEmpty()) {
+                return false;
+            }
+            AtomicBoolean hasCategory = new AtomicBoolean(false);
+
+            recipe.forEach(category -> {
+                logger.error("Category{}", category.getCategoryName());
+                if (categories.stream().map(Category::getCategoryName).toList().contains(category.getCategoryName())) {
+                    hasCategory.set(true);
+                }
+            });
+            return hasCategory.get();
+        }).toList();
+
+        updateGridPane(filteredResult.stream().map(UiModel::getvBoxes).toList());
+    }
+
+    protected void searchRecipes(String query) {
+        List<UiModel> filteredResult = menuComponentStore.getAllMenuModel().stream().filter(vBox -> {
+            MenuItemController controller = vBox.getMenuItemController();
+            return controller.getRecipe().getTitle().toLowerCase().contains(query.toLowerCase());
+        }).toList();
+
+        updateGridPane(filteredResult.stream().map(UiModel::getvBoxes).toList());
+    }
+
     private List<VBox> getCurrentRecipes() {
         return menuComponentStore.getMenuComponents(getMenuListingType());
-    }
-
-    // Method to update VBox with recipe data
-    private void updateCardBoxWithRecipe(VBox cardBox, Recipe recipe) {
-        VBox menuItemCard = (VBox) cardBox.lookup("#menuItemCard");
-        menuItemCard.setOnMouseClicked(this::navigateToDetail);
-        Label titleLabel = (Label) cardBox.lookup("#recipeTitle");
-        Text description = (Text) cardBox.lookup("#textDescription");
-        ImageView imageView = (ImageView) cardBox.lookup("#profileImage");
-        titleLabel.setText(recipe.getTitle());
-        description.setText(recipe.getDescription());
-        imageView.setImage(new Image("file:" + recipe.getImage(), 200, 200, true, true));
-    }
-
-    private void navigateToDetail(MouseEvent event) {
-        NavigationUtil.insertChild("recipe-details-view.fxml");
     }
 
     public void updateGridPane(List<VBox> menuItems) {
