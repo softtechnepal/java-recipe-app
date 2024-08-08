@@ -37,6 +37,10 @@ public class RecipeController extends BaseRecipeListing {
     public void initialize() {
         navTitle.requestFocus();
         fetchRecipes();
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchRecipes(newValue);
+        });
     }
 
     private void fetchRecipes() {

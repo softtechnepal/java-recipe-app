@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +107,10 @@ public abstract class BaseRecipeListing {
     }
 
     public void addFilter(List<Category> categories) {
+        if (categories.isEmpty()) {
+            updateGridPane(getCurrentRecipes());
+            return;
+        }
         List<UiModel> filteredResult = menuComponentStore.getAllMenuModel().stream().filter(vBox -> {
             MenuItemController controller = vBox.getMenuItemController();
             List<Category> recipe = controller.getRecipe().getCategory();
@@ -123,6 +126,15 @@ public abstract class BaseRecipeListing {
                 }
             });
             return hasCategory.get();
+        }).toList();
+
+        updateGridPane(filteredResult.stream().map(UiModel::getvBoxes).toList());
+    }
+
+    protected void searchRecipes(String query) {
+        List<UiModel> filteredResult = menuComponentStore.getAllMenuModel().stream().filter(vBox -> {
+            MenuItemController controller = vBox.getMenuItemController();
+            return controller.getRecipe().getTitle().toLowerCase().contains(query.toLowerCase());
         }).toList();
 
         updateGridPane(filteredResult.stream().map(UiModel::getvBoxes).toList());
