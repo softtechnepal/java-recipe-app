@@ -31,7 +31,7 @@
         </HBox>
         <!-- My Recipes -->
         <StackPane>
-            <ScrollPane style="-fx-background-color: white" styleClass="no-scroll-bars" HBox.hgrow="ALWAYS"
+            <ScrollPane style="-fx-background-color: white; -fx-background:white;" styleClass="no-scroll-bars" HBox.hgrow="ALWAYS"
                         VBox.vgrow="ALWAYS">
                 <GridPane fx:id="menuGrid" hgap="16" style="-fx-background-color: white" vgap="16">
                 </GridPane>

@@ -1,5 +1,6 @@
 package com.example.recipe.services;
 
+import com.example.recipe.domain.UiModel;
 import com.example.recipe.domain.enums.MenuListingType;
 import javafx.scene.layout.VBox;
 
@@ -8,8 +9,8 @@ import java.util.List;
 
 public class MenuComponentStore {
     private static MenuComponentStore instance;
-    private final List<VBox> allMenuComponents;
-    private final List<VBox> myMenuComponents;
+    private final List<UiModel> allMenuComponents;
+    private final List<UiModel> myMenuComponents;
 
     private MenuComponentStore() {
         allMenuComponents = new ArrayList<>();
@@ -23,7 +24,7 @@ public class MenuComponentStore {
         return instance;
     }
 
-    public void addMenuComponent(VBox component, MenuListingType menuListingType) {
+    public void addMenuComponent(UiModel component, MenuListingType menuListingType) {
         if (menuListingType == MenuListingType.ALL_RECIPE) {
             allMenuComponents.add(component);
         } else if (menuListingType == MenuListingType.MY_RECIPE) {
@@ -33,8 +34,12 @@ public class MenuComponentStore {
 
     public List<VBox> getMenuComponents(MenuListingType menuListingType) {
         if (menuListingType == MenuListingType.ALL_RECIPE) {
-            return allMenuComponents;
+            return allMenuComponents.stream().map(UiModel::getvBoxes).toList();
         }
-        return myMenuComponents;
+        return myMenuComponents.stream().map(UiModel::getvBoxes).toList();
+    }
+
+    public List<UiModel> getAllMenuModel() {
+        return allMenuComponents;
     }
 }

@@ -18,6 +18,7 @@ public class UserCategoryService {
     }
 
     private final ArrayList<Category> categories = new ArrayList<>();
+    private final ArrayList<Category> selectedCategories = new ArrayList<>();
 
     public void getAllCategories(DatabaseCallback<ArrayList<Category>> callback) {
         LoggerUtil.logger.error("Error while retrieving data {}", categories.size());
@@ -36,5 +37,14 @@ public class UserCategoryService {
 
     public DbResponse<Category> getCategoryById(long categoryId) {
         return categoryRepository.getCategoryById(categoryId);
+    }
+
+    public void setSelectedCategories(List<Category> selectedCategories) {
+        this.selectedCategories.clear();
+        this.selectedCategories.addAll(selectedCategories);
+    }
+
+    public List<Category> getSelectedCategories() {
+        return selectedCategories;
     }
 }
