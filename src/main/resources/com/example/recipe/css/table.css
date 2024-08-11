@@ -35,25 +35,25 @@
 }
 
 /* Table View */
-.table-container .table-view {
+.table-view {
     -fx-background-color: #f0f0f0;
     -fx-text-fill: black;
     -fx-padding: 10;
     -fx-selection-bar: #d0d0d0;
 }
 
-.table-container .table-view .column-header {
+ .table-view .column-header {
     -fx-background-color: -color-primary;
     -fx-border-color: -color-primary;
     -fx-border-width: 1px;
     -fx-padding: 5px;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: -text-color;
+    -fx-text-fill: -text-color !important;
 }
 
-.table-container .table-view .column-header .text {
-    -fx-text-fill: -text-color;
+ .table-view .column-header .text {
+    -fx-text-fill: -text-color !important;
 }
 
 .table-header-button{

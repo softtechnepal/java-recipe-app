@@ -7,7 +7,7 @@ import java.util.List;
 public class ValidationUtil {
 
     public static boolean validateListings(List<?> list, Label fieldName, String title) {
-        if (list.isEmpty()) {
+        if (list == null || list.isEmpty()) {
             ViewUtil.setTextAndVisibility(fieldName, title + " should be added.", true);
             return false;
         }
