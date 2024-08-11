@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
@@ -25,7 +26,7 @@ public class RecipeController extends BaseRecipeListing {
     @FXML
     public VBox progressContainer;
     @FXML
-    public Label navTitle;
+    public Text navTitle;
     @FXML
     public TextField searchField;
 
