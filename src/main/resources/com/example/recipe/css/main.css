@@ -2,15 +2,15 @@
 @import "custom-menu-item.css";
 
 .root {
-    -fx-background-color: -background-color;
-    -fx-pref-width: 100%;
-    -fx-pref-height: 100%;
-    -fx-min-height: 800px;
-    -fx-min-width: 1000px;
+    /*-fx-background-color: -background-color;*/
+    /*-fx-pref-width: 100%;*/
+    /*-fx-pref-height: 100%;*/
+    /*-fx-min-height: 800px;*/
+    /*-fx-min-width: 1000px;*/
 }
 
 .label {
-    -fx-text-fill: -text-color;
+    /*-fx-text-fill: -text-color;*/
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }

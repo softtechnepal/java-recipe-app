@@ -1,5 +1,6 @@
 package com.example.recipe.ui.user;
 
+import com.example.recipe.Constants;
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
@@ -9,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuItemController {
     @FXML
@@ -45,6 +49,8 @@ public class MenuItemController {
     }
 
     public void navigateToDetail(MouseEvent event) {
-        NavigationUtil.insertChild("recipe-details-view.fxml");
+        Map<String, Object> params = new HashMap<>();
+        params.put(Constants.recipeParamId, recipe.getRecipeId());
+        NavigationUtil.insertChild("recipe-details-view.fxml", params);
     }
 }

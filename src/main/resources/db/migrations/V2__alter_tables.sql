@@ -10,9 +10,9 @@ ALTER TABLE Users
 ALTER TABLE Users
     ADD CONSTRAINT ck_users_status CHECK (status IN ('ACTIVE', 'PENDING', 'DISABLED'));
 
-DROP TABLE allergywarnings;
+-- DROP TABLE allergywarnings;
 
-DROP TABLE RecipeAllergyWarnings;
+-- DROP TABLE RecipeAllergyWarnings;
 
 ALTER TABLE recipes
     ADD COLUMN warnings TEXT DEFAULT '';
@@ -29,3 +29,15 @@ CREATE TABLE RecipeSteps
     CONSTRAINT step_id PRIMARY KEY (step_id),
     FOREIGN KEY (recipe_id) REFERENCES recipes (recipe_id)
 );
+
+ALTER TABLE users
+    ADD COLUMN gender VARCHAR(10) DEFAULT NULL;
+
+ALTER TABLE users
+    ADD COLUMN dob DATE DEFAULT NULL;
+
+ALTER TABLE users
+    ADD CONSTRAINT ck_users_gender CHECK (gender IN ('MALE', 'FEMALE', 'OTHER'));
+
+ALTER TABLE users
+    ADD CONSTRAINT ck_users_dob CHECK (dob <= CURRENT_DATE);
