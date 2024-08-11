@@ -34,7 +34,7 @@ public class LoginController {
     @FXML
     public void initialize() {
         // Load the logo image here
-        Image logoImage = new Image("file:src/main/resources/assets/app_logo.png");
+        Image logoImage = new Image("file:src/main/resources/assets/logo.png");
         logoImageView.setImage(logoImage);
 
         //Test Data

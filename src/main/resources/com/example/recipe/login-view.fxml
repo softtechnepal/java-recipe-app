@@ -9,29 +9,31 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.recipe.ui.common.authentication.LoginController">
     <center>
-        <VBox alignment="CENTER" spacing="20">
-            <padding>
-                <Insets bottom="60" left="60" right="60" top="20"/>
-            </padding>
+        <VBox alignment="CENTER" spacing="10" maxWidth="500">
             <ImageView fx:id="logoImageView" fitWidth="200.0" preserveRatio="true"/>
-            <Label text="Welcome to My Recipe" textFill="#FFFFFF"/>
-            <VBox alignment="CENTER" spacing="10">
-                <TextField fx:id="usernameField" promptText="Username"/>
+            <Label text="Welcome to Application" styleClass="auth_header"/>
+            <VBox alignment="CENTER_LEFT" spacing="4">
+                <Label text="Username" />
+                <TextField fx:id="usernameField" promptText="Username" alignment="TOP_LEFT"/>
                 <Label fx:id="usernameErrorLabel" visible="false" managed="false" styleClass="error-label"/>
             </VBox>
-            <VBox alignment="CENTER" spacing="10">
-                <PasswordField fx:id="passwordField" promptText="Password"/>
+            <VBox alignment="CENTER_LEFT" spacing="4">
+                <Label text="Password"/>
+                <PasswordField fx:id="passwordField" promptText="Password" alignment="TOP_LEFT"/>
                 <Label fx:id="passwordErrorLabel" visible="false" managed="false" styleClass="error-label"/>
             </VBox>
-            <Label fx:id="forgotPasswordLabel" onMouseClicked="#handleForgotPassword" text="Forgot Password?"
-                   textFill="#007bff"/>
-            <Button fx:id="loginButton" contentDisplay="CENTER" text="Login"/>
-            <Label fx:id="registerLabel" alignment="CENTER" onMouseClicked="#handleRegister"
-                   text="Don't hava an account? Register"
-                   textFill="#007bff"/>
-
-            <Label fx:id="guestLabel" alignment="CENTER" onMouseClicked="#handleContinueAsGuest"
-                   text="Continue as Guest" textFill="#007bff"/>
+            <VBox alignment="CENTER_RIGHT">
+                <Label fx:id="forgotPasswordLabel" onMouseClicked="#handleForgotPassword" text="Forgot Password?"
+                       textFill="#293846" textAlignment="RIGHT" style="-fx-cursor: hand"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="10">
+                <Button fx:id="loginButton" contentDisplay="CENTER" text="Login" maxWidth="500"/>
+                <Label fx:id="registerLabel" alignment="CENTER" onMouseClicked="#handleRegister"
+                       text="Don't hava an account? Register"
+                       textFill="#293846" style="-fx-cursor: hand"/>
+                <Label fx:id="guestLabel" alignment="CENTER" onMouseClicked="#handleContinueAsGuest"
+                       text="Continue as Guest" textFill="#293846" style="-fx-cursor: hand"/>
+            </VBox>
         </VBox>
     </center>
 </BorderPane>
