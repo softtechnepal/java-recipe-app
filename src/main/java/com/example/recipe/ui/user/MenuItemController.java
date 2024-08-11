@@ -22,7 +22,7 @@ public class MenuItemController {
     @FXML
     public Label recipeTitle;
     @FXML
-    public Text textDescription;
+    public Label textDescription;
     @FXML
     public Label rating;
     @FXML

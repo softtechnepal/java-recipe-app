@@ -9,6 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import java.lang.Double?>
 <VBox id="menuItemCard" prefHeight="300.0" prefWidth="335.0" styleClass="elevated-card"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:id="root"
@@ -41,19 +42,25 @@
                 </HBox>
                 <HBox prefHeight="25.0" prefWidth="284.0" spacing="12.0">
                     <children>
-                        <Text fx:id="textDescription"
-                              style="-fx-text-fill: #343534; -fx-max-height: 60px; -fx-wrap-text: true; -fx-text-overrun: ellipsis-word"
-                              wrappingWidth="222.0">
-                            <font>
-                                <Font size="15.0"/>
-                            </font>
-                        </Text>
-                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#onSave">
+                        <VBox minHeight="60" maxHeight="60"
+                              maxWidth="222">
+                            <Label fx:id="textDescription"
+                                   style="-fx-text-fill: #343534; -fx-wrap-text: true; -fx-text-overrun: ellipsis-word;"
+                                   wrapText="true"
+                                   textFill="#343534">
+                                <font>
+                                    <Font size="15.0"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true"
+                                   onMouseClicked="#onSave">
                             <image>
                                 <Image url="@../../../assets/ic_like.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#review">
+                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true"
+                                   onMouseClicked="#review">
                             <image>
                                 <Image url="@../../../assets/ic_comment.png"/>
                             </image>
