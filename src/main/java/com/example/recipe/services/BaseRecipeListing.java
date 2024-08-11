@@ -42,9 +42,6 @@ public abstract class BaseRecipeListing {
     public void loadRecipeComponents(List<Recipe> data) {
         if (loadRecipeIfExists(data)) return;
 
-        // todo () Here comes the logic for recipe loading if the recipe is not already loaded
-        //  Load only the new ones if old ones already exist
-
         final Task<Void> loadingTask;
         if (isPreviousTaskRunningForCurrentScreen()) {
             loadingTask = taskManager.getTask(getScreenId());

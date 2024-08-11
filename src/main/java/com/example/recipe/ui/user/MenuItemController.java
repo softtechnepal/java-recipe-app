@@ -6,7 +6,6 @@ import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,8 +15,6 @@ import javafx.scene.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class MenuItemController {
     @FXML
@@ -73,6 +70,7 @@ public class MenuItemController {
                 return;
             }
             DialogUtil.showInfoDialog("Success", response.getMessage());
+            NavigationUtil.refreshCurrentChild();
         });
         mouseEvent.consume();
     }

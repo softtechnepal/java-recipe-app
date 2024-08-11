@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class NavigationUtil {
     private static final String FXML_PATH = "/com/example/recipe/";
     private static final String CSS_PATH = "/com/example/recipe/css/main.css";
     private static final Logger log = LoggerFactory.getLogger(NavigationUtil.class);
-    private static String currentScreen = ".";
+    private static String currentChild = ".";
     private static final Map<String, Object> currentParams = new HashMap<>();
 
     public static void navigateTo(String fxmlFile) {
@@ -62,10 +61,16 @@ public class NavigationUtil {
 
 
     public static void insertChild(String fxmlFile) {
+        if (fxmlFile.equals(currentChild)) {
+            return;
+        }
         replaceChild(fxmlFile);
     }
 
     public static void insertChild(String fxmlFile, Map<String, ?> params) {
+        if (fxmlFile.equals(currentChild)) {
+            return;
+        }
         synchronized (currentParams) {
             currentParams.clear();
             currentParams.putAll(params);
@@ -75,10 +80,7 @@ public class NavigationUtil {
 
     private static void replaceChild(String fxmlFile) {
         try {
-            if (fxmlFile.equals(currentScreen)) {
-                return;
-            }
-            currentScreen = fxmlFile;
+            currentChild = fxmlFile;
             HBox hBoxContainer = SingletonObjects.getInstance().getMainBox();
             URL profile = NavigationUtil.class.getResource(FXML_PATH + fxmlFile);
             assert profile != null;
@@ -96,5 +98,9 @@ public class NavigationUtil {
         synchronized (currentParams) {
             return currentParams.get(key);
         }
+    }
+
+    public static void refreshCurrentChild() {
+        replaceChild(currentChild);
     }
 }
