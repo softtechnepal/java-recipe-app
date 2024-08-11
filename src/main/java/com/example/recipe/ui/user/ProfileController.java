@@ -1,11 +1,13 @@
 package com.example.recipe.ui.user;
 
+import com.example.recipe.domain.User;
 import com.example.recipe.services.UserService;
 import com.example.recipe.utils.DialogUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class ProfileController {
@@ -23,6 +25,7 @@ public class ProfileController {
     public TextField tfFirstName;
 
     private UserService userService;
+    private User user;
 
     public void initialize() {
         userService = new UserService();
@@ -34,27 +37,31 @@ public class ProfileController {
         var response = userService.getUserById(107);
 
         if (response.isSuccess()) {
-            var user = response.getData();
+            user = response.getData();
 
-            email.setText(user.getEmail());
-
-            if (user.getFirstName() != null)
-                tfFirstName.setText(user.getFirstName());
-
-            if (user.getLastName() != null)
-                tfLastName.setText(user.getLastName());
-
-            if (user.getFirstName() != null || user.getLastName() != null)
-                fullName.setText(user.getFirstName() + " " + user.getLastName());
-
-            if (user.getGender() != null && !user.getGender().isEmpty() && genderComboBox.getItems().contains(user.getGender()))
-                genderComboBox.setValue(user.getGender());
-
-            if (user.getDob() != null)
-                dobDatePicker.setValue(LocalDate.parse(user.getDob().toString()));
+            setProfile(user);
         } else {
             DialogUtil.showErrorDialog("Error", response.getMessage());
         }
+    }
+
+    private void setProfile(User userData) {
+        email.setText(userData.getEmail());
+
+        if (userData.getFirstName() != null)
+            tfFirstName.setText(userData.getFirstName());
+
+        if (userData.getLastName() != null)
+            tfLastName.setText(userData.getLastName());
+
+        if (userData.getFirstName() != null || userData.getLastName() != null)
+            fullName.setText(userData.getFirstName() + " " + userData.getLastName());
+
+        if (userData.getGender() != null && !userData.getGender().isEmpty() && genderComboBox.getItems().contains(user.getGender()))
+            genderComboBox.setValue(userData.getGender());
+
+        if (userData.getDob() != null)
+            dobDatePicker.setValue(LocalDate.parse(userData.getDob().toString()));
     }
 
     private void configureDatePicker() {
@@ -68,6 +75,32 @@ public class ProfileController {
     }
 
     public void saveProfile(ActionEvent actionEvent) {
+        String firstName = tfFirstName.getText();
+        String lastName = tfLastName.getText();
 
+        if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()) {
+            DialogUtil.showErrorDialog("Validation Error", "First Name and Last Name cannot be empty.");
+            return;
+        }
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        if (genderComboBox.getValue() != null) {
+            user.setGender(genderComboBox.getValue());
+        }
+
+        if (dobDatePicker.getValue() != null) {
+            user.setDob(Date.valueOf(dobDatePicker.getValue()));
+        }
+
+        userService.updateProfile(user, (response) -> {
+            if (response.isSuccess()) {
+                setProfile(response.getData());
+                DialogUtil.showInfoDialog("Success", "User profile updated successfully.");
+            } else {
+                DialogUtil.showErrorDialog("Error", response.getMessage());
+            }
+        });
     }
 }
