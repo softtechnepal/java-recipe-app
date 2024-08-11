@@ -20,7 +20,7 @@
                             <Image url="@../../../assets/users.png"/>
                         </image>
                     </ImageView>
-                    <Label style="-fx-text-fill: black;" text="Sandip Thapa">
+                    <Label fx:id="fullName" style="-fx-text-fill: black;" text="Sandip Thapa">
                         <font>
                             <Font name="System Bold" size="24.0"/>
                         </font>
@@ -28,7 +28,7 @@
                             <Insets top="12.0"/>
                         </padding>
                     </Label>
-                    <Label style="-fx-text-fill: grey;" text="sandip.thapa@gmail.com" textFill="#464343">
+                    <Label fx:id="email" style="-fx-text-fill: grey;" text="sandip.thapa@gmail.com" textFill="#464343">
                         <padding>
                             <Insets top="12.0"/>
                         </padding>
@@ -46,13 +46,13 @@
                     <VBox>
                         <children>
                             <Label text="First Name" style="-fx-text-fill: black;"/>
-                            <TextField/>
+                            <TextField fx:id="tfFirstName"/>
                         </children>
                     </VBox>
                     <VBox>
                         <children>
                             <Label text="Last Name" style="-fx-text-fill: black;"/>
-                            <TextField/>
+                            <TextField fx:id="tfLastName"/>
                         </children>
                     </VBox>
                     <VBox>

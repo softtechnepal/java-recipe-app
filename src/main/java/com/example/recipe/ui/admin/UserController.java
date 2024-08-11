@@ -56,7 +56,7 @@ public class UserController {
             return new SimpleStringProperty(user.getStatus());
         });
         createdAtColumn.setCellValueFactory(cellData -> {
-            String[] parts = cellData.getValue().getCreatedAt().toString().split(" ");
+            String[] parts = cellData.getValue().getCreated_at().toString().split(" ");
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
         });

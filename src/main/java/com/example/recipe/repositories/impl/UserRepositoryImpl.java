@@ -2,15 +2,20 @@ package com.example.recipe.repositories.impl;
 
 import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.User;
+import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
+import com.example.recipe.repositories.iuser.UserRepository;
+import com.example.recipe.utils.DatabaseThread;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
 import static com.example.recipe.utils.LoggerUtil.logger;
 
-public class UserRepositoryImpl implements IAdminUserRepository {
+public class UserRepositoryImpl implements IAdminUserRepository, UserRepository {
 
     @Override
     public DbResponse<ArrayList<User>> getAllUsers() {
@@ -26,6 +31,8 @@ public class UserRepositoryImpl implements IAdminUserRepository {
                             rs.getString("last_name"),
                             rs.getString("username"),
                             rs.getString("email"),
+                            rs.getString("gender"),
+                            rs.getDate("dob"),
                             rs.getBoolean("is_admin"),
                             rs.getString("status"),
                             rs.getDate("created_at")
@@ -37,7 +44,7 @@ public class UserRepositoryImpl implements IAdminUserRepository {
             logger.error("Error while retrieving data", e);
             return new DbResponse.Failure<>(e.getMessage());
         }
-        return new DbResponse.Success<>("Get user success",users);
+        return new DbResponse.Success<>("Get user success", users);
     }
 
     @Override
@@ -55,6 +62,8 @@ public class UserRepositoryImpl implements IAdminUserRepository {
                             rs.getString("last_name"),
                             rs.getString("username"),
                             rs.getString("email"),
+                            rs.getString("gender"),
+                            rs.getDate("dob"),
                             rs.getBoolean("is_admin"),
                             rs.getString("status"),
                             rs.getDate("created_at")
@@ -90,5 +99,31 @@ public class UserRepositoryImpl implements IAdminUserRepository {
             return new DbResponse.Failure<>(e.getMessage());
         }
         return new DbResponse.Success<>("User status updated to " + status, null);
+    }
+
+    @Override
+    public void updateProfile(User updateRequest, DatabaseCallback<User> result) {
+        String query = """
+                    UPDATE users SET first_name = ?, last_name = ?, gender = ?, dob = ? WHERE user_id = ?
+                """;
+
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection();
+                 PreparedStatement st = connection.prepareStatement(query)) {
+                st.setString(1, updateRequest.getFirstName());
+                st.setString(2, updateRequest.getLastName());
+                st.setString(3, updateRequest.getGender());
+                st.setDate(4, updateRequest.getDob());
+                st.setLong(5, updateRequest.getUserId());
+                int rowsAffected = st.executeUpdate();
+                if (rowsAffected == 0) {
+                    return new DbResponse.Failure<>("User not found");
+                }
+            } catch (Exception e) {
+                logger.error("Error while logging in", e);
+                return DbResponse.failure(e.getMessage());
+            }
+            return new DbResponse.Success<>("User details updated successfully", updateRequest);
+        }, result);
     }
 }
