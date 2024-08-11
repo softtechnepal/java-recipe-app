@@ -4,6 +4,7 @@ import com.example.recipe.domain.UiModel;
 import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.recipe.Recipe;
+import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.user.MenuItemController;
 import com.example.recipe.utils.TaskManager;
 import javafx.application.Platform;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -33,15 +33,14 @@ public abstract class BaseRecipeListing {
 
     protected abstract String getScreenId();
 
+    protected static final UserRecipeService userRecipeService = new UserRecipeService();
+
     private final MenuComponentStore menuComponentStore = MenuComponentStore.getInstance();
 
     private final TaskManager taskManager = TaskManager.getInstance();
 
     public void loadRecipeComponents(List<Recipe> data) {
         if (loadRecipeIfExists(data)) return;
-
-        // todo () Here comes the logic for recipe loading if the recipe is not already loaded
-        //  Load only the new ones if old ones already exist
 
         final Task<Void> loadingTask;
         if (isPreviousTaskRunningForCurrentScreen()) {
@@ -59,7 +58,7 @@ public abstract class BaseRecipeListing {
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/recipe/menu-item.fxml"));
                             VBox cardBox = fxmlLoader.load();
                             MenuItemController controller = fxmlLoader.getController();
-                            controller.setData(recipe);
+                            controller.setData(recipe, userRecipeService);
                             // Update the cardBox with recipe data
                             // updateCardBoxWithRecipe(cardBox, recipe);
                             menuComponentStore.addMenuComponent(new UiModel(controller, cardBox), getMenuListingType());
@@ -93,17 +92,6 @@ public abstract class BaseRecipeListing {
             return true;
         }
         return false;
-    }
-
-    // todo () Method to update VBox with recipe data
-    private List<Recipe> getNewRecipes(List<Recipe> data) {
-        List<Recipe> newRecipes = new ArrayList<>();
-        /*for (Recipe recipe : data) {
-            if (!menuComponentStore.containsRecipe(recipe, getMenuListingType())) {
-                newRecipes.add(recipe);
-            }
-        }*/
-        return newRecipes;
     }
 
     public void addFilter(List<Category> categories) {

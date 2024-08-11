@@ -1,14 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-
-
-<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS"
-            xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.recipe.ui.user.ProfileController">
-    <children>
-        <Label layoutX="222.0" layoutY="326.0" text="Profile Page" textFill="black"/>
-    </children>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.user.ProfileController" prefHeight="700.0" prefWidth="562.0"
+            HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+    <HBox>
+        <children>
+            <VBox alignment="TOP_CENTER">
+                <children>
+                    <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../../../assets/users.png"/>
+                        </image>
+                    </ImageView>
+                    <Label fx:id="fullName" style="-fx-text-fill: black;" text="Sandip Thapa">
+                        <font>
+                            <Font name="System Bold" size="24.0"/>
+                        </font>
+                        <padding>
+                            <Insets top="12.0"/>
+                        </padding>
+                    </Label>
+                    <Label fx:id="email" style="-fx-text-fill: grey;" text="sandip.thapa@gmail.com" textFill="#464343">
+                        <padding>
+                            <Insets top="12.0"/>
+                        </padding>
+                    </Label>
+                </children>
+                <padding>
+                    <Insets bottom="24.0" left="16.0" right="16.0" top="24.0"/>
+                </padding>
+            </VBox>
+            <VBox spacing="24.0">
+                <padding>
+                    <Insets bottom="24.0" left="24.0" right="24.0" top="24.0"/>
+                </padding>
+                <children>
+                    <VBox>
+                        <children>
+                            <Label text="First Name" style="-fx-text-fill: black;"/>
+                            <TextField fx:id="tfFirstName"/>
+                        </children>
+                    </VBox>
+                    <VBox>
+                        <children>
+                            <Label text="Last Name" style="-fx-text-fill: black;"/>
+                            <TextField fx:id="tfLastName"/>
+                        </children>
+                    </VBox>
+                    <VBox>
+                        <children>
+                            <Label text="Gender"/>
+                            <ComboBox fx:id="genderComboBox" minWidth="300" minHeight="45">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="MALE"/>
+                                        <String fx:value="FEMALE"/>
+                                        <String fx:value="OTHER"/>
+                                    </FXCollections>
+                                </items>
+                            </ComboBox>
+                        </children>
+                    </VBox>
+                    <VBox>
+                        <Label text="Date of Birth" style="-fx-text-fill: black;"/>
+                        <DatePicker fx:id="dobDatePicker" minWidth="300" minHeight="45"/>
+                    </VBox>
+                    <Button text="Update Profile" onAction="#saveProfile"/>
+                </children>
+            </VBox>
+        </children>
+    </HBox>
 </AnchorPane>

@@ -30,7 +30,6 @@ public class RecipeController extends BaseRecipeListing {
     public TextField searchField;
 
 
-    private static final UserRecipeService userRecipeService = new UserRecipeService();
     private final UserCategoryService userCategoryService = new UserCategoryService();
 
     @FXML

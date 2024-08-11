@@ -11,10 +11,12 @@ public class MenuComponentStore {
     private static MenuComponentStore instance;
     private final List<UiModel> allMenuComponents;
     private final List<UiModel> myMenuComponents;
+    private final List<UiModel> favouriteMenuComponents;
 
     private MenuComponentStore() {
         allMenuComponents = new ArrayList<>();
         myMenuComponents = new ArrayList<>();
+        favouriteMenuComponents = new ArrayList<>();
     }
 
     public static synchronized MenuComponentStore getInstance() {
@@ -29,14 +31,19 @@ public class MenuComponentStore {
             allMenuComponents.add(component);
         } else if (menuListingType == MenuListingType.MY_RECIPE) {
             myMenuComponents.add(component);
+        } else {
+            favouriteMenuComponents.add(component);
         }
     }
 
     public List<VBox> getMenuComponents(MenuListingType menuListingType) {
         if (menuListingType == MenuListingType.ALL_RECIPE) {
             return allMenuComponents.stream().map(UiModel::getvBoxes).toList();
+        } else if (menuListingType == MenuListingType.MY_RECIPE) {
+            return myMenuComponents.stream().map(UiModel::getvBoxes).toList();
+        } else {
+            return favouriteMenuComponents.stream().map(UiModel::getvBoxes).toList();
         }
-        return myMenuComponents.stream().map(UiModel::getvBoxes).toList();
     }
 
     public List<UiModel> getAllMenuModel() {
