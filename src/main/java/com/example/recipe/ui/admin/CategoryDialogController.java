@@ -41,7 +41,7 @@ public class CategoryDialogController {
             category.setCategoryName(categoryName);
             DbResponse<Category> res = categoryService.updateCategory(category);
             if (res.isSuccess()) {
-                showErrorDialog("Success", "Category Updated Successfully");
+                showInfoDialog("Success", "Category Updated Successfully");
                 dialogStage.close();
             } else {
                 showErrorDialog("Error", "Failed to update the category");

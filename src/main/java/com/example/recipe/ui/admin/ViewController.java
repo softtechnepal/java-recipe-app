@@ -1,65 +1,54 @@
+// src/main/java/com/example/recipe/ui/user/DashboardController.java
 package com.example.recipe.ui.admin;
-
-import com.example.recipe.utils.NavigationUtil;
+import com.example.recipe.components.CustomMenuItem;
+import com.example.recipe.utils.SingletonObjects;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import java.io.IOException;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+
+import java.util.List;
 
 public class ViewController {
     @FXML
-    public Button dashboardButton;
+    public HBox hBoxContainer;
     @FXML
-    public Button usersButton;
+    public CustomMenuItem dashboardMenuItem;
     @FXML
-    public Button recipeButton;
+    public CustomMenuItem categoryMenuitem;
     @FXML
-    public Button categoryButton;
-    public Text pageDescription;
+    public CustomMenuItem recipeMenuItem;
     @FXML
-    private ScrollPane containerPane;
+    public CustomMenuItem userMenuItem;
+    @FXML
+    public CustomMenuItem logoutMenuItem;
+    @FXML
 
+    public ImageView imageView;
     @FXML
-    private Text pageTitle;
+    private CustomMenuItem activeMenuItem;
 
     @FXML
     private void initialize() {
-        // Load initial content
-        loadContent("Dashboard", "admin/dashboard.fxml","This page shows the overview analytics of the entire recipe application");
+        Image logoImage = new Image("file:src/main/resources/assets/logo.png");
+        imageView.setImage(logoImage);
+        SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
-        // Set button actions
-        dashboardButton.setOnAction(e -> loadContent("Dashboard", "admin/dashboard.fxml","This page shows the overview analytics of the entire recipe application"));
-        usersButton.setOnAction(e -> loadContent("Users", "admin/users.fxml","This page shows the shows the total users of entire recipe application"));
-        recipeButton.setOnAction(e -> loadContent("Recipe", "admin/recipe.fxml","This page shows the shows the total recipe of entire recipe application"));
-        categoryButton.setOnAction(e -> loadContent("Category", "admin/categories.fxml","This page shows the shows the total categories of entire recipe application"));
+        List<CustomMenuItem> menuItems = List.of(dashboardMenuItem, categoryMenuitem, recipeMenuItem, userMenuItem);
+
+        for (CustomMenuItem menuItem : menuItems) {
+            menuItem.deactivate();
+            menuItem.setOnMouseClicked(event -> activateMenuItem(menuItem));
+        }
+
+        activateMenuItem(menuItems.get(0));
     }
 
-    public void loadContent(String title, String fxmlPath, String desc) {
-        try {
-            if (pageTitle == null || containerPane == null) {
-                System.err.println("Error: pageTitle or containerPane is null.");
-                return;
-            }
-
-            pageTitle.setText(title);
-            pageDescription.setText(desc);
-
-            // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(NavigationUtil.class.getResource("/com/example/recipe/" + fxmlPath));
-            Pane newContent = loader.load();
-
-            // Set content to ScrollPane
-            containerPane.setContent(newContent);
-
-            // Ensure scroll policies are set
-            containerPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            containerPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        } catch (IOException e) {
-            System.err.println("Failed to load content: " + e.getMessage());
-            e.printStackTrace();
+    private void activateMenuItem(CustomMenuItem menuItem) {
+        if (activeMenuItem != null) {
+            activeMenuItem.deactivate();
         }
+        menuItem.activate();
+        activeMenuItem = menuItem;
     }
 }

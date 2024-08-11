@@ -51,7 +51,10 @@ public class CategoryController {
                     private final Button editButton = new Button("Edit");
                     private final Button deleteButton = new Button("Delete");
                     private final HBox hBox = new HBox(10, editButton, deleteButton);
-
+                    {
+                        editButton.getStyleClass().add("table-header-button");
+                        deleteButton.getStyleClass().add("table-header-button");
+                    }
                     {
                         // Handle delete button action
                         deleteButton.setOnAction(event -> {

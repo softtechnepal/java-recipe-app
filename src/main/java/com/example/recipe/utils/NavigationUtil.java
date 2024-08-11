@@ -2,9 +2,9 @@ package com.example.recipe.utils;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -63,7 +63,7 @@ public class NavigationUtil {
             HBox hBoxContainer = SingletonObjects.getInstance().getMainBox();
             URL profile = NavigationUtil.class.getResource(FXML_PATH + fxmlFile);
             assert profile != null;
-            AnchorPane pane = FXMLLoader.load(profile);
+            Node pane = FXMLLoader.load(profile);
             if (hBoxContainer.getChildren().size() > 1) {
                 hBoxContainer.getChildren().remove(1);
             }

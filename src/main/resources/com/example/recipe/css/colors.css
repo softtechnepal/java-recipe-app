@@ -7,5 +7,10 @@
     -input-background-color: #ffffff;
     -input-border-color: #dcdcdc;
     -logout-color: #667A8A;
-
+    -font-family: Popins, sans-serif;
+    -color-primary: #768d5d;
+    -color-secondary:#fdd87f;
+    -color-tertiary:#533422;
+    -color-dark: #2d2d2d;
+    -color-light: #f4f4f4;
 }

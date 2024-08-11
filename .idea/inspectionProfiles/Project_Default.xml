@@ -9,7 +9,7 @@
       <option name="myIgnoreVendorSpecificProperties" value="false" />
       <option name="myCustomPropertiesList">
         <value>
-          <list size="9">
+          <list size="18">
             <item index="0" class="java.lang.String" itemvalue="-root-background-color" />
             <item index="1" class="java.lang.String" itemvalue="-primary-color" />
             <item index="2" class="java.lang.String" itemvalue="-secondary-color" />
@@ -19,6 +19,15 @@
             <item index="6" class="java.lang.String" itemvalue="-input-background-color" />
             <item index="7" class="java.lang.String" itemvalue="-input-border-color" />
             <item index="8" class="java.lang.String" itemvalue="-logout-color" />
+            <item index="9" class="java.lang.String" itemvalue="-font-family" />
+            <item index="10" class="java.lang.String" itemvalue="-color-primary-main" />
+            <item index="11" class="java.lang.String" itemvalue="-color-primary-dark" />
+            <item index="12" class="java.lang.String" itemvalue="-color-primary-light" />
+            <item index="13" class="java.lang.String" itemvalue="-color-dark" />
+            <item index="14" class="java.lang.String" itemvalue="-color-light" />
+            <item index="15" class="java.lang.String" itemvalue="-color-primary" />
+            <item index="16" class="java.lang.String" itemvalue="-color-secondary" />
+            <item index="17" class="java.lang.String" itemvalue="-color-tertiary" />
           </list>
         </value>
       </option>

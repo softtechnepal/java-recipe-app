@@ -68,7 +68,9 @@ public class UserController {
                 return new TableCell<User, Void>() {
                     private final ToggleButton toggleButton = new ToggleButton("Active");
                     private final HBox hBox = new HBox(10, toggleButton);
-
+                    {
+                        toggleButton.getStyleClass().add("button");
+                    }
                     {
                         toggleButton.setOnAction(event -> {
                             User user = getTableView() != null ? getTableView().getItems().get(getIndex()) : null;
