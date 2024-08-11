@@ -8,15 +8,20 @@ import java.util.List;
 public interface UserRecipeRepository {
     void addRecipe(Recipe recipe, DatabaseCallback<Recipe> callback);
 
+    // Get recipe detail
     void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback);
 
+    // User's recipe list
     void getRecipeByUserId(long userId, DatabaseCallback<List<Recipe>> callback);
 
+    // All recipes
     void getAllRecipes(DatabaseCallback<List<Recipe>> callback);
 
     void updateRecipe(Recipe recipe, DatabaseCallback<Recipe> callback);
 
     void deleteRecipe(long recipeId, DatabaseCallback<Recipe> callback);
+
+    void addRecipeFavorite(long recipeId, long userId, DatabaseCallback<Boolean> callback);
 }
 
 

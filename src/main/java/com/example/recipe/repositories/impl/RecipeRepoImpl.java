@@ -201,4 +201,41 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void deleteRecipe(long recipeId, DatabaseCallback<Recipe> callback) {
 
     }
+
+    @Override
+    public void addRecipeFavorite(long recipeId, long userId, DatabaseCallback<Boolean> callback) {
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                String checkQuery = "SELECT COUNT(*) FROM wishlist WHERE recipe_id = ? AND user_id = ?";
+                try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+                    checkStmt.setLong(1, recipeId);
+                    checkStmt.setLong(2, userId);
+                    try (ResultSet resultSet = checkStmt.executeQuery()) {
+                        if (resultSet.next() && resultSet.getInt(1) > 0) {
+                            // Recipe is already in wishlist, remove it
+                            String deleteQuery = "DELETE FROM wishlist WHERE recipe_id = ? AND user_id = ?";
+                            try (PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery)) {
+                                deleteStmt.setLong(1, recipeId);
+                                deleteStmt.setLong(2, userId);
+                                deleteStmt.executeUpdate();
+                                return DbResponse.success("Recipe removed from wishlist", false);
+                            }
+                        } else {
+                            // Recipe is not in wishlist, add it
+                            String insertQuery = "INSERT INTO wishlist (recipe_id, user_id) VALUES (?, ?)";
+                            try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+                                insertStmt.setLong(1, recipeId);
+                                insertStmt.setLong(2, userId);
+                                insertStmt.executeUpdate();
+                                return DbResponse.success("Recipe added to wishlist", true);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error while updating wishlist", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
 }
