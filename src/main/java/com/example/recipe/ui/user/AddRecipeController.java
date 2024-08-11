@@ -141,12 +141,13 @@ public class AddRecipeController {
 
             List<VBox> stepViews = new ArrayList<>();
             steps.forEach(step -> {
-                VBox vBox = new VBox(10);
-                vBox.setStyle("-fx-background-radius: 10px; -fx-padding: 10px; -fx-background-color: #eae2e2; -fx-border-radius: 8px; -fx-max-width: 500px");
+                VBox vBox = new VBox(4);
+                vBox.setStyle("-fx-background-radius: 4px; -fx-padding: 10px; -fx-background-color:  #dcdcdc; " +
+                        "-fx-border-radius: 4px; -fx-max-width: 500px; -fx-border-color: #dcdcdc; -fx-border-width: 1px");
                 Label title = new Label(step.getStepName());
-                title.setStyle("-fx-font-weight: bold; -fx-font-size: 22px; -fx-text-fill: #3e8ee4");
+                title.setStyle("-fx-font-weight: bold; -fx-font-size: 20px; -fx-text-fill: #293846");
                 Text description = new Text(step.getStepDescription());
-                description.setStyle("-fx-font-size: 16px; -fx-text-fill: #000000; -fx-wrap-text: true; max-width: 400px");
+                description.setStyle("-fx-font-size: 16px; -fx-text-fill:  #2d2d2d; -fx-wrap-text: true; max-width: 400px");
                 description.setWrappingWidth(480);
                 vBox.getChildren().addAll(title, description);
                 stepViews.add(vBox);

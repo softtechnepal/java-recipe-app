@@ -64,11 +64,9 @@
     -fx-padding: 8 10 !important;
     -fx-font-size: 14px !important;
     -fx-cursor: hand !important;
-    -fx-fill-width: true !important;
 }
 .table-header-button:hover{
     -fx-background-color: -color-tertiary !important;
-    -fx-max-width: unset !important;
     -fx-font-size: 14px !important;
 }
 

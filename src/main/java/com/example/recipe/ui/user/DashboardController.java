@@ -4,6 +4,8 @@ package com.example.recipe.ui.user;
 import com.example.recipe.components.CustomMenuItem;
 import com.example.recipe.utils.SingletonObjects;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.util.List;
@@ -25,7 +27,13 @@ public class DashboardController {
     private CustomMenuItem activeMenuItem;
 
     @FXML
+    public ImageView imageView;
+
+
+    @FXML
     private void initialize() {
+        Image logoImage = new Image("file:src/main/resources/assets/logo.png");
+        imageView.setImage(logoImage);
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
         List<CustomMenuItem> menuItems = List.of(recipeMenuItem, myRecipeMenuItem, savedRecipeMenuItem, profileMenuItem);

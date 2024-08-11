@@ -14,27 +14,29 @@
 }
 
 .label {
-    -fx-text-fill: -text-color;
+    -fx-text-fill: -color-dark;
     -fx-font-size: 14px;
-    -fx-font-weight: bold;
 }
 
 .error-label {
     -fx-text-fill: -error-color;
     -fx-font-size: 12px;
-    -fx-padding: 5;
 }
 
 /* TextField Styles */
 .text-field,
-.text-field-disabled {
-    -fx-background-color: -input-background-color;
-    -fx-border-color: -input-border-color;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-    -fx-padding: 10;
+.text-field-disabled ,
+.text-area,
+.text-area-disabled {
+    -fx-background-color:   -input-background-color;
+    -fx-border-color:   -input-border-color;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-padding: 8 10;
     -fx-font-size: 14px;
     -fx-max-width: 600px;
+    -fx-min-width: 400px;
+    -fx-border-width: 1px;
 }
 
 
@@ -47,12 +49,10 @@
     -fx-padding: 8 10 !important;
     -fx-font-size: 14px !important;
     -fx-cursor: hand !important;
-    -fx-fill-width: true !important;
 }
 
 .button:hover {
     -fx-background-color: -color-tertiary !important;
-    -fx-max-width: unset !important;
     -fx-font-size: 14px !important;
 }
 
