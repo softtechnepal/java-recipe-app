@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -96,17 +95,6 @@ public abstract class BaseRecipeListing {
             return true;
         }
         return false;
-    }
-
-    // todo () Method to update VBox with recipe data
-    private List<Recipe> getNewRecipes(List<Recipe> data) {
-        List<Recipe> newRecipes = new ArrayList<>();
-        /*for (Recipe recipe : data) {
-            if (!menuComponentStore.containsRecipe(recipe, getMenuListingType())) {
-                newRecipes.add(recipe);
-            }
-        }*/
-        return newRecipes;
     }
 
     public void addFilter(List<Category> categories) {

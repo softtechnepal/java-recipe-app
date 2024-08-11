@@ -22,6 +22,9 @@ public interface UserRecipeRepository {
     void deleteRecipe(long recipeId, DatabaseCallback<Recipe> callback);
 
     void addRecipeFavorite(long recipeId, long userId, DatabaseCallback<Boolean> callback);
+
+    // Get User's Favorite Recipes
+    void getFavoriteRecipes(DatabaseCallback<List<Recipe>> callback);
 }
 
 

@@ -6,6 +6,7 @@ import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.mappper.RecipeMapper;
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.repositories.iuser.UserRecipeRepository;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.utils.DatabaseThread;
 import com.example.recipe.utils.ImageUtil;
 
@@ -146,28 +147,6 @@ public class RecipeRepoImpl implements UserRecipeRepository {
         }, callback);
     }
 
-    private List<Recipe> mapResultSetToRecipes(ResultSet resultSet) throws SQLException {
-        List<Recipe> recipes = new ArrayList<>();
-        while (resultSet.next()) {
-            Recipe recipe = mapResultSetToRecipe(resultSet);
-            recipes.add(recipe);
-        }
-        return recipes;
-    }
-
-    // todo make mapper class for this which maps all the database to its respective object
-    private Recipe mapResultSetToRecipe(ResultSet resultSet) throws SQLException {
-        Recipe recipe = new Recipe();
-        recipe.setRecipeId(resultSet.getLong("recipe_id"));
-        recipe.setTitle(resultSet.getString("title"));
-        recipe.setDescription(resultSet.getString("description"));
-        recipe.setImage(resultSet.getString("image"));
-        recipe.setVideoUrl(resultSet.getString("video_url"));
-        recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
-        recipe.setWarnings(resultSet.getString("warnings"));
-        return recipe;
-    }
-
     @Override
     public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
         final String SELECT_RECIPE_QUERY = """
@@ -190,6 +169,28 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 return DbResponse.failure(e.getMessage());
             }
         }, callback);
+    }
+
+    private List<Recipe> mapResultSetToRecipes(ResultSet resultSet) throws SQLException {
+        List<Recipe> recipes = new ArrayList<>();
+        while (resultSet.next()) {
+            Recipe recipe = mapResultSetToRecipe(resultSet);
+            recipes.add(recipe);
+        }
+        return recipes;
+    }
+
+    // todo make mapper class for this which maps all the database to its respective object
+    private Recipe mapResultSetToRecipe(ResultSet resultSet) throws SQLException {
+        Recipe recipe = new Recipe();
+        recipe.setRecipeId(resultSet.getLong("recipe_id"));
+        recipe.setTitle(resultSet.getString("title"));
+        recipe.setDescription(resultSet.getString("description"));
+        recipe.setImage(resultSet.getString("image"));
+        recipe.setVideoUrl(resultSet.getString("video_url"));
+        recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
+        recipe.setWarnings(resultSet.getString("warnings"));
+        return recipe;
     }
 
     @Override
@@ -234,6 +235,33 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 }
             } catch (Exception e) {
                 logger.error("Error while updating wishlist", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    @Override
+    public void getFavoriteRecipes(DatabaseCallback<List<Recipe>> callback) {
+        final String SELECT_FAVORITE_RECIPE_QUERY = """
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                                       c.category_id, c.category_name
+                                FROM recipes r
+                                         RIGHT JOIN wishlist w ON r.recipe_id = w.recipe_id
+                                         LEFT JOIN recipecategories rc ON w.recipe_id = rc.recipe_id
+                                         LEFT JOIN categories c ON rc.category_id = c.category_id
+                                WHERE w.user_id = ?;
+                """;
+
+        DatabaseThread.runDataOperation(() -> {
+            try (
+                    Connection connection = DatabaseConfig.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(SELECT_FAVORITE_RECIPE_QUERY)
+            ) {
+                statement.setLong(1, UserDetailStore.getInstance().getUserId());
+                List<Recipe> recipes = RecipeMapper.mapResultSetToRecipes(statement.executeQuery());
+                return DbResponse.success("Success", recipes);
+            } catch (Exception e) {
+                logger.error("Error while fetching favorite recipes", e);
                 return DbResponse.failure(e.getMessage());
             }
         }, callback);

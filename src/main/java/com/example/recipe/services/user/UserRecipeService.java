@@ -34,4 +34,8 @@ public class UserRecipeService {
     public void addToFavourite(long recipeId, DatabaseCallback<Boolean> callback) {
         recipeRepository.addRecipeFavorite(recipeId, UserDetailStore.getInstance().getUserId(), callback);
     }
+
+    public void getFavoriteRecipes(DatabaseCallback<List<Recipe>> callback) {
+        recipeRepository.getFavoriteRecipes(callback);
+    }
 }
