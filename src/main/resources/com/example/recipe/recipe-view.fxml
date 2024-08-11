@@ -1,54 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
-            xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.recipe.ui.user.RecipeController">
-    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0">
-        <!-- Navigation Bar -->
-        <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" spacing="24.0" styleClass="elevated-nav-bar"
-              HBox.hgrow="ALWAYS">
-            <Label fx:id="navTitle" style="-fx-text-fill: black; -fx-font-size: 24; -fx-font-weight: bold;"
-                   text="Explore Recipes"/>
-            <HBox alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
-                <children>
-                    <TextField fx:id="searchField" minHeight="35.0" minWidth="230.0" promptText="Search for recipe"/>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onFilterClicked" pickOnBounds="true"
-                               preserveRatio="true">
-                        <image>
-                            <Image url="@../../../assets/ic_filter.png"/>
-                        </image>
-                    </ImageView>
-                </children>
-            </HBox>
-            <padding>
-                <Insets bottom="8.0" top="8.0"/>
-            </padding>
-        </HBox>
-        <GridPane fx:id="categoryGrid" hgap="16" style="-fx-background-color: white" vgap="16">
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.text.Text?>
 
-        </GridPane>
-        <!-- My Recipes -->
-        <StackPane>
-            <ScrollPane style="-fx-background-color: white; -fx-background: white;" styleClass="no-scroll-bars"
-                        HBox.hgrow="ALWAYS"
-                        VBox.vgrow="ALWAYS">
-                <GridPane fx:id="menuGrid" hgap="16" style="-fx-background-color: white" vgap="16">
-                </GridPane>
-            </ScrollPane>
-            <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20"
-                  style="-fx-background-color: white" visible="false" HBox.hgrow="ALWAYS">
-                <ProgressIndicator minHeight="60" minWidth="60"/>
-                <Label style="-fx-text-fill: blue" text="Loading Recipes..."/>
-            </VBox>
-        </StackPane>
-        <padding>
-            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
-        </padding>
-    </VBox>
-</AnchorPane>
+<?import javafx.scene.control.Button?>
+<BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeController">
+    <center>
+        <VBox fx:id="containerVBox" BorderPane.alignment="CENTER">
+            <GridPane fx:id="categoryGrid"  BorderPane.alignment="CENTER">
+                <!-- Content goes here -->
+            </GridPane>
+            <!-- My Recipes -->
+            <StackPane>
+                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="recipe-card-grid">
+                        <!-- Content goes here -->
+                    </GridPane>
+                </ScrollPane>
+
+                <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false" HBox.hgrow="ALWAYS">
+                    <ProgressIndicator minHeight="60" minWidth="60"/>
+                    <Label styleClass="table-header-main" text="Loading Recipes..."/>
+                </VBox>
+            </StackPane>
+        </VBox>
+    </center>
+    <top>
+        <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
+            <children>
+                <Text fx:id="navTitle" styleClass="table-header-main" text="Explore Recipes" />
+                <Text styleClass="table-header-desc" text="This is the list of recipes that all the users have created throughout the application" />
+                <HBox spacing="700.0" VBox.vgrow="ALWAYS">
+                    <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search" HBox.hgrow="ALWAYS" fx:id="searchField"/>
+                    <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#onFilterClicked" text="Filter By Category" >
+                        <graphic>
+                            <ImageView fx:id="filterIcon" fitWidth="16" fitHeight="16" preserveRatio="true">
+                                <Image url="@../../../assets/sidemenu/tag_active.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+</BorderPane>
