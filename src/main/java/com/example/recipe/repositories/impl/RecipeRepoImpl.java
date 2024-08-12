@@ -151,18 +151,28 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
         final String SELECT_RECIPE_QUERY = """
                 SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                       c.category_id, c.category_name,
+                       CASE WHEN w.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_saved
+                FROM recipes r
+                         LEFT JOIN recipecategories rc ON r.recipe_id = rc.recipe_id
+                         LEFT JOIN categories c ON rc.category_id = c.category_id
+                         LEFT JOIN wishlist w ON r.recipe_id = w.recipe_id AND w.user_id = ?
+                """;
+        /*final String SELECT_RECIPE_QUERY = """
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
                        c.category_id, c.category_name
                 FROM recipes r
                          LEFT JOIN recipecategories rc ON r.recipe_id = rc.recipe_id
                          LEFT JOIN categories c ON rc.category_id = c.category_id;
-                """;
+                """;*/
 
         DatabaseThread.runDataOperation(() -> {
             try (
                     Connection connection = DatabaseConfig.getConnection();
                     PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_QUERY)
             ) {
-                List<Recipe> recipes = RecipeMapper.mapResultSetToRecipes(statement.executeQuery());
+                statement.setLong(1, UserDetailStore.getInstance().getUserId());
+                List<Recipe> recipes = RecipeMapper.mapResultSetToRecipes(statement.executeQuery(), false);
                 return DbResponse.success("Success", recipes);
             } catch (Exception e) {
                 logger.error("Error while fetching recipe by ID", e);
@@ -258,7 +268,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                     PreparedStatement statement = connection.prepareStatement(SELECT_FAVORITE_RECIPE_QUERY)
             ) {
                 statement.setLong(1, UserDetailStore.getInstance().getUserId());
-                List<Recipe> recipes = RecipeMapper.mapResultSetToRecipes(statement.executeQuery());
+                List<Recipe> recipes = RecipeMapper.mapResultSetToRecipes(statement.executeQuery(), true);
                 return DbResponse.success("Success", recipes);
             } catch (Exception e) {
                 logger.error("Error while fetching favorite recipes", e);

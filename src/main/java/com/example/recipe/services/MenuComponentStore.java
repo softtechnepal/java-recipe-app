@@ -36,6 +36,16 @@ public class MenuComponentStore {
         }
     }
 
+    public void clearMenuComponents(MenuListingType menuListingType) {
+        if (menuListingType == MenuListingType.ALL_RECIPE) {
+            allMenuComponents.clear();
+        } else if (menuListingType == MenuListingType.MY_RECIPE) {
+            myMenuComponents.clear();
+        } else {
+            favouriteMenuComponents.clear();
+        }
+    }
+
     public List<VBox> getMenuComponents(MenuListingType menuListingType) {
         if (menuListingType == MenuListingType.ALL_RECIPE) {
             return allMenuComponents.stream().map(UiModel::getvBoxes).toList();
@@ -43,6 +53,16 @@ public class MenuComponentStore {
             return myMenuComponents.stream().map(UiModel::getvBoxes).toList();
         } else {
             return favouriteMenuComponents.stream().map(UiModel::getvBoxes).toList();
+        }
+    }
+
+    public List<UiModel> getMenuModel(MenuListingType menuListingType) {
+        if (menuListingType == MenuListingType.ALL_RECIPE) {
+            return allMenuComponents;
+        } else if (menuListingType == MenuListingType.MY_RECIPE) {
+            return myMenuComponents;
+        } else {
+            return favouriteMenuComponents;
         }
     }
 

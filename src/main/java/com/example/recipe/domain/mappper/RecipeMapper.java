@@ -4,6 +4,7 @@ import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.recipe.Recipe;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RecipeMapper {
-    public static List<Recipe> mapResultSetToRecipes(ResultSet resultSet) throws SQLException {
+    public static List<Recipe> mapResultSetToRecipes(ResultSet resultSet, boolean fromSaved) throws SQLException {
         Map<Long, Recipe> recipeMap = new HashMap<>();
+
+        boolean hasIsSavedColumn = false;
+        if (!fromSaved) {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                if ("is_saved".equalsIgnoreCase(metaData.getColumnName(i))) {
+                    hasIsSavedColumn = true;
+                    break;
+                }
+            }
+        }
         while (resultSet.next()) {
             Long recipeId = resultSet.getLong("recipe_id");
             Recipe recipe = recipeMap.getOrDefault(recipeId, new Recipe());
@@ -25,6 +38,11 @@ public class RecipeMapper {
                 recipe.setWarnings(resultSet.getString("warnings"));
                 recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
                 recipe.setUpdatedAt(resultSet.getTimestamp("updated_at"));
+                if (hasIsSavedColumn) {
+                    recipe.setSaved(resultSet.getBoolean("is_saved"));
+                }
+                if (fromSaved)
+                    recipe.setSaved(true);
                 recipeMap.put(recipeId, recipe);
             }
             long categoryId = resultSet.getLong("category_id");

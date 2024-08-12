@@ -1,6 +1,7 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.Constants;
+import com.example.recipe.domain.common.RefreshCallback;
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
@@ -11,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +27,12 @@ public class MenuItemController {
     public Label rating;
     @FXML
     public VBox root;
+    @FXML
+    public ImageView savedImage;
 
     private Recipe recipe;
     private UserRecipeService userRecipeService;
-
+    private RefreshCallback refreshCallback;
 
     @FXML
     public void initialize() {
@@ -43,10 +45,22 @@ public class MenuItemController {
         loadData();
     }
 
+    public void setData(Recipe recipe, UserRecipeService userRecipeService, RefreshCallback callback) {
+        this.refreshCallback = callback;
+        this.recipe = recipe;
+        this.userRecipeService = userRecipeService;
+        loadData();
+    }
+
     private void loadData() {
         recipeTitle.setText(recipe.getTitle());
         textDescription.setText(recipe.getDescription());
         recipeImage.setImage(new Image("file:" + recipe.getImage(), 200, 200, true, true));
+        if (recipe.isSaved()) {
+            savedImage.setImage(new Image("file:src/main/resources/assets/ic_like_filled.png"));
+        } else {
+            savedImage.setImage(new Image("file:src/main/resources/assets/ic_like.png"));
+        }
     }
 
     public Recipe getRecipe() {
@@ -69,8 +83,15 @@ public class MenuItemController {
                 DialogUtil.showErrorDialog("Error", response.getMessage());
                 return;
             }
-            DialogUtil.showInfoDialog("Success", response.getMessage());
-            NavigationUtil.refreshCurrentChild();
+            if (!response.getData()) {
+                savedImage.setImage(new Image("file:src/main/resources/assets/ic_like.png"));
+            } else {
+                savedImage.setImage(new Image("file:src/main/resources/assets/ic_like_filled.png"));
+            }
+
+            if (refreshCallback != null) {
+                refreshCallback.refresh();
+            }
         });
         mouseEvent.consume();
     }
