@@ -132,7 +132,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                        u.user_id, u.username, u.email, u.first_name, u.last_name,
                        c.category_id, c.category_name,
                        i.ingredient_id, i.ingredient_name, i.quantity, i.unit,
-                       s.step_id, s.step_description, s.step_order,
+                       s.step_id, s.step_description, s.step_order, s.step_name,
                        n.calories, n.protein, n.fat, n.carbohydrates, n.other,
                        CASE WHEN w.recipe_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_saved
                 FROM recipes r
@@ -183,7 +183,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
                     // Set categories
                     Long categoryId = resultSet.getLong("category_id");
-                    if (!resultSet.wasNull()) {
+                    if (!resultSet.wasNull() && categories.stream().map(Category::getCategoryId).noneMatch(id -> id.equals(categoryId))) {
                         Category category = new Category();
                         category.setCategoryId(categoryId);
                         category.setCategoryName(resultSet.getString("category_name"));
@@ -192,7 +192,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
                     // Set ingredients
                     Long ingredientId = resultSet.getLong("ingredient_id");
-                    if (!resultSet.wasNull()) {
+                    if (!resultSet.wasNull() && ingredients.stream().map(Ingredient::getIngredientId).noneMatch(id -> id.equals(ingredientId))) {
                         Ingredient ingredient = new Ingredient();
                         ingredient.setIngredientId(ingredientId);
                         ingredient.setIngredientName(resultSet.getString("ingredient_name"));
@@ -203,11 +203,12 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
                     // Set steps
                     Long stepId = resultSet.getLong("step_id");
-                    if (!resultSet.wasNull()) {
+                    if (!resultSet.wasNull() && steps.stream().map(Steps::getStepId).noneMatch(id -> id.equals(stepId))) {
                         Steps step = new Steps();
                         step.setStepId(stepId);
                         step.setStepDescription(resultSet.getString("step_description"));
                         step.setStepOrder(resultSet.getInt("step_order"));
+                        step.setStepName(resultSet.getString("step_name"));
                         steps.add(step);
                     }
 
@@ -263,13 +264,6 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                          LEFT JOIN categories c ON rc.category_id = c.category_id
                          LEFT JOIN wishlist w ON r.recipe_id = w.recipe_id AND w.user_id = ?
                 """;
-        /*final String SELECT_RECIPE_QUERY = """
-                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
-                       c.category_id, c.category_name
-                FROM recipes r
-                         LEFT JOIN recipecategories rc ON r.recipe_id = rc.recipe_id
-                         LEFT JOIN categories c ON rc.category_id = c.category_id;
-                """;*/
 
         DatabaseThread.runDataOperation(() -> {
             try (

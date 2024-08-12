@@ -5,8 +5,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeDetailController">
     <children>
@@ -41,8 +41,16 @@
                                 <Label fx:id="recipeTitle" text="Recipe Title"
                                        style="-fx-font-size: 32px; -fx-font-weight: bold"/>
                                 <Text fx:id="recipeDescription" strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                                      text="Description of the recipe"
                                       wrappingWidth="800.0" style="-fx-font-size: 18px"/>
+                                <VBox fx:id="recipeByContainer" prefHeight="200.0" prefWidth="100.0"
+                                      style="-fx-cursor: hand">
+                                    <children>
+                                        <Label text="Recipe By" style="-fx-text-fill: #363535"/>
+                                        <Label fx:id="recipeByName" text="Prachan Ghale"
+                                               style="-fx-font-size: 18px; -fx-text-fill: #272b27"/>
+                                    </children>
+                                </VBox>
                                 <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
                                       text="August 24, 2024"/>
                                 <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
@@ -51,34 +59,47 @@
                                         <Image url="@../../../assets/img_food.jpg"/>
                                     </image>
                                 </ImageView>
-                                <HBox spacing="40.0">
+                                <HBox spacing="80.0" alignment="CENTER_LEFT">
                                     <children>
-                                        <VBox fx:id="recipeByContainer" prefHeight="200.0" prefWidth="100.0">
-                                            <children>
-                                                <Label text="Recipe By"/>
-                                                <Label fx:id="recipeByName" text="Prachan Ghale"/>
-                                            </children>
-                                        </VBox>
-                                        <Label fx:id="recipeReview" text="24 Reviews"/>
-                                        <Label fx:id="recipeRating" text="4.5 Star"/>
+                                        <HBox alignment="CENTER_LEFT" spacing="12">
+                                            <ImageView fx:id="starIcon" fitHeight="18.0" fitWidth="18.0"
+                                                       pickOnBounds="true" preserveRatio="true"/>
+                                            <Label fx:id="recipeRating" text="4.5 Star"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
+                                            <Label fx:id="recipeReview" text="24 Reviews"/>
+                                            <Label fx:id="viewRecipe" text="(Show Reviews)"
+                                                   style="-fx-text-fill: blue;"/>
+                                        </HBox>
                                     </children>
+                                    <padding>
+                                        <Insets bottom="12.0"/>
+                                    </padding>
                                 </HBox>
-                                <Label fx:id="recipeWarnings" text="Warnings related to allergies"/>
+                                <Label fx:id="recipeWarnings" text="Warnings related to allergies"
+                                       style="-fx-font-size: 18;"/>
+                                <Separator prefHeight="10.0" prefWidth="830.0"/>
                                 <Label text="How to make?" style="-fx-font-size: 22px; -fx-font-weight: bold"/>
-                                <VBox fx:id="recipeSteps"/>
+                                <VBox fx:id="recipeSteps" spacing="16"/>
                             </children>
+                            <padding>
+                                <Insets bottom="34.0"/>
+                            </padding>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="200.0" spacing="30.0">
+                        <VBox prefHeight="300.0" prefWidth="200.0" spacing="10.0">
                             <children>
-                                <Label text="Ingredients"/>
+                                <Label text="Ingredients" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
                                 <VBox fx:id="ingredients"/>
-                                <Label text="Categories"/>
+                                <Separator prefHeight="10.0" prefWidth="300.0"/>
+                                <Label text="Categories" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
                                 <VBox fx:id="categories"/>
-                                <Label text="Nutritional Information"/>
+                                <Separator prefHeight="10.0" prefWidth="300.0"/>
+                                <Label text="Nutritional Information"
+                                       style="-fx-font-size: 18px; -fx-font-weight: bold"/>
                                 <VBox fx:id="nutrition"/>
                             </children>
                             <padding>
-                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0"/>
+                                <Insets bottom="12.0" left="12.0" right="12.0" top="200.0"/>
                             </padding>
                         </VBox>
                     </children>
