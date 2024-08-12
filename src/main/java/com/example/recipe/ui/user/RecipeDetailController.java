@@ -6,7 +6,6 @@ import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -64,10 +63,30 @@ public class RecipeDetailController {
     private void initialize() {
         recipeId = (Long) NavigationUtil.getParam(Constants.recipeParamId);
         ImageUtil.loadImageAsync("src/main/resources/assets/ic_start.png", starIcon);
-        getRecipeDetails();
+        fetchRecipeDetail();
+        fetchReview();
     }
 
-    private void getRecipeDetails() {
+    private void fetchReview() {
+        userRecipeService.getRecipeReview(recipeId, response -> {
+            if (response.isSuccess()) {
+                if (response.getData() != null) {
+                    if (response.getData().isEmpty()) {
+                        recipeReview.setText("");
+                        recipeRating.setText("No ratings yet");
+                        viewRecipe.setText("Add Review");
+                        return;
+                    }
+                    recipeReview.setText("Reviews: " + response.getData().size());
+                    recipeRating.setText("Rating: " + response.getData().stream().mapToDouble(Review::getRating).average().orElse(0));
+                }
+            } else {
+                logger.error("{}", response.getMessage());
+            }
+        });
+    }
+
+    private void fetchRecipeDetail() {
         userRecipeService.getRecipeDetailById(recipeId, response -> {
             if (response.isSuccess()) {
                 if (response.getData() != null) {

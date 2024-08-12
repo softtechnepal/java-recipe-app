@@ -46,7 +46,6 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 "(user_id, title, description, image, video_url, warnings) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING recipe_id";
         try (PreparedStatement statement = connection.prepareStatement(insertRecipeQuery, Statement.RETURN_GENERATED_KEYS)) {
-            // todo(gprachan) set it do different place for better separation of concerns
             statement.setInt(1, 108);
             statement.setString(2, recipe.getTitle());
             statement.setString(3, recipe.getDescription());
@@ -167,13 +166,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                         recipe.setSaved(resultSet.getBoolean("is_saved"));
 
                         // Set user details
-                        User user = new User();
-                        user.setUserId(resultSet.getLong("user_id"));
-                        user.setUsername(resultSet.getString("username"));
-                        user.setEmail(resultSet.getString("email"));
-                        user.setFirstName(resultSet.getString("first_name"));
-                        user.setLastName(resultSet.getString("last_name"));
-                        recipe.setUser(user);
+                        recipe.setUser(RecipeMapper.mapUser(resultSet));
 
                         // Initialize the lists
                         categories = new ArrayList<>();
@@ -358,6 +351,31 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 return DbResponse.success("Success", recipes);
             } catch (Exception e) {
                 logger.error("Error while fetching favorite recipes", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    @Override
+    public void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback) {
+        final String SELECT_RECIPE_REVIEWS_QUERY = """
+                SELECT r.review_id, r.rating, r.review, r.created_at, r.updated_at,
+                       u.user_id, u.username, u.email, u.first_name, u.last_name
+                FROM reviews r
+                JOIN users u ON r.user_id = u.user_id
+                WHERE r.recipe_id = ?;
+                """;
+
+        DatabaseThread.runDataOperation(() -> {
+            try (
+                    Connection connection = DatabaseConfig.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_REVIEWS_QUERY)
+            ) {
+                statement.setLong(1, recipeId);
+                List<Review> reviews = RecipeMapper.mapResultSetToReviews(statement.executeQuery());
+                return DbResponse.success("Success", reviews);
+            } catch (Exception e) {
+                logger.error("Error while fetching recipe reviews", e);
                 return DbResponse.failure(e.getMessage());
             }
         }, callback);

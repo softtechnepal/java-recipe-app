@@ -2,6 +2,7 @@ package com.example.recipe.services.user;
 
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.domain.common.DatabaseCallback;
+import com.example.recipe.domain.recipe.Review;
 import com.example.recipe.repositories.impl.RecipeRepoImpl;
 import com.example.recipe.repositories.iuser.UserRecipeRepository;
 import com.example.recipe.services.UserDetailStore;
@@ -41,5 +42,9 @@ public class UserRecipeService {
 
     public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
         recipeRepository.getRecipeDetailById(recipeId, callback);
+    }
+
+    public void getRecipeReview(long recipeId, DatabaseCallback<List<Review>> callback) {
+        recipeRepository.getRecipeReviews(recipeId, callback);
     }
 }

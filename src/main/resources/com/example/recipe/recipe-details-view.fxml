@@ -55,9 +55,6 @@
                                       text="August 24, 2024"/>
                                 <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
                                            VBox.vgrow="ALWAYS">
-                                    <image>
-                                        <Image url="@../../../assets/img_food.jpg"/>
-                                    </image>
                                 </ImageView>
                                 <HBox spacing="80.0" alignment="CENTER_LEFT">
                                     <children>

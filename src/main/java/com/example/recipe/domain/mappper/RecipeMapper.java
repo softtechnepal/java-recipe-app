@@ -1,7 +1,9 @@
 package com.example.recipe.domain.mappper;
 
+import com.example.recipe.domain.User;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.recipe.Recipe;
+import com.example.recipe.domain.recipe.Review;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -71,5 +73,31 @@ public class RecipeMapper {
         recipe.setUpdatedAt(resultSet.getTimestamp("updated_at"));
         recipe.setWarnings(resultSet.getString("warnings"));
         return recipe;
+    }
+
+    public static List<Review> mapResultSetToReviews(ResultSet resultSet) throws SQLException {
+        List<Review> reviews = new ArrayList<>();
+        while (resultSet.next()) {
+            Review review = new Review();
+            review.setId(resultSet.getLong("review_id"));
+            review.setRating(resultSet.getInt("rating"));
+            review.setReview(resultSet.getString("comment"));
+            review.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+            review.setUpdatedAt(resultSet.getTimestamp("updated_at").toLocalDateTime());
+
+            review.setUser(mapUser(resultSet));
+            reviews.add(review);
+        }
+        return reviews;
+    }
+
+    public static User mapUser(ResultSet resultSet) throws SQLException {
+        User user = new User();
+        user.setUserId(resultSet.getLong("user_id"));
+        user.setUsername(resultSet.getString("username"));
+        user.setFirstName(resultSet.getString("first_name"));
+        user.setLastName(resultSet.getString("last_name"));
+        user.setEmail(resultSet.getString("email"));
+        return user;
     }
 }
