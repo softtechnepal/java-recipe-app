@@ -3,7 +3,6 @@ package com.example.recipe.ui.user;
 import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
 import com.example.recipe.services.user.UserCategoryService;
-import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.dialogs.CategoryDialog;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -48,6 +47,8 @@ public class RecipeController extends BaseRecipeListing {
             if (response.isSuccess()) {
                 if (!response.getData().isEmpty())
                     loadRecipeComponents(response.getData());
+                else
+                    progressContainer.setVisible(false);
             } else {
                 logger.error("Failed to fetch recipes {}", response.getMessage());
             }

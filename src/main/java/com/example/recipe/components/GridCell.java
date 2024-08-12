@@ -58,7 +58,7 @@ public class GridCell extends ListCell<Recipe> {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/recipe/menu-item.fxml"));
                         root = loader.load();
                         MenuItemController controller = loader.getController();
-                        controller.setData(item, MenuListingType.MY_RECIPE);
+                        // controller.setData(item, MenuListingType.MY_RECIPE);
                         // hBox.getChildren().add(root);
                         menuComponentStore.addMenuComponent(new UiModel(controller, root), MenuListingType.ALL_RECIPE);
                         hBox.getChildren().add(root);

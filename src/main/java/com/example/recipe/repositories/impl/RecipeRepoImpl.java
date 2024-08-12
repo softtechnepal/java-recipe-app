@@ -46,7 +46,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 "(user_id, title, description, image, video_url, warnings) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING recipe_id";
         try (PreparedStatement statement = connection.prepareStatement(insertRecipeQuery, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, 108);
+            statement.setLong(1, UserDetailStore.getInstance().getUserId());
             statement.setString(2, recipe.getTitle());
             statement.setString(3, recipe.getDescription());
             statement.setString(4, recipe.getImage());

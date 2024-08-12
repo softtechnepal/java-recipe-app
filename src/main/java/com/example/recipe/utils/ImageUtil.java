@@ -5,6 +5,8 @@ import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +32,20 @@ public class ImageUtil {
         String newFileName = timestamp + "_" + randomNum + getFileExtension(sourceFile.getName());
 
         Path destinationFile = destinationDir.resolve(newFileName);
-        Files.copy(sourceFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
+
+        // Create a temporary file for the compressed image
+        File tempCompressedFile = File.createTempFile("compressed_", getFileExtension(sourceFile.getName()));
+        try {
+            // Compress the image
+            compressImage(sourceFile, tempCompressedFile, 0.25f); // Compress with 75% quality
+
+            // Copy the compressed image to the destination
+            Files.copy(tempCompressedFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        } finally {
+            // Delete the temporary file
+            tempCompressedFile.deleteOnExit();
+        }
+
         return destinationFile.toString();
     }
 
@@ -55,5 +70,31 @@ public class ImageUtil {
             }
         };
         new Thread(task).start();
+    }
+
+
+    public static void compressImage(File inputFile, File outputFile, float quality) throws IOException {
+        BufferedImage image = ImageIO.read(inputFile);
+        if (image == null) {
+            throw new IOException("Could not read image file: " + inputFile.getAbsolutePath());
+        }
+
+        // Get a ImageWriter for jpeg format.
+        var writers = ImageIO.getImageWritersByFormatName("jpeg");
+        if (!writers.hasNext()) {
+            throw new IllegalStateException("No writers found");
+        }
+        var writer = writers.next();
+
+        // Set the compression quality.
+        var param = writer.getDefaultWriteParam();
+        param.setCompressionMode(javax.imageio.ImageWriteParam.MODE_EXPLICIT);
+        param.setCompressionQuality(quality);
+
+        // Write the image to the output file.
+        try (var outputStream = ImageIO.createImageOutputStream(outputFile)) {
+            writer.setOutput(outputStream);
+            writer.write(null, new javax.imageio.IIOImage(image, null, null), param);
+        }
     }
 }
