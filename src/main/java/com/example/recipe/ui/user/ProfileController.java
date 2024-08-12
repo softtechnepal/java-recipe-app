@@ -1,6 +1,7 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.User;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.UserService;
 import com.example.recipe.utils.DialogUtil;
 import javafx.event.ActionEvent;
@@ -34,7 +35,7 @@ public class ProfileController {
     }
 
     private void getUserProfile() {
-        var response = userService.getUserById(107);
+        var response = userService.getUserById(UserDetailStore.getInstance().getUserId());
 
         if (response.isSuccess()) {
             user = response.getData();

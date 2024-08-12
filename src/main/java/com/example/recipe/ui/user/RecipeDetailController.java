@@ -172,4 +172,8 @@ public class RecipeDetailController {
     public void onBackPressed(MouseEvent mouseEvent) {
 
     }
+
+    public void openReviewDialog(MouseEvent mouseEvent) {
+
+    }
 }
