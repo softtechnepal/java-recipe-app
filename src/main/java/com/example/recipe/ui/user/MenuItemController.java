@@ -6,6 +6,7 @@ import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
+import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -62,11 +63,11 @@ public class MenuItemController {
     private void loadData() {
         recipeTitle.setText(recipe.getTitle());
         textDescription.setText(recipe.getDescription());
-        recipeImage.setImage(new Image("file:" + recipe.getImage(), 200, 200, true, true));
+        ImageUtil.loadImageAsync(recipe.getImage(), recipeImage);
         if (recipe.isSaved()) {
-            savedImage.setImage(new Image("file:src/main/resources/assets/ic_like_filled.png"));
+            ImageUtil.loadImageAsync("file:src/main/resources/assets/ic_like_filled.png", savedImage);
         } else {
-            savedImage.setImage(new Image("file:src/main/resources/assets/ic_like.png"));
+            ImageUtil.loadImageAsync("file:src/main/resources/assets/ic_like.png", savedImage);
         }
     }
 
