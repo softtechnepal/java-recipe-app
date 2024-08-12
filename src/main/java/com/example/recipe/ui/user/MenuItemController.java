@@ -2,6 +2,7 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.Constants;
 import com.example.recipe.domain.common.RefreshCallback;
+import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
@@ -29,6 +30,8 @@ public class MenuItemController {
     public VBox root;
     @FXML
     public ImageView savedImage;
+    @FXML
+    public ImageView reviewImage;
 
     private Recipe recipe;
     private UserRecipeService userRecipeService;
@@ -39,9 +42,13 @@ public class MenuItemController {
         root.getProperties().put("controller", this);
     }
 
-    public void setData(Recipe recipe, UserRecipeService userRecipeService) {
+    public void setData(Recipe recipe, UserRecipeService userRecipeService, MenuListingType menuListingType) {
         this.recipe = recipe;
         this.userRecipeService = userRecipeService;
+        if (menuListingType == MenuListingType.MY_RECIPE) {
+            savedImage.setVisible(false);
+            reviewImage.setVisible(false);
+        }
         loadData();
     }
 

@@ -69,7 +69,7 @@ public abstract class BaseRecipeListing {
                                     NavigationUtil.refreshCurrentChild();
                                 });
                             } else {
-                                controller.setData(recipe, userRecipeService);
+                                controller.setData(recipe, userRecipeService, getMenuListingType());
                             }
                             menuComponentStore.addMenuComponent(new UiModel(controller, cardBox), getMenuListingType());
                         }
