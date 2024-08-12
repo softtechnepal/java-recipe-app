@@ -1,6 +1,7 @@
 package com.example.recipe.repositories.impl;
 
 import com.example.recipe.config.DatabaseConfig;
+import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.mappper.RecipeMapper;
@@ -126,7 +127,111 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     @Override
     public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
+        final String SELECT_RECIPE_DETAIL_QUERY = """
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                       u.user_id, u.username, u.email, u.first_name, u.last_name,
+                       c.category_id, c.category_name,
+                       i.ingredient_id, i.ingredient_name, i.quantity, i.unit,
+                       s.step_id, s.step_description, s.step_order,
+                       n.calories, n.protein, n.fat, n.carbohydrates, n.other,
+                       CASE WHEN w.recipe_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_saved
+                FROM recipes r
+                LEFT JOIN users u ON r.user_id = u.user_id
+                LEFT JOIN recipecategories rc ON r.recipe_id = rc.recipe_id
+                LEFT JOIN categories c ON rc.category_id = c.category_id
+                LEFT JOIN ingredients ri ON r.recipe_id = ri.recipe_id
+                LEFT JOIN ingredients i ON ri.ingredient_id = i.ingredient_id
+                LEFT JOIN recipesteps rs ON r.recipe_id = rs.recipe_id
+                LEFT JOIN recipesteps s ON rs.step_id = s.step_id
+                LEFT JOIN nutritionalinformation n ON r.recipe_id = n.recipe_id
+                LEFT JOIN wishlist w ON r.recipe_id = w.recipe_id AND w.user_id = ?
+                WHERE r.recipe_id = ?;
+                """;
+        DatabaseThread.runDataOperation(() -> {
+            try (
+                    Connection connection = DatabaseConfig.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(SELECT_RECIPE_DETAIL_QUERY)
+            ) {
+                statement.setLong(1, UserDetailStore.getInstance().getUserId());
+                statement.setLong(2, recipeId);
+                ResultSet resultSet = statement.executeQuery();
+                Recipe recipe = null;
+                List<Category> categories = new ArrayList<>();
+                List<Ingredient> ingredients = new ArrayList<>();
+                List<Steps> steps = new ArrayList<>();
 
+                while (resultSet.next()) {
+                    if (recipe == null) {
+                        // Initialize the Recipe object only once
+                        recipe = RecipeMapper.mapRecipe(resultSet);
+                        recipe.setSaved(resultSet.getBoolean("is_saved"));
+
+                        // Set user details
+                        User user = new User();
+                        user.setUserId(resultSet.getLong("user_id"));
+                        user.setUsername(resultSet.getString("username"));
+                        user.setEmail(resultSet.getString("email"));
+                        user.setFirstName(resultSet.getString("first_name"));
+                        user.setLastName(resultSet.getString("last_name"));
+                        recipe.setUser(user);
+
+                        // Initialize the lists
+                        categories = new ArrayList<>();
+                        ingredients = new ArrayList<>();
+                        steps = new ArrayList<>();
+                    }
+
+                    // Set categories
+                    Long categoryId = resultSet.getLong("category_id");
+                    if (!resultSet.wasNull()) {
+                        Category category = new Category();
+                        category.setCategoryId(categoryId);
+                        category.setCategoryName(resultSet.getString("category_name"));
+                        categories.add(category);
+                    }
+
+                    // Set ingredients
+                    Long ingredientId = resultSet.getLong("ingredient_id");
+                    if (!resultSet.wasNull()) {
+                        Ingredient ingredient = new Ingredient();
+                        ingredient.setIngredientId(ingredientId);
+                        ingredient.setIngredientName(resultSet.getString("ingredient_name"));
+                        ingredient.setQuantity(resultSet.getDouble("quantity"));
+                        ingredient.setUnit(resultSet.getString("unit"));
+                        ingredients.add(ingredient);
+                    }
+
+                    // Set steps
+                    Long stepId = resultSet.getLong("step_id");
+                    if (!resultSet.wasNull()) {
+                        Steps step = new Steps();
+                        step.setStepId(stepId);
+                        step.setStepDescription(resultSet.getString("step_description"));
+                        step.setStepOrder(resultSet.getInt("step_order"));
+                        steps.add(step);
+                    }
+
+                    // Set nutritional information
+                    NutritionalInformation nutritionalInformation = new NutritionalInformation();
+                    nutritionalInformation.setCalories(resultSet.getInt("calories"));
+                    nutritionalInformation.setProtein(resultSet.getDouble("protein"));
+                    nutritionalInformation.setFat(resultSet.getDouble("fat"));
+                    nutritionalInformation.setCarbohydrates(resultSet.getDouble("carbohydrates"));
+                    recipe.setNutritionalInformation(nutritionalInformation);
+                }
+
+                if (recipe != null) {
+                    recipe.setCategory(categories);
+                    recipe.setIngredients(ingredients);
+                    recipe.setSteps(steps);
+                }
+
+                return DbResponse.success("Success", recipe);
+            } catch (Exception e) {
+                logger.error("Error while fetching recipe by ID", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
     }
 
     @Override
@@ -184,23 +289,10 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     private List<Recipe> mapResultSetToRecipes(ResultSet resultSet) throws SQLException {
         List<Recipe> recipes = new ArrayList<>();
         while (resultSet.next()) {
-            Recipe recipe = mapResultSetToRecipe(resultSet);
+            Recipe recipe = RecipeMapper.mapRecipe(resultSet);
             recipes.add(recipe);
         }
         return recipes;
-    }
-
-    // todo make mapper class for this which maps all the database to its respective object
-    private Recipe mapResultSetToRecipe(ResultSet resultSet) throws SQLException {
-        Recipe recipe = new Recipe();
-        recipe.setRecipeId(resultSet.getLong("recipe_id"));
-        recipe.setTitle(resultSet.getString("title"));
-        recipe.setDescription(resultSet.getString("description"));
-        recipe.setImage(resultSet.getString("image"));
-        recipe.setVideoUrl(resultSet.getString("video_url"));
-        recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
-        recipe.setWarnings(resultSet.getString("warnings"));
-        return recipe;
     }
 
     @Override

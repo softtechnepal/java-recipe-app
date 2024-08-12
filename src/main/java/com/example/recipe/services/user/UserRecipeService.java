@@ -38,4 +38,8 @@ public class UserRecipeService {
     public void getFavoriteRecipes(DatabaseCallback<List<Recipe>> callback) {
         recipeRepository.getFavoriteRecipes(callback);
     }
+
+    public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
+        recipeRepository.getRecipeDetailById(recipeId, callback);
+    }
 }

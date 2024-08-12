@@ -58,4 +58,18 @@ public class RecipeMapper {
         }
         return new ArrayList<>(recipeMap.values());
     }
+
+
+    public static Recipe mapRecipe(ResultSet resultSet) throws SQLException {
+        Recipe recipe = new Recipe();
+        recipe.setRecipeId(resultSet.getLong("recipe_id"));
+        recipe.setTitle(resultSet.getString("title"));
+        recipe.setDescription(resultSet.getString("description"));
+        recipe.setImage(resultSet.getString("image"));
+        recipe.setVideoUrl(resultSet.getString("video_url"));
+        recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
+        recipe.setUpdatedAt(resultSet.getTimestamp("updated_at"));
+        recipe.setWarnings(resultSet.getString("warnings"));
+        return recipe;
+    }
 }

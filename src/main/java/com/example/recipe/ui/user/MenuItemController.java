@@ -80,9 +80,9 @@ public class MenuItemController {
     }
 
     public void navigateToNextPage() {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Long> params = new HashMap<>();
         params.put(Constants.recipeParamId, recipe.getRecipeId());
-        NavigationUtil.insertChild("recipe-details-view.fxml", params);
+        RecipeDetailController.navigate(params);
     }
 
     public void onSave(MouseEvent mouseEvent) {
