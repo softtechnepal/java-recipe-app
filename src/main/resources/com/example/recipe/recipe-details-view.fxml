@@ -66,7 +66,8 @@
                                         <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
                                             <Label fx:id="recipeReview" text="24 Reviews"/>
                                             <Label fx:id="viewRecipe" text="(Show Reviews)"
-                                                   style="-fx-text-fill: blue;"/>
+                                                   style="-fx-text-fill: blue;"
+                                            onMouseClicked="#openReviewDialog"/>
                                         </HBox>
                                     </children>
                                     <padding>

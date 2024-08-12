@@ -2,6 +2,7 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.application.Platform;
@@ -35,7 +36,7 @@ public class MyRecipeController extends BaseRecipeListing {
 
     private void fetchRecipes() {
         Platform.runLater(() -> progressContainer.setVisible(true));
-        userRecipeService.getRecipeByUserId(107, response -> {
+        userRecipeService.getRecipeByUserId(UserDetailStore.getInstance().getUserId(), response -> {
             if (response.isSuccess()) {
                 if (!response.getData().isEmpty())
                     loadRecipeComponents(response.getData());
