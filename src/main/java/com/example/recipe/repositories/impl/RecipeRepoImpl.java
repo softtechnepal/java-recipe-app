@@ -380,4 +380,32 @@ public class RecipeRepoImpl implements UserRecipeRepository {
             }
         }, callback);
     }
+
+    @Override
+    public void addReview(long recipeId, Review review, DatabaseCallback<Review> callback) {
+        String INSERT_REVIEW_QUERY = "INSERT INTO reviews (recipe_id, user_id, rating, review) VALUES (?, ?, ?, ?)";
+
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                try (PreparedStatement statement = connection.prepareStatement(INSERT_REVIEW_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+                    statement.setLong(1, recipeId);
+                    statement.setLong(2, UserDetailStore.getInstance().getUserId());
+                    statement.setInt(3, review.getRating());
+                    statement.setString(4, review.getReview());
+                    statement.execute();
+                    try (ResultSet resultSet = statement.getGeneratedKeys()) {
+                        if (resultSet.next()) {
+                            review.setId(resultSet.getLong(1));
+                            return DbResponse.success("Review added successfully", review);
+                        } else {
+                            throw new SQLException("Failed to get review ID");
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error while adding review", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
 }

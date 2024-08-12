@@ -69,6 +69,11 @@
                                                    style="-fx-text-fill: blue;"
                                             onMouseClicked="#openReviewDialog"/>
                                         </HBox>
+                                        <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
+                                            <Label fx:id="addReview" text="Add Review"
+                                                   style="-fx-text-fill: blue;"
+                                            onMouseClicked="#addReview"/>
+                                        </HBox>
                                     </children>
                                     <padding>
                                         <Insets bottom="12.0"/>

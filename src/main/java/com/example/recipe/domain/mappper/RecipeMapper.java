@@ -81,7 +81,7 @@ public class RecipeMapper {
             Review review = new Review();
             review.setId(resultSet.getLong("review_id"));
             review.setRating(resultSet.getInt("rating"));
-            review.setReview(resultSet.getString("comment"));
+            review.setReview(resultSet.getString("review"));
             review.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
             review.setUpdatedAt(resultSet.getTimestamp("updated_at").toLocalDateTime());
 

@@ -2,7 +2,11 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.Constants;
 import com.example.recipe.domain.recipe.*;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
+import com.example.recipe.ui.dialogs.AddReviewDialog;
+import com.example.recipe.ui.dialogs.ReviewListingDialog;
+import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
@@ -51,6 +55,8 @@ public class RecipeDetailController {
     public ImageView starIcon;
     @FXML
     public Label viewRecipe;
+    @FXML
+    public Label addReview;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -74,11 +80,16 @@ public class RecipeDetailController {
                     if (response.getData().isEmpty()) {
                         recipeReview.setText("");
                         recipeRating.setText("No ratings yet");
-                        viewRecipe.setText("Add Review");
+                        viewRecipe.setText("");
                         return;
                     }
+                    if (response.getData().stream().map(Review::getUser).anyMatch(user -> user.getUserId() == (UserDetailStore.getInstance().getUserId()))) {
+                        addReview.setText("Edit Review");
+                    }
+                    viewRecipe.setText("(View Reviews)");
                     recipeReview.setText("Reviews: " + response.getData().size());
-                    recipeRating.setText("Rating: " + response.getData().stream().mapToDouble(Review::getRating).average().orElse(0));
+                    var avgRating = response.getData().stream().mapToDouble(Review::getRating).average().orElse(0);
+                    recipeRating.setText("Rating: " + String.format("%.1f", avgRating) + " stars");
                 }
             } else {
                 logger.error("{}", response.getMessage());
@@ -174,6 +185,24 @@ public class RecipeDetailController {
     }
 
     public void openReviewDialog(MouseEvent mouseEvent) {
+        userRecipeService.getRecipeReview(recipeId, response -> {
+            if (response.isSuccess()) {
+                if (response.getData() != null) {
+                    if (response.getData().isEmpty()) {
+                        DialogUtil.showErrorDialog("Error", "No reviews found");
+                    } else {
+                        var dialog = new ReviewListingDialog(response.getData());
+                        dialog.showAndWait();
+                    }
+                }
+            } else {
+                DialogUtil.showErrorDialog("Error", response.getMessage());
+            }
+        });
+    }
 
+    public void addReview(MouseEvent mouseEvent) {
+        var dialog = new AddReviewDialog(recipeId, userRecipeService, this::fetchReview);
+        dialog.showAndWait();
     }
 }
