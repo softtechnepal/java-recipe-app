@@ -2,6 +2,7 @@ package com.example.recipe.repositories.iuser;
 
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.domain.common.DatabaseCallback;
+import com.example.recipe.domain.recipe.Review;
 
 import java.util.List;
 
@@ -25,6 +26,9 @@ public interface UserRecipeRepository {
 
     // Get User's Favorite Recipes
     void getFavoriteRecipes(DatabaseCallback<List<Recipe>> callback);
+
+    // Get Recipe Reviews
+    void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback);
 }
 
 

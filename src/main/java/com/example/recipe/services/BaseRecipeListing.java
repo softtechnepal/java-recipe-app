@@ -6,6 +6,8 @@ import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.user.MenuItemController;
+import com.example.recipe.ui.user.SavedRecipesController;
+import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.TaskManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -16,6 +18,7 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,14 +56,21 @@ public abstract class BaseRecipeListing {
                 @Override
                 protected Void call() {
                     try {
+
+                        menuComponentStore.clearMenuComponents(getMenuListingType());
                         for (Recipe recipe : data) {
-                            // Create a new FXMLLoader for each item
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/recipe/menu-item.fxml"));
+
                             VBox cardBox = fxmlLoader.load();
                             MenuItemController controller = fxmlLoader.getController();
-                            controller.setData(recipe, userRecipeService);
-                            // Update the cardBox with recipe data
-                            // updateCardBoxWithRecipe(cardBox, recipe);
+                            if (getMenuListingType() == MenuListingType.FAVOURITE_RECIPE) {
+                                controller.setData(recipe, userRecipeService, () -> {
+                                    menuComponentStore.clearMenuComponents(MenuListingType.ALL_RECIPE);
+                                    NavigationUtil.refreshCurrentChild();
+                                });
+                            } else {
+                                controller.setData(recipe, userRecipeService, getMenuListingType());
+                            }
                             menuComponentStore.addMenuComponent(new UiModel(controller, cardBox), getMenuListingType());
                         }
                         updateMessage("Loading completed");

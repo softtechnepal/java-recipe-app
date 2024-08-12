@@ -1,7 +1,6 @@
 package com.example.recipe.domain;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 public class User {
     private long userId;
@@ -15,6 +14,8 @@ public class User {
     private String status;
     private Date created_at;
 
+    public User() {
+    }
     public User(long userId, String firstName, String lastName, String username, String email, String gender, Date dob, boolean isAdmin, String status, Date created_at) {
         this.userId = userId;
         this.firstName = firstName;
@@ -46,6 +47,10 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public void setLastName(String lastName) {

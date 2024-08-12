@@ -1,5 +1,7 @@
 package com.example.recipe.domain.recipe;
 
+import com.example.recipe.domain.User;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -13,6 +15,8 @@ public class Recipe {
     private String videoUrl;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private User user;
+    private boolean isSaved;
 
     private NutritionalInformation nutritionalInformation;
 
@@ -142,5 +146,22 @@ public class Recipe {
 
     public void setSteps(List<Steps> steps) {
         this.steps = steps;
+    }
+
+    // Getters and setters for the new field
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

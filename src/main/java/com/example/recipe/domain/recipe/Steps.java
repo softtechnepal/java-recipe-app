@@ -7,6 +7,9 @@ public class Steps {
     private String stepDescription;
     private Long recipeId;
 
+    public Steps() {
+    }
+
     public Steps(Long stepId, Integer stepOrder, String stepName, String stepDescription, Long recipeId) {
         this.stepId = stepId;
         this.stepOrder = stepOrder;

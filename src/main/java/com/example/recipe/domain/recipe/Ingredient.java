@@ -9,6 +9,8 @@ public class Ingredient {
     private String unit;
     private String ingredientImage;
 
+    public Ingredient() {
+    }
     public Ingredient(Long ingredientId, Long recipeId, String ingredientName, Double quantity, String unit, String ingredientImage) {
         this.ingredientId = ingredientId;
         this.recipeId = recipeId;
