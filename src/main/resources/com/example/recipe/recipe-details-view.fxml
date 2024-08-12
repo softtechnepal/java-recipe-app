@@ -1,13 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.recipe.ui.user.RecipeDetailController"
-            prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeDetailController">
     <children>
-        <Button fx:id="btnGoBack" layoutX="254.0" layoutY="338.0" mnemonicParsing="false" text="Recipe Detail Page"/>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0"
+              spacing="24"
+        >
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="16.0">
+                <children>
+                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
+                               onMouseClicked="#onBackPressed">
+                        <image>
+                            <Image url="@../../../assets/ic_back.png"/>
+                        </image>
+                    </ImageView>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Recipe Detail">
+                        <font>
+                            <Font name="System Bold" size="20.0"/>
+                        </font>
+                    </Text>
+                </children>
+            </HBox>
+            <ScrollPane style="-fx-background-color: white; -fx-background: white;"
+                        styleClass="no-scroll-bars">
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <VBox maxWidth="300.0" minWidth="830.0" prefHeight="200.0" spacing="16.0" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                            <children>
+                                <Label fx:id="recipeTitle" text="Recipe Title"
+                                       style="-fx-font-size: 32px; -fx-font-weight: bold"/>
+                                <Text fx:id="recipeDescription" strokeType="OUTSIDE" strokeWidth="0.0"
+                                      text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                                      wrappingWidth="800.0" style="-fx-font-size: 18px"/>
+                                <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
+                                      text="August 24, 2024"/>
+                                <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
+                                           VBox.vgrow="ALWAYS">
+                                    <image>
+                                        <Image url="@../../../assets/img_food.jpg"/>
+                                    </image>
+                                </ImageView>
+                                <HBox spacing="40.0">
+                                    <children>
+                                        <VBox fx:id="recipeByContainer" prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label text="Recipe By"/>
+                                                <Label fx:id="recipeByName" text="Prachan Ghale"/>
+                                            </children>
+                                        </VBox>
+                                        <Label fx:id="recipeReview" text="24 Reviews"/>
+                                        <Label fx:id="recipeRating" text="4.5 Star"/>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="recipeWarnings" text="Warnings related to allergies"/>
+                                <Label text="How to make?" style="-fx-font-size: 22px; -fx-font-weight: bold"/>
+                                <VBox fx:id="recipeSteps"/>
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="200.0" spacing="30.0">
+                            <children>
+                                <Label text="Ingredients"/>
+                                <VBox fx:id="ingredients"/>
+                                <Label text="Categories"/>
+                                <VBox fx:id="categories"/>
+                                <Label text="Nutritional Information"/>
+                                <VBox fx:id="nutrition"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0"/>
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+            </ScrollPane>
+        </VBox>
     </children>
+    <padding>
+        <Insets left="24.0" right="24.0" top="24.0"/>
+    </padding>
 </AnchorPane>

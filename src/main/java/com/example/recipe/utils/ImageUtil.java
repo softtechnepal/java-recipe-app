@@ -40,12 +40,12 @@ public class ImageUtil {
     }
 
 
-    public static void loadImageAsync(String imageUrl, ImageView imageView){
+    public static void loadImageAsync(String imageUrl, ImageView imageView) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
                 try {
-                    URL url = new URL(imageUrl);
+                    URL url = new URL("file:" + imageUrl);
                     Image image = new Image(url.openStream());
                     Platform.runLater(() -> imageView.setImage(image));
                 } catch (IOException e) {

@@ -2,14 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
-<?import java.lang.Double?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <VBox id="menuItemCard" prefHeight="300.0" prefWidth="335.0" styleClass="elevated-card"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:id="root"
@@ -18,7 +12,6 @@
     <children>
         <ImageView fx:id="recipeImage" cache="true" cacheHint="SCALE" fitHeight="220" fitWidth="315">
             <image>
-                <Image url="@../../../assets/img_food.jpg"/>
             </image>
         </ImageView>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="12.0">
@@ -50,7 +43,8 @@
                         <ImageView fx:id="savedImage" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true"
                                    preserveRatio="true"
                                    onMouseClicked="#onSave"/>
-                        <ImageView fx:id="reviewImage" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true"
+                        <ImageView fx:id="reviewImage" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true"
+                                   preserveRatio="true"
                                    onMouseClicked="#review">
                             <image>
                                 <Image url="@../../../assets/ic_comment.png"/>

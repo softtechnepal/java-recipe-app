@@ -7,7 +7,6 @@ import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
-import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -65,9 +64,9 @@ public class MenuItemController {
         textDescription.setText(recipe.getDescription());
         ImageUtil.loadImageAsync(recipe.getImage(), recipeImage);
         if (recipe.isSaved()) {
-            ImageUtil.loadImageAsync("file:src/main/resources/assets/ic_like_filled.png", savedImage);
+            ImageUtil.loadImageAsync("src/main/resources/assets/ic_like_filled.png", savedImage);
         } else {
-            ImageUtil.loadImageAsync("file:src/main/resources/assets/ic_like.png", savedImage);
+            ImageUtil.loadImageAsync("src/main/resources/assets/ic_like.png", savedImage);
         }
     }
 
