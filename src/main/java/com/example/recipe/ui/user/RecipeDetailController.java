@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -57,6 +58,8 @@ public class RecipeDetailController {
     public Label viewRecipe;
     @FXML
     public Label addReview;
+    @FXML
+    public HBox editRecipe;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -110,6 +113,12 @@ public class RecipeDetailController {
     }
 
     private void loadUI(Recipe data) {
+        if (data.getUser().getUserId() == UserDetailStore.getInstance().getUserId()) {
+            editRecipe.setVisible(true);
+            addReview.setVisible(false);
+        } else {
+            editRecipe.setVisible(false);
+        }
         // Set Recipe Title
         recipeTitle.setText(data.getTitle());
 
@@ -204,5 +213,9 @@ public class RecipeDetailController {
     public void addReview(MouseEvent mouseEvent) {
         var dialog = new AddReviewDialog(recipeId, userRecipeService, this::fetchReview);
         dialog.showAndWait();
+    }
+
+    public void editRecipe(MouseEvent mouseEvent) {
+
     }
 }

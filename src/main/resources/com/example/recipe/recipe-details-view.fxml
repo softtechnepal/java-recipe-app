@@ -67,12 +67,18 @@
                                             <Label fx:id="recipeReview" text="24 Reviews"/>
                                             <Label fx:id="viewRecipe" text="(Show Reviews)"
                                                    style="-fx-text-fill: blue;"
-                                            onMouseClicked="#openReviewDialog"/>
+                                                   onMouseClicked="#openReviewDialog"/>
                                         </HBox>
                                         <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
                                             <Label fx:id="addReview" text="Add Review"
                                                    style="-fx-text-fill: blue;"
-                                            onMouseClicked="#addReview"/>
+                                                   onMouseClicked="#addReview"/>
+                                        </HBox>
+                                        <HBox fx:id="editRecipe" spacing="8" alignment="CENTER" style="-fx-cursor: hand"
+                                              onMouseClicked="#editRecipe" visible="false">
+                                            <Label text="Edit Recipe"
+                                                   style="-fx-text-fill: blue;"
+                                            />
                                         </HBox>
                                     </children>
                                     <padding>
