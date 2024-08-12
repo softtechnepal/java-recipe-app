@@ -37,7 +37,7 @@
             />
             <CustomMenuItem
                     fx:id="savedRecipeMenuItem"
-                    navigateToPath="profile-view.fxml"
+                    navigateToPath="saved_recipes.fxml"
                     label="Saved Recipes"
                     iconPath="assets/ic_saved.png"
                     activeIconPath="assets/ic_saved_active.png"/>

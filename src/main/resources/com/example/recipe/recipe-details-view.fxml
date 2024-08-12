@@ -1,13 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.recipe.ui.user.RecipeDetailController"
-            prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeDetailController">
     <children>
-        <Button fx:id="btnGoBack" layoutX="254.0" layoutY="338.0" mnemonicParsing="false" text="Recipe Detail Page"/>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0"
+              spacing="24"
+        >
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="16.0">
+                <children>
+                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
+                               onMouseClicked="#onBackPressed">
+                        <image>
+                            <Image url="@../../../assets/ic_back.png"/>
+                        </image>
+                    </ImageView>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Recipe Detail">
+                        <font>
+                            <Font name="System Bold" size="20.0"/>
+                        </font>
+                    </Text>
+                </children>
+            </HBox>
+            <ScrollPane style="-fx-background-color: white; -fx-background: white;"
+                        styleClass="no-scroll-bars">
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <VBox maxWidth="300.0" minWidth="830.0" prefHeight="200.0" spacing="16.0" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                            <children>
+                                <Label fx:id="recipeTitle" text="Recipe Title"
+                                       style="-fx-font-size: 32px; -fx-font-weight: bold"/>
+                                <Text fx:id="recipeDescription" strokeType="OUTSIDE" strokeWidth="0.0"
+                                      text="Description of the recipe"
+                                      wrappingWidth="800.0" style="-fx-font-size: 18px"/>
+                                <VBox fx:id="recipeByContainer" prefHeight="200.0" prefWidth="100.0"
+                                      style="-fx-cursor: hand">
+                                    <children>
+                                        <Label text="Recipe By" style="-fx-text-fill: #363535"/>
+                                        <Label fx:id="recipeByName" text="Prachan Ghale"
+                                               style="-fx-font-size: 18px; -fx-text-fill: #272b27"/>
+                                    </children>
+                                </VBox>
+                                <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
+                                      text="August 24, 2024"/>
+                                <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
+                                           VBox.vgrow="ALWAYS">
+                                </ImageView>
+                                <HBox spacing="80.0" alignment="CENTER_LEFT">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12">
+                                            <ImageView fx:id="starIcon" fitHeight="18.0" fitWidth="18.0"
+                                                       pickOnBounds="true" preserveRatio="true"/>
+                                            <Label fx:id="recipeRating" text="4.5 Star"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
+                                            <Label fx:id="recipeReview" text="24 Reviews"/>
+                                            <Label fx:id="viewRecipe" text="(Show Reviews)"
+                                                   style="-fx-text-fill: blue;"
+                                                   onMouseClicked="#openReviewDialog"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
+                                            <Label fx:id="addReview" text="Add Review"
+                                                   style="-fx-text-fill: blue;"
+                                                   onMouseClicked="#addReview"/>
+                                        </HBox>
+                                        <HBox fx:id="editRecipe" spacing="8" alignment="CENTER" style="-fx-cursor: hand"
+                                              onMouseClicked="#editRecipe" visible="false">
+                                            <Label text="Edit Recipe"
+                                                   style="-fx-text-fill: blue;"
+                                            />
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="12.0"/>
+                                    </padding>
+                                </HBox>
+                                <Label fx:id="recipeWarnings" text="Warnings related to allergies"
+                                       style="-fx-font-size: 18;"/>
+                                <Separator prefHeight="10.0" prefWidth="830.0"/>
+                                <Label text="How to make?" style="-fx-font-size: 22px; -fx-font-weight: bold"/>
+                                <VBox fx:id="recipeSteps" spacing="16"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="34.0"/>
+                            </padding>
+                        </VBox>
+                        <VBox prefHeight="300.0" prefWidth="200.0" spacing="10.0">
+                            <children>
+                                <Label text="Ingredients" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
+                                <VBox fx:id="ingredients"/>
+                                <Separator prefHeight="10.0" prefWidth="300.0"/>
+                                <Label text="Categories" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
+                                <VBox fx:id="categories"/>
+                                <Separator prefHeight="10.0" prefWidth="300.0"/>
+                                <Label text="Nutritional Information"
+                                       style="-fx-font-size: 18px; -fx-font-weight: bold"/>
+                                <VBox fx:id="nutrition"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="12.0" left="12.0" right="12.0" top="200.0"/>
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+            </ScrollPane>
+        </VBox>
     </children>
+    <padding>
+        <Insets left="24.0" right="24.0" top="24.0"/>
+    </padding>
 </AnchorPane>

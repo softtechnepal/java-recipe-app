@@ -8,17 +8,22 @@ public class User {
     private String lastName;
     private String username;
     private String email;
+    private String gender;
+    private Date dob;
     private boolean isAdmin;
     private String status;
     private Date created_at;
 
-    public User(long userId,String firstName, String lastName, String username, String email, boolean isAdmin, String status,
-                Date created_at){
+    public User() {
+    }
+    public User(long userId, String firstName, String lastName, String username, String email, String gender, Date dob, boolean isAdmin, String status, Date created_at) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
+        this.gender = gender;
+        this.dob = dob;
         this.isAdmin = isAdmin;
         this.status = status;
         this.created_at = created_at;
@@ -36,55 +41,75 @@ public class User {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Date getCreatedAt() {
-        return created_at;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public String getGender() {
+        return gender;
     }
 
-    public void setStatus(String email) {
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public void setCreatedDate(Date created_at) {
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 }

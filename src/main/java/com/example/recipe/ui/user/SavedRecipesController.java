@@ -2,46 +2,36 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
-import com.example.recipe.services.UserDetailStore;
-import com.example.recipe.services.user.UserRecipeService;
-import com.example.recipe.utils.NavigationUtil;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
-public class MyRecipeController extends BaseRecipeListing {
+public class SavedRecipesController extends BaseRecipeListing {
     @FXML
     public GridPane menuGrid;
     @FXML
-    public Button btnAddRecipe;
-    @FXML
     public VBox progressContainer;
-
-    private static final UserRecipeService userRecipeService = new UserRecipeService();
 
     @FXML
     public void initialize() {
-        btnAddRecipe.setOnAction(this::onAddRecipe);
-        fetchRecipes();
+        fetchSavedRecipes();
     }
 
-    private void onAddRecipe(ActionEvent actionEvent) {
-        NavigationUtil.insertChild("add-recipe-view.fxml");
-    }
-
-    private void fetchRecipes() {
+    private void fetchSavedRecipes() {
         Platform.runLater(() -> progressContainer.setVisible(true));
-        userRecipeService.getRecipeByUserId(UserDetailStore.getInstance().getUserId(), response -> {
+        userRecipeService.getFavoriteRecipes(response -> {
             if (response.isSuccess()) {
-                if (!response.getData().isEmpty())
+                if (!response.getData().isEmpty()) {
                     loadRecipeComponents(response.getData());
+                } else {
+                    Platform.runLater(() -> progressContainer.setVisible(false));
+                    logger.info("No saved recipes found");
+                }
             } else {
-                logger.error("Failed to fetch recipes {}", response.getMessage());
+                logger.error("Failed to fetch saved recipes {}", response.getMessage());
             }
         });
     }
@@ -58,7 +48,7 @@ public class MyRecipeController extends BaseRecipeListing {
 
     @Override
     protected MenuListingType getMenuListingType() {
-        return MenuListingType.MY_RECIPE;
+        return MenuListingType.FAVOURITE_RECIPE;
     }
 
     @Override

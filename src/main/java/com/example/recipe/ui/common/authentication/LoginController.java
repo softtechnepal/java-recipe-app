@@ -4,6 +4,7 @@ import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.domain.response.LoginResponse;
 import com.example.recipe.services.AuthenticationService;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -59,6 +60,10 @@ public class LoginController {
     private void handleLoginResponse(DbResponse<LoginResponse> response) {
         LoggerUtil.logger.error("Login response: {}", response instanceof DbResponse.Success ? "Success" : "Failure");
         if (response instanceof DbResponse.Success) {
+            UserDetailStore userDetailStore = UserDetailStore.getInstance();
+            userDetailStore.setUserEmail(response.getData().getEmail());
+            userDetailStore.setUserId(response.getData().getId());
+            userDetailStore.setUserName(response.getData().getUsername());
             if (response.getData().isAdmin()) {
                 NavigationUtil.navigateTo("admin/base-view.fxml");
                 return;
