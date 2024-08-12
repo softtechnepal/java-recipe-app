@@ -73,7 +73,6 @@ public class RecipeDetailController {
         recipeId = (Long) NavigationUtil.getParam(Constants.recipeParamId);
         ImageUtil.loadImageAsync("src/main/resources/assets/ic_start.png", starIcon);
         fetchRecipeDetail();
-        fetchReview();
     }
 
     private void fetchReview() {
@@ -104,6 +103,7 @@ public class RecipeDetailController {
         userRecipeService.getRecipeDetailById(recipeId, response -> {
             if (response.isSuccess()) {
                 if (response.getData() != null) {
+                    fetchReview();
                     loadUI(response.getData());
                 }
             } else {

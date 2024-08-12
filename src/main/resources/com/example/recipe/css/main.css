@@ -2,7 +2,7 @@
 @import "custom-menu-item.css";
 
 .root {
-    /*-fx-background-color: -background-color;*/
+    -fx-background-color: -background-color;
     /*-fx-pref-width: 100%;*/
     /*-fx-pref-height: 100%;*/
     /*-fx-min-height: 800px;*/
