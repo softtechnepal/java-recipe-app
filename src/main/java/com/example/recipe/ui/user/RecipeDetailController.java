@@ -149,8 +149,9 @@ public class RecipeDetailController {
         for (Steps step : steps) {
             Label stepLabel = new Label(step.getStepName());
             stepLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
-            Label stepDescription = new Label(step.getStepDescription());
-            stepDescription.setStyle("-fx-font-weight: normal; -fx-font-size: 16px; -fx-text-fill: #333333");
+            Text stepDescription = new Text(step.getStepDescription());
+            stepDescription.setWrappingWidth(790);
+            stepDescription.setStyle("-fx-font-weight: normal; -fx-font-size: 16px; -fx-text-fill: #333333;");
             Separator separator = new Separator();
             this.recipeSteps.getChildren().addAll(stepLabel, stepDescription, separator);
         }
