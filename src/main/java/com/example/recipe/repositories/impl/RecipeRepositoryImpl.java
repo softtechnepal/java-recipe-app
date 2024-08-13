@@ -5,6 +5,7 @@ import com.example.recipe.domain.Recipe;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.iadmin.IAdminRecipeRepository;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,10 +19,23 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
     public DbResponse<ArrayList<Recipe>> getAllRecipes() {
         ArrayList<Recipe> recipes = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT * FROM recipes";
+            String query = "SELECT r.recipe_id, r.user_id, r.title, r.description, r.image, r.video_url, r.created_at, " +
+                    "u.username, " +
+                    "(SELECT ARRAY_AGG(i.ingredient_name) FROM ingredients i WHERE i.recipe_id = r.recipe_id) AS ingredients, " +
+                    "(SELECT ARRAY_AGG(c.category_name) FROM recipecategories rc JOIN categories c ON rc.category_id = c.category_id WHERE rc.recipe_id = r.recipe_id) AS categories, " +
+                    "(SELECT COUNT(*) FROM reviews rv WHERE rv.recipe_id = r.recipe_id) AS totalReviews, " +
+                    "(SELECT COUNT(*) FROM wishlist sr WHERE sr.recipe_id = r.recipe_id) AS totalSaved " +
+                    "FROM recipes r " +
+                    "LEFT JOIN users u ON r.user_id = u.user_id";
             try (PreparedStatement st = conn.prepareStatement(query)) {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
+                    Array sqlIngredients = rs.getArray("ingredients");
+                    String[] ingredientsArray = sqlIngredients != null ? (String[]) sqlIngredients.getArray() : new String[0];
+                    String ingredients = String.join(",", ingredientsArray);
+                    Array sqlCategories = rs.getArray("categories");
+                    String[] categoriesArray = sqlCategories != null ? (String[]) sqlCategories.getArray() : new String[0];
+                    String categories = String.join(",", categoriesArray);
                     Recipe recipe = new Recipe(
                             rs.getLong("recipe_id"),
                             rs.getLong("user_id"),
@@ -29,7 +43,12 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
                             rs.getString("description"),
                             rs.getString("image"),
                             rs.getString("video_url"),
-                            rs.getString("created_at")
+                            rs.getString("created_at"),
+                            rs.getString("username"),
+                             ingredients,
+                            categories,
+                            rs.getInt("totalReviews"),
+                            rs.getInt("totalSaved")
                     );
                     recipes.add(recipe);
                 }
@@ -44,11 +63,25 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
     @Override
     public DbResponse<Recipe> getRecipeById(long recipeId) {
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT * FROM recipes WHERE recipe_id = ?";
+            String query = "SELECT r.recipe_id, r.user_id, r.title, r.description, r.image, r.video_url, r.created_at, " +
+                    "u.username, " +
+                    "(SELECT ARRAY_AGG(i.ingredient_name) FROM ingredients i WHERE i.recipe_id = r.recipe_id) AS ingredients, " +
+                    "(SELECT ARRAY_AGG(c.category_name) FROM recipecategories rc JOIN categories c ON rc.category_id = c.category_id WHERE rc.recipe_id = r.recipe_id) AS categories, " +
+                    "(SELECT COUNT(*) FROM reviews rv WHERE rv.recipe_id = r.recipe_id) AS totalReviews, " +
+                    "(SELECT COUNT(*) FROM wishlist sr WHERE sr.recipe_id = r.recipe_id) AS totalSaved " +
+                    "FROM recipes r " +
+                    "LEFT JOIN users u ON r.user_id = u.user_id " +
+                    "WHERE r.recipe_id = ?";
             try (PreparedStatement st = conn.prepareStatement(query)) {
                 st.setLong(1, recipeId);
                 ResultSet rs = st.executeQuery();
                 if (rs.next()) {
+                    Array sqlIngredients = rs.getArray("ingredients");
+                    String[] ingredientsArray = sqlIngredients != null ? (String[]) sqlIngredients.getArray() : new String[0];
+                    String ingredients = String.join(",", ingredientsArray);
+                    Array sqlCategories = rs.getArray("categories");
+                    String[] categoriesArray = sqlCategories != null ? (String[]) sqlCategories.getArray() : new String[0];
+                    String categories = String.join(",", categoriesArray);
                     Recipe recipe = new Recipe(
                             rs.getLong("recipe_id"),
                             rs.getLong("user_id"),
@@ -56,7 +89,12 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
                             rs.getString("description"),
                             rs.getString("image"),
                             rs.getString("video_url"),
-                            rs.getString("created_at")
+                            rs.getString("created_at"),
+                            rs.getString("username"),
+                          ingredients,
+                            categories,
+                            rs.getInt("totalReviews"),
+                            rs.getInt("totalSaved")
                     );
                     return new DbResponse.Success<>("Get recipe success", recipe);
                 } else {
@@ -73,11 +111,25 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
     public DbResponse<ArrayList<Recipe>> getRecipeByUserId(long userId) {
         ArrayList<Recipe> recipes = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT * FROM recipes WHERE user_id = ?";
+            String query = "SELECT r.recipe_id, r.user_id, r.title, r.description, r.image, r.video_url, r.created_at, " +
+                    "u.username, " +
+                    "(SELECT ARRAY_AGG(i.ingredient_name) FROM ingredients i WHERE i.recipe_id = r.recipe_id) AS ingredients, " +
+                    "(SELECT ARRAY_AGG(c.category_name) FROM recipecategories rc JOIN categories c ON rc.category_id = c.category_id WHERE rc.recipe_id = r.recipe_id) AS categories, " +
+                    "(SELECT COUNT(*) FROM reviews rv WHERE rv.recipe_id = r.recipe_id) AS totalReviews, " +
+                    "(SELECT COUNT(*) FROM wishlist sr WHERE sr.recipe_id = r.recipe_id) AS totalSaved " +
+                    "FROM recipes r " +
+                    "LEFT JOIN users u ON r.user_id = u.user_id " +
+                    "WHERE r.user_id = ?";
             try (PreparedStatement st = conn.prepareStatement(query)) {
                 st.setLong(1, userId);
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
+                    Array sqlIngredients = rs.getArray("ingredients");
+                    String[] ingredientsArray = sqlIngredients != null ? (String[]) sqlIngredients.getArray() : new String[0];
+                    String ingredients = String.join(",", ingredientsArray);
+                    Array sqlCategories = rs.getArray("categories");
+                    String[] categoriesArray = sqlCategories != null ? (String[]) sqlCategories.getArray() : new String[0];
+                    String categories = String.join(",", categoriesArray);
                     Recipe recipe = new Recipe(
                             rs.getLong("recipe_id"),
                             rs.getLong("user_id"),
@@ -85,7 +137,12 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
                             rs.getString("description"),
                             rs.getString("image"),
                             rs.getString("video_url"),
-                            rs.getString("created_at")
+                            rs.getString("created_at"),
+                            rs.getString("username"),
+                           ingredients,
+                            categories,
+                            rs.getInt("totalReviews"),
+                            rs.getInt("totalSaved")
                     );
                     recipes.add(recipe);
                 }
@@ -177,91 +234,20 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
         return new DbResponse.Success<>("Delete recipe success", null);
     }
 
-    // TODO: Prachan: the table is empty and doesnot establish any relation between recipe and ingredients
-    @Override
-    public DbResponse<ArrayList<String>> getIngredientsByRecipeId(long recipeId) {
-        ArrayList<String> ingredients = new ArrayList<>();
-        try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT ingredient_name FROM ingredients WHERE recipe_id = ?";
-            try (PreparedStatement st = conn.prepareStatement(query)) {
-                st.setLong(1, recipeId);
-                ResultSet rs = st.executeQuery();
-                while (rs.next()) {
-                    ingredients.add(rs.getString("ingredient"));
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error while retrieving ingredients", e);
-            return new DbResponse.Failure<>(e.getMessage());
-        }
-        return new DbResponse.Success<>("Get ingredients success", ingredients);
-    }
-
-    // TODO: Prachan: the table is empty, doesnot establish any relation between recipe and category
-    @Override
-    public DbResponse<ArrayList<String>> getCategoriesByRecipeId(long recipeId) {
-        ArrayList<String> categories = new ArrayList<>();
-        try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT c.category_name FROM recipecategories rc JOIN categories c ON rc.category_id = c.category_id WHERE rc.recipe_id = ?";
-            try (PreparedStatement st = conn.prepareStatement(query)) {
-                st.setLong(1, recipeId);
-                ResultSet rs = st.executeQuery();
-                while (rs.next()) {
-                    categories.add(rs.getString("category_name"));
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error while retrieving categories", e);
-            return new DbResponse.Failure<>(e.getMessage());
-        }
-        return new DbResponse.Success<>("Get categories success", categories);
-    }
-
-    @Override
-    public DbResponse<Integer> getTotalReviewsByRecipeId(long recipeId) {
-        int totalReviews = 0;
-        try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT COUNT(*) AS total_reviews FROM reviews WHERE recipe_id = ?";
-            try (PreparedStatement st = conn.prepareStatement(query)) {
-                st.setLong(1, recipeId);
-                ResultSet rs = st.executeQuery();
-                if (rs.next()) {
-                    totalReviews = rs.getInt("total_reviews");
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error while retrieving total reviews", e);
-            return new DbResponse.Failure<>(e.getMessage());
-        }
-        return new DbResponse.Success<>("Get total reviews success", totalReviews);
-    }
-
-    @Override
-    public DbResponse<Integer> getTotalSavedByRecipeId(long recipeId) {
-        int totalSaved = 0;
-        try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT COUNT(*) AS total_saved FROM wishlist WHERE recipe_id = ?";
-            try (PreparedStatement st = conn.prepareStatement(query)) {
-                st.setLong(1, recipeId);
-                ResultSet rs = st.executeQuery();
-                if (rs.next()) {
-                    totalSaved = rs.getInt("total_saved");
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error while retrieving total saved", e);
-            return new DbResponse.Failure<>(e.getMessage());
-        }
-        return new DbResponse.Success<>("Get total saved success", totalSaved);
-    }
-
     @Override
     public DbResponse<ArrayList<Recipe>> searchRecipe(String searchTerm) {
         ArrayList<Recipe> recipes = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT DISTINCT r.* FROM recipes r " +
+            String query = "SELECT r.recipe_id, r.user_id, r.title, r.description, r.image, r.video_url, r.created_at, " +
+                    "u.username, " +
+                    "(SELECT ARRAY_AGG(i.ingredient_name) FROM ingredients i WHERE i.recipe_id = r.recipe_id) AS ingredients, " +
+                    "(SELECT ARRAY_AGG(c.category_name) FROM recipecategories rc JOIN categories c ON rc.category_id = c.category_id WHERE rc.recipe_id = r.recipe_id) AS categories, " +
+                    "(SELECT COUNT(*) FROM reviews rv WHERE rv.recipe_id = r.recipe_id) AS totalReviews, " +
+                    "(SELECT COUNT(*) FROM wishlist sr WHERE sr.recipe_id = r.recipe_id) AS totalSaved " +
+                    "FROM recipes r " +
+                    "LEFT JOIN users u ON r.user_id = u.user_id " +
                     "WHERE r.title ILIKE ? " +
-                    "OR EXISTS (SELECT 1 FROM users u WHERE r.user_id = u.user_id AND u.username ILIKE ?) " +
+                    "OR u.username ILIKE ? " +
                     "OR EXISTS (SELECT 1 FROM ingredients i WHERE r.recipe_id = i.recipe_id AND i.ingredient_name ILIKE ?) " +
                     "OR EXISTS (SELECT 1 FROM recipecategories rc JOIN categories c ON rc.category_id = c.category_id WHERE r.recipe_id = rc.recipe_id AND c.category_name ILIKE ?)";
             try (PreparedStatement st = conn.prepareStatement(query)) {
@@ -272,6 +258,12 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
                 st.setString(4, searchPattern);
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
+                    Array sqlIngredients = rs.getArray("ingredients");
+                    String[] ingredientsArray = sqlIngredients != null ? (String[]) sqlIngredients.getArray() : new String[0];
+                    String ingredients = String.join(",", ingredientsArray);
+                    Array sqlCategories = rs.getArray("categories");
+                    String[] categoriesArray = sqlCategories != null ? (String[]) sqlCategories.getArray() : new String[0];
+                    String categories = String.join(",", categoriesArray);
                     Recipe recipe = new Recipe(
                             rs.getLong("recipe_id"),
                             rs.getLong("user_id"),
@@ -279,7 +271,12 @@ public class RecipeRepositoryImpl implements IAdminRecipeRepository {
                             rs.getString("description"),
                             rs.getString("image"),
                             rs.getString("video_url"),
-                            rs.getString("created_at")
+                            rs.getString("created_at"),
+                            rs.getString("username"),
+                            ingredients,
+                            categories,
+                            rs.getInt("totalReviews"),
+                            rs.getInt("totalSaved")
                     );
                     recipes.add(recipe);
                 }

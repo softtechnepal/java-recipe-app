@@ -29,21 +29,6 @@ public class AdminRecipeService {
         return recipeRepository.deleteRecipe(recipeId);
     }
 
-    public DbResponse<ArrayList<String>> getIngredientsByRecipeId(long recipeId) {
-        return recipeRepository.getIngredientsByRecipeId(recipeId);
-    }
-
-    public DbResponse<ArrayList<String>> getCategoriesByRecipeId(long recipeId) {
-        return recipeRepository.getCategoriesByRecipeId(recipeId);
-    }
-
-    public DbResponse<Integer> getTotalReviewsByRecipeId(long recipeId) {
-        return recipeRepository.getTotalReviewsByRecipeId(recipeId);
-    }
-
-    public DbResponse<Integer> getTotalSavedByRecipeId(long recipeId) {
-        return recipeRepository.getTotalSavedByRecipeId(recipeId);
-    }
     public DbResponse<ArrayList<Recipe>> searchRecipe(String searchTerm) {
         return recipeRepository.searchRecipe(searchTerm);
     }

@@ -81,44 +81,10 @@ public class RecipeController {
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
         });
-        category.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<ArrayList<String>> response = recipeService.getCategoriesByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                ArrayList<String> categories = response.getData();
-                return new SimpleStringProperty(String.join(", ", categories));
-            } else {
-                return new SimpleStringProperty("Unknown");
-            }
-        });
-        ingredients.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<ArrayList<String>> response = recipeService.getIngredientsByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                ArrayList<String> ingredients = response.getData();
-                return new SimpleStringProperty(String.join(", ", ingredients));
-            } else {
-                return new SimpleStringProperty("Unknown");
-            }
-        });
-        totalReviews.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<Integer> response = recipeService.getTotalReviewsByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                return new SimpleIntegerProperty(response.getData()).asObject();
-            } else {
-                return new SimpleIntegerProperty(0).asObject();
-            }
-        });
-        totalSaved.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<Integer> response = recipeService.getTotalSavedByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                return new SimpleIntegerProperty(response.getData()).asObject();
-            } else {
-                return new SimpleIntegerProperty(0).asObject();
-            }
-        });
+        totalReviews.setCellValueFactory(new PropertyValueFactory<>("totalReviews"));
+        totalSaved.setCellValueFactory(new PropertyValueFactory<>("totalSaved"));
+        category.setCellValueFactory(new PropertyValueFactory<>("categories"));
+        ingredients.setCellValueFactory(new PropertyValueFactory<>("ingredients"));
         // Add buttons to the actions column
         actions.setCellFactory(new Callback<TableColumn<Recipe, Void>, TableCell<Recipe, Void>>() {
             @Override
