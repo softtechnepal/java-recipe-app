@@ -71,7 +71,7 @@
                                                styleClass="text-button"/>
                                     </HBox>
                                     <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
-                                    <HBox alignment="CENTER">
+                                    <HBox alignment="CENTER" spacing="16">
                                         <Label fx:id="addReview" text="Add Review"
                                                styleClass="text-button"
                                                onMouseClicked="#addReview"/>
@@ -79,6 +79,11 @@
                                         <Label fx:id="editRecipe" text="Edit Recipe"
                                                styleClass="text-button"
                                                onMouseClicked="#onEditRecipe"
+                                               visible="false"
+                                        />
+                                        <Label fx:id="deleteRecipe" text="Delete Recipe"
+                                               styleClass="text-button"
+                                               onMouseClicked="#onDeleteRecipe"
                                                visible="false"
                                         />
                                     </HBox>

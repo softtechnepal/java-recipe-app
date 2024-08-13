@@ -362,6 +362,16 @@ public class RecipeRepoImpl implements UserRecipeRepository {
         }
     }
 
+    private void deleteNutritionalInformation(Connection connection, long recipeId) throws SQLException {
+        String DELETE_NUTRITIONAL_INFO_QUERY = """
+                        DELETE FROM nutritionalinformation WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_NUTRITIONAL_INFO_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
     private void updateNutritionalInformation(Connection connection, NutritionalInformation nutritionalInformation, Long recipeId) throws SQLException {
         String updateNutritionalInfoQuery = """
                     UPDATE nutritionalinformation
@@ -379,9 +389,55 @@ public class RecipeRepoImpl implements UserRecipeRepository {
         }
     }
 
-    @Override
-    public void deleteRecipe(long recipeId, DatabaseCallback<Recipe> callback) {
+    private void deleteRecipe(Connection connection, long recipeId) throws SQLException {
+        String DELETE_RECIPE_QUERY = """
+                        DELETE FROM recipes WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
 
+    private void deleteRecipeReviews(Connection connection, long recipeId) throws SQLException {
+        String DELETE_RECIPE_REVIEWS_QUERY = """
+                        DELETE FROM reviews WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_REVIEWS_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteRecipeWishList(Connection connection, long recipeId) throws SQLException {
+        String DELETE_RECIPE_WISHLIST_QUERY = """
+                        DELETE FROM wishlist WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_WISHLIST_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void deleteRecipe(long recipeId, DatabaseCallback<Boolean> callback) {
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                connection.setAutoCommit(false);
+                deleteIngredients(connection, recipeId);
+                deleteCategories(connection, recipeId);
+                deleteSteps(connection, recipeId);
+                deleteNutritionalInformation(connection, recipeId);
+                deleteRecipeReviews(connection, recipeId);
+                deleteRecipeWishList(connection, recipeId);
+                deleteRecipe(connection, recipeId);
+                connection.commit();
+                return DbResponse.success("Recipe deleted successfully", true);
+            } catch (Exception e) {
+                logger.error("Error while deleting recipe", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
     }
 
     @Override

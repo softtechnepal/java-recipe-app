@@ -63,6 +63,8 @@ public class RecipeDetailController {
     public Label editRecipe;
     @FXML
     public HBox viewReviewsContainer;
+    @FXML
+    public Label deleteRecipe;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -97,6 +99,7 @@ public class RecipeDetailController {
                             addReview.setVisible(false);
                             addReview.setManaged(false);
                             editRecipe.setVisible(true);
+                            deleteRecipe.setVisible(true);
                         } else if (reviewedUsers.anyMatch(user -> user.getUserId() == UserDetailStore.getInstance().getUserId())) {
                             addReview.setVisible(false);
                             addReview.setManaged(false);
@@ -241,5 +244,20 @@ public class RecipeDetailController {
         Map<String, Long> params = new HashMap<>();
         params.put(Constants.USER_ID_PARAM, currentRecipe.getUser().getUserId());
         OtherUserController.navigate(params);
+    }
+
+    public void onDeleteRecipe(MouseEvent mouseEvent) {
+        if (currentRecipe.getUser().getUserId() == UserDetailStore.getInstance().getUserId()) {
+            userRecipeService.deleteRecipe(recipeId, response -> {
+                if (response.isSuccess()) {
+                    DialogUtil.showInfoDialog("Success", "Recipe deleted successfully");
+                    NavigationUtil.insertChild("recipe-view.fxml");
+                } else {
+                    DialogUtil.showErrorDialog("Error", response.getMessage());
+                }
+            });
+        } else {
+            DialogUtil.showErrorDialog("Error", "You are not allowed to delete this recipe");
+        }
     }
 }
