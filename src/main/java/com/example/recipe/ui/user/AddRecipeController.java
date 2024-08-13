@@ -262,9 +262,8 @@ public class AddRecipeController {
                 userRecipeService.updateRecipe(recipe, response -> {
                     if (response.isSuccess()) {
                         DialogUtil.showInfoDialog("Success", "Recipe updated successfully");
-
-                        /*Map<String, Long> params = Map.of(Constants.RECIPE_ID_PARAM, updateRecipe.getRecipeId());
-                        RecipeDetailController.navigate(params);*/
+                        Map<String, Long> params = Map.of(Constants.RECIPE_ID_PARAM, updateRecipe.getRecipeId());
+                        RecipeDetailController.navigate(params);
                     } else {
                         DialogUtil.showErrorDialog("Error", response.getMessage());
                     }
