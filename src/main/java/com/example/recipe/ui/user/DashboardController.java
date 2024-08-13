@@ -37,7 +37,9 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
-        ImageUtil.loadImageAsync("file:src/main/resources/assets/logo.png", imageView);
+        Image image =  new Image("file:src/main/resources/assets/logo.png");
+        imageView.setImage(image);
+
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
         List<CustomMenuItem> menuItems = List.of(recipeMenuItem, myRecipeMenuItem, savedRecipeMenuItem, profileMenuItem);
