@@ -51,8 +51,14 @@
                                                style="-fx-font-size: 18px; -fx-text-fill: #272b27"/>
                                     </children>
                                 </VBox>
-                                <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="August 24, 2024"/>
+                                <HBox spacing="24.0">
+                                    <Label fx:id="lbPreTime" style="-fx-font-size: 16; -fx-font-weight: bold"/>
+                                    <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="10.0"/>
+                                    <Label fx:id="lbServings" style="-fx-font-size: 16; -fx-font-weight: bold"/>
+                                    <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="10.0"/>
+                                    <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
+                                          text="August 24, 2024"/>
+                                </HBox>
                                 <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
                                            VBox.vgrow="ALWAYS">
                                 </ImageView>

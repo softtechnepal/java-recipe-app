@@ -70,6 +70,10 @@ public class RecipeDetailController {
     public HBox viewReviewsContainer;
     @FXML
     public Label deleteRecipe;
+    @FXML
+    public Label lbPreTime;
+    @FXML
+    public Label lbServings;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -148,6 +152,12 @@ public class RecipeDetailController {
         // Set Recipe Create Date
         recipeCreateDate.setText(data.getCreatedAt().toString());
 
+        // Set Recipe Preparation Time
+        lbPreTime.setText("Preparation Time: " + data.getPrepTime() + " minutes");
+
+        // Set Recipe Servings
+        lbServings.setText("Can Servings: " + data.getTotalServings());
+
         // Set Recipe Image
         ImageUtil.loadImageAsync(data.getImage(), recipeImage);
 
@@ -155,7 +165,11 @@ public class RecipeDetailController {
         recipeByName.setText(data.getUser().getFullName());
 
         // Set Recipe Warnings
-        recipeWarnings.setText(data.getWarnings());
+        if (data.getWarnings() == null || data.getWarnings().isEmpty()) {
+            recipeWarnings.setText("No warnings");
+        } else {
+            recipeWarnings.setText(data.getWarnings());
+        }
 
         loadSteps(data.getSteps());
         loadIngredients(data.getIngredients());
