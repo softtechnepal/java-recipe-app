@@ -31,6 +31,8 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
+    public final static String LOGIN_ROUTE = "login-view.fxml";
+
     @FXML
     public void initialize() {
         // Load the logo image here
@@ -38,8 +40,8 @@ public class LoginController {
         logoImageView.setImage(logoImage);
 
         //Test Data
-        usernameField.setText("admin");
-        passwordField.setText("admin");
+        usernameField.setText("prachan");
+        passwordField.setText("Internal@1");
 
         // Add event handlers for buttons here
         loginButton.setOnAction(event -> handleLogin());

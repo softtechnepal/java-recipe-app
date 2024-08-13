@@ -44,6 +44,7 @@
                     navigateToPath="login-view.fxml"
                     label="Logout"
                     styleClass="sidemenu-logout-class"
+                    onMouseClicked="#onLogout"
                     iconPath="assets/ic_log_out.png"/>
         </VBox>
     </VBox>

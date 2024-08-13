@@ -4,12 +4,22 @@ import com.example.recipe.domain.User;
 import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.UserService;
 import com.example.recipe.utils.DialogUtil;
+import com.example.recipe.utils.ImageUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.sql.Date;
 import java.time.LocalDate;
+
+import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class ProfileController {
     @FXML
@@ -24,6 +34,8 @@ public class ProfileController {
     public TextField tfLastName;
     @FXML
     public TextField tfFirstName;
+    @FXML
+    public ImageView profileImage;
 
     private UserService userService;
     private User user;
@@ -39,7 +51,6 @@ public class ProfileController {
 
         if (response.isSuccess()) {
             user = response.getData();
-
             setProfile(user);
         } else {
             DialogUtil.showErrorDialog("Error", response.getMessage());
@@ -47,6 +58,10 @@ public class ProfileController {
     }
 
     private void setProfile(User userData) {
+        if (userData.getProfilePicture() != null) {
+            ImageUtil.loadImageAsync(userData.getProfilePicture(), profileImage);
+        }
+
         email.setText(userData.getEmail());
 
         if (userData.getFirstName() != null)
@@ -95,13 +110,35 @@ public class ProfileController {
             user.setDob(Date.valueOf(dobDatePicker.getValue()));
         }
 
+        updateUserProfile(user);
+    }
+
+    private void updateUserProfile(User user) {
         userService.updateProfile(user, (response) -> {
             if (response.isSuccess()) {
                 setProfile(response.getData());
-                DialogUtil.showInfoDialog("Success", "User profile updated successfully.");
+                DialogUtil.showInfoDialog("Success", "Profile updated successfully.");
             } else {
                 DialogUtil.showErrorDialog("Error", response.getMessage());
             }
         });
+    }
+
+    public void changePhoto(MouseEvent mouseEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(((Node) mouseEvent.getSource()).getScene().getWindow());
+        if (selectedFile != null) {
+            try {
+                String newImagePath = ImageUtil.copyImageToDbImages(selectedFile);
+                user.setProfilePicture(newImagePath);
+                updateUserProfile(user);
+            } catch (Exception e) {
+                DialogUtil.showErrorDialog("Error", "Error while uploading image");
+            }
+        }
     }
 }

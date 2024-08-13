@@ -2,10 +2,15 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.components.CustomMenuItem;
+import com.example.recipe.services.UserDetailStore;
+import com.example.recipe.ui.common.authentication.LoginController;
+import com.example.recipe.utils.ImageUtil;
+import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.SingletonObjects;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.util.List;
@@ -32,8 +37,7 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
-        Image logoImage = new Image("file:src/main/resources/assets/logo.png");
-        imageView.setImage(logoImage);
+        ImageUtil.loadImageAsync("file:src/main/resources/assets/logo.png", imageView);
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
         List<CustomMenuItem> menuItems = List.of(recipeMenuItem, myRecipeMenuItem, savedRecipeMenuItem, profileMenuItem);
@@ -52,5 +56,10 @@ public class DashboardController {
         }
         menuItem.activate();
         activeMenuItem = menuItem;
+    }
+
+    public void onLogout(MouseEvent mouseEvent) {
+        UserDetailStore.getInstance().clear();
+        NavigationUtil.navigateTo(LoginController.LOGIN_ROUTE);
     }
 }

@@ -4,12 +4,12 @@
 @import "table.css";
 
 .root {
+    /*-fx-pref-width: 100%;*/
+    /*-fx-pref-height: 100%;*/
+    /*-fx-min-height: 800px;*/
+    /*-fx-min-width: 1000px;*/
     /*-fx-background-color: -color-dark;*/
     /*-fx-background-color: -background-color;*/
-    -fx-pref-width: 100%;
-    -fx-pref-height: 100%;
-    -fx-min-height: 800px;
-    -fx-min-width: 1000px;
     -fx-font-family: -font-family;
 }
 
@@ -83,14 +83,6 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
 }
-
-.circle-image {
-    -fx-border-color: black;
-    -fx-border-width: 2;
-    -fx-border-radius: 50%;
-    -fx-background-radius: 50%;
-}
-
 
 .logout-class {
     -fx-background-color: -logout-color;

@@ -29,6 +29,8 @@ public interface UserRecipeRepository {
 
     // Get Recipe Reviews
     void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback);
+
+    void addReview(long recipeId, Review review, DatabaseCallback<Review> callback);
 }
 
 

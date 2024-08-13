@@ -13,6 +13,7 @@ public class User {
     private boolean isAdmin;
     private String status;
     private Date created_at;
+    private String profilePicture;
 
     public User() {
     }
@@ -111,5 +112,13 @@ public class User {
 
     public void setCreated_at(Date created_at) {
         this.created_at = created_at;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

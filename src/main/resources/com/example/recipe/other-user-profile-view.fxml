@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
+            xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.user.OtherUserController">
+    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0" spacing="16">
+        <!-- Navigation Bar -->
+        <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" spacing="24.0" styleClass="elevated-nav-bar"
+              HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
+                       onMouseClicked="#onBackPressed">
+                <image>
+                    <Image url="@../../../assets/ic_back.png"/>
+                </image>
+            </ImageView>
+            <Label style="-fx-text-fill: black; -fx-font-size: 24; -fx-font-weight: bold;"
+                   text="User Detail"/>
+            <padding>
+                <Insets bottom="8.0" top="8.0"/>
+            </padding>
+        </HBox>
+        <HBox spacing="30" alignment="CENTER_LEFT">
+            <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
+                       pickOnBounds="true" cache="true">
+                <image>
+                    <Image url="@../../../assets/users.png"/>
+                </image>
+                <clip>
+                    <Circle radius="75" centerX="75" centerY="75"/>
+                </clip>
+            </ImageView>
+            <VBox spacing="8">
+                <Label fx:id="fullName" style="-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold"
+                       text="Full Name">
+                    <padding>
+                        <Insets top="12.0"/>
+                    </padding>
+                </Label>
+                <Label fx:id="usernameLabel" style="-fx-font-size: 16;" text="Username"/>
+                <Label fx:id="emailLabel" style="-fx-font-size: 16;" text="Email"/>
+            </VBox>
+        </HBox>
+        <!-- My Recipes -->
+        <Label style="-fx-text-fill: black; -fx-font-size: 24px; -fx-font-weight: bold" text="Recipes"/>
+        <Separator/>
+        <StackPane>
+            <ScrollPane style="-fx-background-color: white; -fx-background: white;" styleClass="no-scroll-bars"
+                        HBox.hgrow="ALWAYS"
+                        VBox.vgrow="ALWAYS">
+                <GridPane fx:id="menuGrid" hgap="16" style="-fx-background-color: white" vgap="16">
+                </GridPane>
+            </ScrollPane>
+            <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20"
+                  style="-fx-background-color: white" visible="false" HBox.hgrow="ALWAYS">
+                <ProgressIndicator minHeight="60" minWidth="60"/>
+                <Label style="-fx-text-fill: blue" text="Loading Recipes..."/>
+            </VBox>
+        </StackPane>
+        <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+        </padding>
+    </VBox>
+</AnchorPane>

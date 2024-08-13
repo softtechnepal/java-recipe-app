@@ -6,7 +6,6 @@ import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.domain.recipe.Recipe;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.user.MenuItemController;
-import com.example.recipe.ui.user.SavedRecipesController;
 import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.TaskManager;
 import javafx.application.Platform;
@@ -15,10 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,7 +22,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public abstract class BaseRecipeListing {
-    private static final Logger log = LoggerFactory.getLogger(BaseRecipeListing.class);
 
     protected abstract GridPane getMenuGrid();
 
@@ -43,6 +38,10 @@ public abstract class BaseRecipeListing {
     private final TaskManager taskManager = TaskManager.getInstance();
 
     public void loadRecipeComponents(List<Recipe> data) {
+        if (data.isEmpty()) {
+            getProgressContainer().setVisible(false);
+            return;
+        }
         if (loadRecipeIfExists(data)) return;
 
         final Task<Void> loadingTask;
@@ -56,11 +55,9 @@ public abstract class BaseRecipeListing {
                 @Override
                 protected Void call() {
                     try {
-
                         menuComponentStore.clearMenuComponents(getMenuListingType());
                         for (Recipe recipe : data) {
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/recipe/menu-item.fxml"));
-
                             VBox cardBox = fxmlLoader.load();
                             MenuItemController controller = fxmlLoader.getController();
                             if (getMenuListingType() == MenuListingType.FAVOURITE_RECIPE) {

@@ -6,8 +6,8 @@
         -fx-font-family: 'Poppins', sans-serif;
         -fx-border-radius: 10px;
         -fx-pref-height: 100%;
-        -fx-min-width:250px;
-        -fx-max-width: 250px;
+        -fx-min-width:300px;
+        -fx-max-width: 300px;
         -fx-spacing: 12px;
 }
 

@@ -8,7 +8,9 @@ import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 import com.example.recipe.repositories.iuser.UserRepository;
 import com.example.recipe.utils.DatabaseThread;
+import com.example.recipe.utils.ImageUtil;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,6 +71,9 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
                             rs.getString("status"),
                             rs.getDate("created_at")
                     );
+
+                    user.setProfilePicture(rs.getString("profile_picture"));
+                    logger.error("User Repo Data: {}", rs.getString("profile_picture"));
                 }
             }
         } catch (Exception e) {
@@ -105,7 +110,7 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
     @Override
     public void updateProfile(User updateRequest, DatabaseCallback<User> result) {
         String query = """
-                    UPDATE users SET first_name = ?, last_name = ?, gender = ?, dob = ? WHERE user_id = ?
+                    UPDATE users SET first_name = ?, last_name = ?, gender = ?, dob = ?, profile_picture = ? WHERE user_id = ?
                 """;
 
         DatabaseThread.runDataOperation(() -> {
@@ -115,7 +120,8 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
                 st.setString(2, updateRequest.getLastName());
                 st.setString(3, updateRequest.getGender());
                 st.setDate(4, updateRequest.getDob());
-                st.setLong(5, updateRequest.getUserId());
+                st.setString(5, updateRequest.getProfilePicture());
+                st.setLong(6, updateRequest.getUserId());
                 int rowsAffected = st.executeUpdate();
                 if (rowsAffected == 0) {
                     return new DbResponse.Failure<>("User not found");

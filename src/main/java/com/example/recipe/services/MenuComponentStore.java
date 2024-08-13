@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuComponentStore {
+    // Can remove my menu and favourite menu components
     private static MenuComponentStore instance;
     private final List<UiModel> allMenuComponents;
     private final List<UiModel> myMenuComponents;

@@ -47,4 +47,7 @@ public class UserRecipeService {
     public void getRecipeReview(long recipeId, DatabaseCallback<List<Review>> callback) {
         recipeRepository.getRecipeReviews(recipeId, callback);
     }
+    public void addReview(long recipeId, Review review, DatabaseCallback<Review> callback) {
+        recipeRepository.addReview(recipeId, review, callback);
+    }
 }

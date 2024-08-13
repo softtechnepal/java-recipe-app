@@ -46,26 +46,6 @@ CREATE TABLE NutritionalInformation
     CONSTRAINT nutritional_info_recipe_fk FOREIGN KEY (recipe_id) REFERENCES Recipes (recipe_id)
 );
 
-CREATE SEQUENCE IF NOT EXISTS allergy_id_seq START 100 INCREMENT BY 1;
-
-CREATE TABLE AllergyWarnings
-(
-    allergy_id   BIGINT DEFAULT NEXTVAL('allergy_id_seq') NOT NULL,
-    allergy_name VARCHAR(255)                             NOT NULL,
-    description  TEXT,
-    allergens    TEXT,
-    CONSTRAINT allergy_waking_pk PRIMARY KEY (allergy_id)
-);
-
-CREATE TABLE RecipeAllergyWarnings
-(
-    allergy_id INT,
-    recipe_id  INT,
-    CONSTRAINT recipe_allergy_warning_pk PRIMARY KEY (allergy_id, recipe_id),
-    CONSTRAINT recipe_allergy_fk FOREIGN KEY (allergy_id) REFERENCES AllergyWarnings (allergy_id),
-    CONSTRAINT recipe_allergy_recipe_fk FOREIGN KEY (recipe_id) REFERENCES Recipes (recipe_id)
-);
-
 CREATE SEQUENCE IF NOT EXISTS ingredient_id_seq START 100 INCREMENT BY 1;
 CREATE TABLE Ingredients
 (

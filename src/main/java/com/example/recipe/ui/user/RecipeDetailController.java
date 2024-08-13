@@ -2,7 +2,11 @@ package com.example.recipe.ui.user;
 
 import com.example.recipe.Constants;
 import com.example.recipe.domain.recipe.*;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
+import com.example.recipe.ui.dialogs.AddReviewDialog;
+import com.example.recipe.ui.dialogs.ReviewListingDialog;
+import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
@@ -10,10 +14,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +57,12 @@ public class RecipeDetailController {
     public ImageView starIcon;
     @FXML
     public Label viewRecipe;
+    @FXML
+    public Label addReview;
+    @FXML
+    public Label editRecipe;
+    @FXML
+    public HBox viewReviewsContainer;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -58,13 +70,13 @@ public class RecipeDetailController {
 
     private Long recipeId;
     private final UserRecipeService userRecipeService = new UserRecipeService();
+    private Recipe currentRecipe;
 
     @FXML
     private void initialize() {
-        recipeId = (Long) NavigationUtil.getParam(Constants.recipeParamId);
+        recipeId = (Long) NavigationUtil.getParam(Constants.RECIPE_ID_PARAM);
         ImageUtil.loadImageAsync("src/main/resources/assets/ic_start.png", starIcon);
         fetchRecipeDetail();
-        fetchReview();
     }
 
     private void fetchReview() {
@@ -72,13 +84,28 @@ public class RecipeDetailController {
             if (response.isSuccess()) {
                 if (response.getData() != null) {
                     if (response.getData().isEmpty()) {
-                        recipeReview.setText("");
                         recipeRating.setText("No ratings yet");
-                        viewRecipe.setText("Add Review");
-                        return;
+                        viewReviewsContainer.setVisible(false);
+                        viewReviewsContainer.setManaged(false);
+                    } else {
+                        viewReviewsContainer.setVisible(true);
+                        viewReviewsContainer.setManaged(true);
                     }
+                    if (currentRecipe != null) {
+                        var reviewedUsers = response.getData().stream().map(Review::getUser);
+                        if (currentRecipe.getUser().getUserId() == UserDetailStore.getInstance().getUserId()) {
+                            addReview.setVisible(false);
+                            addReview.setManaged(false);
+                            editRecipe.setVisible(true);
+                        } else if (reviewedUsers.anyMatch(user -> user.getUserId() == UserDetailStore.getInstance().getUserId())) {
+                            addReview.setVisible(false);
+                            addReview.setManaged(false);
+                        }
+                    }
+
                     recipeReview.setText("Reviews: " + response.getData().size());
-                    recipeRating.setText("Rating: " + response.getData().stream().mapToDouble(Review::getRating).average().orElse(0));
+                    var avgRating = response.getData().stream().mapToDouble(Review::getRating).average().orElse(0);
+                    recipeRating.setText(String.format("%.1f", avgRating) + " stars");
                 }
             } else {
                 logger.error("{}", response.getMessage());
@@ -90,7 +117,9 @@ public class RecipeDetailController {
         userRecipeService.getRecipeDetailById(recipeId, response -> {
             if (response.isSuccess()) {
                 if (response.getData() != null) {
-                    loadUI(response.getData());
+                    currentRecipe = response.getData();
+                    loadUI(currentRecipe);
+                    fetchReview();
                 }
             } else {
                 logger.error("{}", response.getMessage());
@@ -129,8 +158,9 @@ public class RecipeDetailController {
         for (Steps step : steps) {
             Label stepLabel = new Label(step.getStepName());
             stepLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
-            Label stepDescription = new Label(step.getStepDescription());
-            stepDescription.setStyle("-fx-font-weight: normal; -fx-font-size: 16px; -fx-text-fill: #333333");
+            Text stepDescription = new Text(step.getStepDescription());
+            stepDescription.setWrappingWidth(790);
+            stepDescription.setStyle("-fx-font-weight: normal; -fx-font-size: 16px; -fx-text-fill: #333333;");
             Separator separator = new Separator();
             this.recipeSteps.getChildren().addAll(stepLabel, stepDescription, separator);
         }
@@ -174,6 +204,34 @@ public class RecipeDetailController {
     }
 
     public void openReviewDialog(MouseEvent mouseEvent) {
+        userRecipeService.getRecipeReview(recipeId, response -> {
+            if (response.isSuccess()) {
+                if (response.getData() != null) {
+                    if (response.getData().isEmpty()) {
+                        DialogUtil.showErrorDialog("Error", "No reviews found");
+                    } else {
+                        var dialog = new ReviewListingDialog(response.getData());
+                        dialog.showAndWait();
+                    }
+                }
+            } else {
+                DialogUtil.showErrorDialog("Error", response.getMessage());
+            }
+        });
+    }
 
+    public void addReview(MouseEvent mouseEvent) {
+        var dialog = new AddReviewDialog(recipeId, userRecipeService, this::fetchReview);
+        dialog.showAndWait();
+    }
+
+    public void editRecipe(MouseEvent mouseEvent) {
+
+    }
+
+    public void onViewProfile(MouseEvent mouseEvent) {
+        Map<String, Long> params = new HashMap<>();
+        params.put(Constants.USER_ID_PARAM, currentRecipe.getUser().getUserId());
+        OtherUserController.navigate(params);
     }
 }

@@ -21,8 +21,7 @@ import static com.example.recipe.utils.LoggerUtil.logger;
 public class NavigationUtil {
     private static final String FXML_PATH = "/com/example/recipe/";
     private static final String CSS_PATH = "/com/example/recipe/css/main.css";
-    private static final Logger log = LoggerFactory.getLogger(NavigationUtil.class);
-    private static String currentChild = ".";
+    private static String currentChild = "";
     private static final Map<String, Object> currentParams = new HashMap<>();
 
     public static void navigateTo(String fxmlFile) {

@@ -128,7 +128,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
         final String SELECT_RECIPE_DETAIL_QUERY = """
                 SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
-                       u.user_id, u.username, u.email, u.first_name, u.last_name,
+                       u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture,
                        c.category_id, c.category_name,
                        i.ingredient_id, i.ingredient_name, i.quantity, i.unit,
                        s.step_id, s.step_description, s.step_order, s.step_name,
@@ -360,7 +360,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback) {
         final String SELECT_RECIPE_REVIEWS_QUERY = """
                 SELECT r.review_id, r.rating, r.review, r.created_at, r.updated_at,
-                       u.user_id, u.username, u.email, u.first_name, u.last_name
+                       u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture
                 FROM reviews r
                 JOIN users u ON r.user_id = u.user_id
                 WHERE r.recipe_id = ?;
@@ -376,6 +376,34 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 return DbResponse.success("Success", reviews);
             } catch (Exception e) {
                 logger.error("Error while fetching recipe reviews", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    @Override
+    public void addReview(long recipeId, Review review, DatabaseCallback<Review> callback) {
+        String INSERT_REVIEW_QUERY = "INSERT INTO reviews (recipe_id, user_id, rating, review) VALUES (?, ?, ?, ?)";
+
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                try (PreparedStatement statement = connection.prepareStatement(INSERT_REVIEW_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+                    statement.setLong(1, recipeId);
+                    statement.setLong(2, UserDetailStore.getInstance().getUserId());
+                    statement.setInt(3, review.getRating());
+                    statement.setString(4, review.getReview());
+                    statement.execute();
+                    try (ResultSet resultSet = statement.getGeneratedKeys()) {
+                        if (resultSet.next()) {
+                            review.setId(resultSet.getLong(1));
+                            return DbResponse.success("Review added successfully", review);
+                        } else {
+                            throw new SQLException("Failed to get review ID");
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error while adding review", e);
                 return DbResponse.failure(e.getMessage());
             }
         }, callback);

@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.recipe.ui.user.ProfileController" prefHeight="700.0" prefWidth="562.0"
-            HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+<AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
+            xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.user.ProfileController">
     <HBox>
         <children>
             <VBox alignment="TOP_CENTER">
                 <children>
-                    <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../../../assets/users.png"/>
-                        </image>
-                    </ImageView>
+                    <VBox spacing="20" alignment="CENTER">
+                        <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
+                                   pickOnBounds="true"
+                                   cache="true">
+                            <image>
+                                <Image url="@../../../assets/users.png"/>
+                            </image>
+                            <clip>
+                                <Circle radius="75" centerX="75" centerY="75"/>
+                            </clip>
+                        </ImageView>
+                        <Label style="-fx-text-fill: blue; -fx-cursor: hand; -fx-font-weight: bold; -fx-underline: true;"
+                               text="Change Photo"
+                               onMouseClicked="#changePhoto"/>
+                    </VBox>
                     <Label fx:id="fullName" style="-fx-text-fill: black;" text="Sandip Thapa">
                         <font>
                             <Font name="System Bold" size="24.0"/>
@@ -45,20 +56,20 @@
                 <children>
                     <VBox>
                         <children>
-                            <Label text="First Name" style="-fx-text-fill: black;"/>
+                            <Label style="-fx-text-fill: black;" text="First Name"/>
                             <TextField fx:id="tfFirstName"/>
                         </children>
                     </VBox>
                     <VBox>
                         <children>
-                            <Label text="Last Name" style="-fx-text-fill: black;"/>
+                            <Label style="-fx-text-fill: black;" text="Last Name"/>
                             <TextField fx:id="tfLastName"/>
                         </children>
                     </VBox>
                     <VBox>
                         <children>
                             <Label text="Gender"/>
-                            <ComboBox fx:id="genderComboBox" minWidth="300" minHeight="45">
+                            <ComboBox fx:id="genderComboBox" minHeight="45" minWidth="300">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
                                         <String fx:value="MALE"/>
@@ -70,10 +81,10 @@
                         </children>
                     </VBox>
                     <VBox>
-                        <Label text="Date of Birth" style="-fx-text-fill: black;"/>
-                        <DatePicker fx:id="dobDatePicker" minWidth="300" minHeight="45"/>
+                        <Label style="-fx-text-fill: black;" text="Date of Birth"/>
+                        <DatePicker fx:id="dobDatePicker" minHeight="45" minWidth="300"/>
                     </VBox>
-                    <Button text="Update Profile" onAction="#saveProfile"/>
+                    <Button onAction="#saveProfile" text="Update Profile"/>
                 </children>
             </VBox>
         </children>
