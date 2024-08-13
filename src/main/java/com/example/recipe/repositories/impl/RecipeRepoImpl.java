@@ -556,4 +556,24 @@ public class RecipeRepoImpl implements UserRecipeRepository {
             }
         }, callback);
     }
+
+    @Override
+    public void deleteReview(Long reviewId, DatabaseCallback<Boolean> callback) {
+        String DELETE_REVIEW_QUERY = "DELETE FROM reviews WHERE review_id = ?";
+
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                connection.setAutoCommit(false);
+                try (PreparedStatement statement = connection.prepareStatement(DELETE_REVIEW_QUERY)) {
+                    statement.setLong(1, reviewId);
+                    statement.executeUpdate();
+                    connection.commit();
+                    return DbResponse.success("Review deleted successfully", true);
+                }
+            } catch (Exception e) {
+                logger.error("Error while deleting review", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
 }

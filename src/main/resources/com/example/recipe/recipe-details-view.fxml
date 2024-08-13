@@ -65,7 +65,7 @@
                                     <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
                                     <HBox fx:id="viewReviewsContainer" spacing="8" alignment="CENTER"
                                           style="-fx-cursor: hand"
-                                          onMouseClicked="#openReviewDialog">
+                                          onMouseClicked="#onViewReviews">
                                         <Label fx:id="recipeReview" text="24 Reviews"/>
                                         <Label fx:id="viewRecipe" text="(Show Reviews)"
                                                styleClass="text-button"/>

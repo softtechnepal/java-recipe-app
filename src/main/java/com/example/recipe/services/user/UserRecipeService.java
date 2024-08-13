@@ -55,4 +55,8 @@ public class UserRecipeService {
     public void deleteRecipe(Long recipeId, DatabaseCallback<Boolean> callback) {
         recipeRepository.deleteRecipe(recipeId, callback);
     }
+
+    public void deleteReview(Long reviewId, DatabaseCallback<Boolean> callback) {
+        recipeRepository.deleteReview(reviewId, callback);
+    }
 }

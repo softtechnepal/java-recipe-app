@@ -31,6 +31,8 @@ public interface UserRecipeRepository {
     void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback);
 
     void addReview(long recipeId, Review review, DatabaseCallback<Review> callback);
+
+    void deleteReview(Long reviewId, DatabaseCallback<Boolean> callback);
 }
 
 

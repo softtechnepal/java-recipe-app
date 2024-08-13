@@ -103,6 +103,9 @@ public class RecipeDetailController {
                         } else if (reviewedUsers.anyMatch(user -> user.getUserId() == UserDetailStore.getInstance().getUserId())) {
                             addReview.setVisible(false);
                             addReview.setManaged(false);
+                        } else {
+                            addReview.setVisible(true);
+                            addReview.setManaged(true);
                         }
                     }
 
@@ -207,15 +210,16 @@ public class RecipeDetailController {
 
     }
 
-    public void openReviewDialog(MouseEvent mouseEvent) {
+    public void onViewReviews(MouseEvent mouseEvent) {
         userRecipeService.getRecipeReview(recipeId, response -> {
             if (response.isSuccess()) {
                 if (response.getData() != null) {
                     if (response.getData().isEmpty()) {
                         DialogUtil.showErrorDialog("Error", "No reviews found");
                     } else {
-                        var dialog = new ReviewListingDialog(response.getData());
+                        var dialog = new ReviewListingDialog(response.getData(), userRecipeService);
                         dialog.showAndWait();
+                        fetchReview();
                     }
                 }
             } else {
