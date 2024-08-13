@@ -45,7 +45,7 @@
                 <Text fx:id="navTitle" styleClass="table-header-main" text="Explore Recipes"/>
                 <Text styleClass="table-header-desc"
                       text="This is the list of recipes that all the users have created throughout the application"/>
-                <HBox VBox.vgrow="ALWAYS" alignment="CENTER_LEFT">
+                <HBox VBox.vgrow="ALWAYS" alignment="CENTER_LEFT" spacing="16">
                     <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search"
                                fx:id="searchField"/>
                     <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">

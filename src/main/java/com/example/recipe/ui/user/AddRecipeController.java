@@ -68,6 +68,14 @@ public class AddRecipeController {
     @FXML
     public GridPane gridCategories;
     @FXML
+    public Label carbohydratesError;
+    @FXML
+    public Label fatError;
+    @FXML
+    public Label proteinError;
+    @FXML
+    public Label caloriesError;
+    @FXML
     private TableView<Ingredient> ingredientsTable;
     @FXML
     private TableColumn<Ingredient, String> ingredientNameColumn;
@@ -96,8 +104,6 @@ public class AddRecipeController {
 
     @FXML
     private void initialize() {
-        // tfCategories.setOnMouseClicked((event) -> onAddCategories(null));
-        // TODO: Prachan: CRUD For Ingredients
         ingredientNameColumn.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
         ingredientUnitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
         ingredientQtyColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
