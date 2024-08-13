@@ -17,7 +17,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.*;
+import java.net.URI;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +31,7 @@ import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class RecipeDetailController {
 
+    private static final Logger log = LoggerFactory.getLogger(RecipeDetailController.class);
     @FXML
     public Label recipeTitle;
     @FXML
@@ -262,6 +267,22 @@ public class RecipeDetailController {
             });
         } else {
             DialogUtil.showErrorDialog("Error", "You are not allowed to delete this recipe");
+        }
+    }
+
+    public void onWatchVideo(MouseEvent mouseEvent) {
+        if (currentRecipe.getVideoUrl() == null && currentRecipe.getVideoUrl().isEmpty()) {
+            DialogUtil.showErrorDialog("Error", "No video found for this recipe");
+            return;
+        }
+        try {
+            URI uri = new URI(currentRecipe.getVideoUrl());
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(uri);
+            }
+        } catch (Exception e) {
+            logger.error("Error: ", e);
+            DialogUtil.showErrorDialog("Error", "Failed to open video");
         }
     }
 }

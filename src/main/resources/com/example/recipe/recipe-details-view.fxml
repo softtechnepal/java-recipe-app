@@ -56,13 +56,18 @@
                                 <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
                                            VBox.vgrow="ALWAYS">
                                 </ImageView>
+                                <Label text="Watch Video"
+                                       styleClass="text-button"
+                                       style="-fx-font-size: 16px;"
+                                       onMouseClicked="#onWatchVideo"
+                                />
                                 <HBox spacing="20.0" alignment="CENTER_LEFT">
                                     <HBox alignment="CENTER_LEFT" spacing="12">
                                         <ImageView fx:id="starIcon" fitHeight="18.0" fitWidth="18.0"
                                                    pickOnBounds="true" preserveRatio="true"/>
                                         <Label fx:id="recipeRating" text="4.5 Star"/>
                                     </HBox>
-                                    <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
+                                    <!--                                    <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>-->
                                     <HBox fx:id="viewReviewsContainer" spacing="8" alignment="CENTER"
                                           style="-fx-cursor: hand"
                                           onMouseClicked="#onViewReviews">
@@ -70,7 +75,7 @@
                                         <Label fx:id="viewRecipe" text="(Show Reviews)"
                                                styleClass="text-button"/>
                                     </HBox>
-                                    <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
+                                    <!--                                    <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>-->
                                     <HBox alignment="CENTER" spacing="16">
                                         <Label fx:id="addReview" text="Add Review"
                                                styleClass="text-button"
