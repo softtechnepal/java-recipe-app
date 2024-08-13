@@ -44,7 +44,7 @@
                                       text="Description of the recipe"
                                       wrappingWidth="800.0" style="-fx-font-size: 18px"/>
                                 <VBox fx:id="recipeByContainer" prefHeight="200.0" prefWidth="100.0"
-                                      style="-fx-cursor: hand">
+                                      style="-fx-cursor: hand" onMouseClicked="#onViewProfile">
                                     <children>
                                         <Label text="Recipe By" style="-fx-text-fill: #363535"/>
                                         <Label fx:id="recipeByName" text="Prachan Ghale"

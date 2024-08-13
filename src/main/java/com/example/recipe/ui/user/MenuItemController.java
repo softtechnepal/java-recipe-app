@@ -80,7 +80,7 @@ public class MenuItemController {
 
     public void navigateToNextPage() {
         Map<String, Long> params = new HashMap<>();
-        params.put(Constants.recipeParamId, recipe.getRecipeId());
+        params.put(Constants.RECIPE_ID_PARAM, recipe.getRecipeId());
         RecipeDetailController.navigate(params);
     }
 

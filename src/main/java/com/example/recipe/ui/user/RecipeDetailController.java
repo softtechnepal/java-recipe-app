@@ -1,7 +1,6 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.Constants;
-import com.example.recipe.domain.User;
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
@@ -20,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +74,7 @@ public class RecipeDetailController {
 
     @FXML
     private void initialize() {
-        recipeId = (Long) NavigationUtil.getParam(Constants.recipeParamId);
+        recipeId = (Long) NavigationUtil.getParam(Constants.RECIPE_ID_PARAM);
         ImageUtil.loadImageAsync("src/main/resources/assets/ic_start.png", starIcon);
         fetchRecipeDetail();
     }
@@ -227,5 +227,11 @@ public class RecipeDetailController {
 
     public void editRecipe(MouseEvent mouseEvent) {
 
+    }
+
+    public void onViewProfile(MouseEvent mouseEvent) {
+        Map<String, Long> params = new HashMap<>();
+        params.put(Constants.USER_ID_PARAM, currentRecipe.getUser().getUserId());
+        OtherUserController.navigate(params);
     }
 }

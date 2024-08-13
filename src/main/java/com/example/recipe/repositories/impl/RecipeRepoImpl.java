@@ -360,7 +360,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback) {
         final String SELECT_RECIPE_REVIEWS_QUERY = """
                 SELECT r.review_id, r.rating, r.review, r.created_at, r.updated_at,
-                       u.user_id, u.username, u.email, u.first_name, u.last_name
+                       u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture
                 FROM reviews r
                 JOIN users u ON r.user_id = u.user_id
                 WHERE r.recipe_id = ?;

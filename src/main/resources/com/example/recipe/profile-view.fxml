@@ -19,7 +19,6 @@
                     <VBox spacing="20" alignment="CENTER">
                         <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
                                    pickOnBounds="true"
-                                   style="-fx-background-color: grey; -fx-border-width: 3px; -fx-border-color: grey; -fx-padding: 3px"
                                    cache="true">
                             <image>
                                 <Image url="@../../../assets/users.png"/>
