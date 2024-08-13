@@ -284,7 +284,99 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     @Override
     public void updateRecipe(Recipe recipe, DatabaseCallback<Recipe> callback) {
+        String UPDATE_RECIPE_QUERY = """
+                    UPDATE recipes
+                    SET title = ?, description = ?, image = ?, video_url = ?, warnings = ?, updated_at = NOW()
+                    WHERE recipe_id = ? AND user_id = ?
+                """;
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                connection.setAutoCommit(false);
 
+                String imagePath = recipe.getImage();
+                if (!imagePath.contains("dbimages/")) {
+                    imagePath = ImageUtil.copyImageToDbImages(new File(recipe.getImage()));
+                }
+                try (PreparedStatement statement = connection.prepareStatement(UPDATE_RECIPE_QUERY)) {
+                    statement.setString(1, recipe.getTitle());
+                    statement.setString(2, recipe.getDescription());
+                    statement.setString(3, imagePath);
+                    statement.setString(4, recipe.getVideoUrl());
+                    statement.setString(5, recipe.getWarnings());
+                    statement.setLong(6, recipe.getRecipeId());
+                    statement.setLong(7, UserDetailStore.getInstance().getUserId());
+                    statement.executeUpdate();
+
+                    // Update Ingredients
+                    deleteIngredients(connection, recipe.getRecipeId());
+                    insertIngredients(connection, recipe.getIngredients(), recipe.getRecipeId());
+
+                    // Update categories
+                    deleteCategories(connection, recipe.getRecipeId());
+                    insertCategories(connection, recipe.getCategory(), recipe.getRecipeId());
+
+                    // Update Steps
+                    deleteSteps(connection, recipe.getRecipeId());
+                    insertSteps(connection, recipe.getSteps(), recipe.getRecipeId());
+
+                    // Update Nutritional Information
+                    updateNutritionalInformation(connection, recipe.getNutritionalInformation(), recipe.getRecipeId());
+
+                    connection.commit();
+                    return DbResponse.success("Recipe updated successfully", recipe);
+                }
+            } catch (Exception exception) {
+                logger.error("Error while updating recipe", exception);
+                return DbResponse.failure(exception.getMessage());
+            }
+        }, callback);
+    }
+
+    private void deleteIngredients(Connection connection, long recipeId) throws SQLException {
+        String DELETE_INGREDIENT_QUERY = """
+                        DELETE FROM ingredients WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_INGREDIENT_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteCategories(Connection connection, long recipeId) throws SQLException {
+        String DELETE_CATEGORY_QUERY = """
+                        DELETE FROM recipecategories WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_CATEGORY_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    protected void deleteSteps(Connection connection, long recipeId) throws SQLException {
+        String DELETE_STEP_QUERY = """
+                        DELETE FROM recipesteps WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_STEP_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void updateNutritionalInformation(Connection connection, NutritionalInformation nutritionalInformation, Long recipeId) throws SQLException {
+        String updateNutritionalInfoQuery = """
+                    UPDATE nutritionalinformation
+                    SET calories = ?, protein = ?, fat = ?, carbohydrates = ?, other = ?
+                    WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(updateNutritionalInfoQuery)) {
+            statement.setDouble(1, nutritionalInformation.getCalories() != null ? nutritionalInformation.getCalories() : 0);
+            statement.setDouble(2, nutritionalInformation.getProtein() != null ? nutritionalInformation.getProtein() : 0);
+            statement.setDouble(3, nutritionalInformation.getFat() != null ? nutritionalInformation.getFat() : 0);
+            statement.setDouble(4, nutritionalInformation.getCarbohydrates() != null ? nutritionalInformation.getCarbohydrates() : 0);
+            statement.setString(5, nutritionalInformation.getOther() != null ? nutritionalInformation.getOther() : "");
+            statement.setLong(6, recipeId);
+            statement.executeUpdate();
+        }
     }
 
     @Override

@@ -169,7 +169,7 @@ public class RecipeDetailController {
     private void loadCategories(List<Category> categories) {
         this.categories.getChildren().clear();
         for (Category category : categories) {
-            Label categoryLabel = getSideStyle("-  " + category.getCategoryName());
+            Label categoryLabel = getBulletPoints(category.getCategoryName());
             this.categories.getChildren().add(categoryLabel);
         }
     }
@@ -177,7 +177,7 @@ public class RecipeDetailController {
     private void loadIngredients(List<Ingredient> ingredients) {
         this.ingredients.getChildren().clear();
         for (Ingredient ingredient : ingredients) {
-            Label ingredientLabel = getSideStyle("-    " + ingredient.getIngredientName() + ": " + ingredient.getQuantity() + " " + ingredient.getUnit());
+            Label ingredientLabel = getBulletPoints(ingredient.getIngredientName() + ": " + ingredient.getQuantity() + " " + ingredient.getUnit());
             this.ingredients.getChildren().add(ingredientLabel);
         }
     }
@@ -185,17 +185,18 @@ public class RecipeDetailController {
     private void loadNutritionalInformation(NutritionalInformation nutritionalInformation) {
         nutrition.getChildren().clear();
         if (nutritionalInformation != null) {
-            Label caloriesLabel = getSideStyle("-  Calories: " + nutritionalInformation.getCalories());
-            Label proteinLabel = getSideStyle("-  Protein: " + nutritionalInformation.getProtein() + "g");
-            Label fatLabel = getSideStyle("-  Fat: " + nutritionalInformation.getFat() + "g");
-            Label carbohydratesLabel = getSideStyle("-  Carbohydrates: " + nutritionalInformation.getCarbohydrates() + "g");
+            Label caloriesLabel = getBulletPoints("Calories: " + nutritionalInformation.getCalories());
+            Label proteinLabel = getBulletPoints("Protein: " + nutritionalInformation.getProtein() + "g");
+            Label fatLabel = getBulletPoints("Fat: " + nutritionalInformation.getFat() + "g");
+            Label carbohydratesLabel = getBulletPoints("Carbohydrates: " + nutritionalInformation.getCarbohydrates() + "g");
             nutrition.getChildren().addAll(caloriesLabel, proteinLabel, fatLabel, carbohydratesLabel);
         }
     }
 
-    private Label getSideStyle(String text) {
-        Label label = new Label(text);
-        label.setStyle("-fx-font-weight: normal; -fx-font-size: 18px; -fx-text-fill: #333");
+    private Label getBulletPoints(String text) {
+        Label label = new Label("• " + text);
+        label.setWrapText(true);
+        label.setStyle("-fx-font-weight: normal; -fx-font-size: 14px; -fx-text-fill: #333; -fx-padding: 5px");
         return label;
     }
 
@@ -225,8 +226,15 @@ public class RecipeDetailController {
         dialog.showAndWait();
     }
 
-    public void editRecipe(MouseEvent mouseEvent) {
-
+    public void onEditRecipe(MouseEvent mouseEvent) {
+        logger.error("{}", currentRecipe);
+        if (currentRecipe != null && currentRecipe.getUser().getUserId() == UserDetailStore.getInstance().getUserId()) {
+            Map<String, Recipe> params = new HashMap<>();
+            params.put(Constants.RECIPE_DETAIL_PARAM, currentRecipe);
+            AddRecipeController.navigateToEditRecipe(params);
+        } else {
+            DialogUtil.showErrorDialog("Error", "You are not allowed to edit this recipe");
+        }
     }
 
     public void onViewProfile(MouseEvent mouseEvent) {

@@ -31,7 +31,7 @@ public class MyRecipeController extends BaseRecipeListing {
     }
 
     private void onAddRecipe(ActionEvent actionEvent) {
-        NavigationUtil.insertChild("add-recipe-view.fxml");
+        AddRecipeController.navigateToAddRecipe();
     }
 
     private void fetchRecipes() {

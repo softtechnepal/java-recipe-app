@@ -25,11 +25,11 @@
 
 /* TextField Styles */
 .text-field,
-.text-field-disabled ,
+.text-field-disabled,
 .text-area,
 .text-area-disabled {
-    -fx-background-color:   -input-background-color;
-    -fx-border-color:   -input-border-color;
+    -fx-background-color: -input-background-color;
+    -fx-border-color: -input-border-color;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
     -fx-padding: 8 10;
@@ -39,6 +39,17 @@
     -fx-border-width: 1px;
 }
 
+.text-field-form {
+    -fx-background-color: -input-background-color;
+    -fx-border-color: -input-border-color;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-padding: 8 10;
+    -fx-font-size: 14px;
+    -fx-max-width: 800px;
+    -fx-min-width: 800px;
+    -fx-border-width: 1px;
+}
 
 /* Button Styles */
 .button {
@@ -106,14 +117,14 @@
     -fx-min-height: 0;
 }
 
-.auth_header{
+.auth_header {
     -fx-font-size: 24px;
     -fx-font-weight: 800;
     -fx-text-fill: -color-dark;
 }
 
-.dashboard-pane{
-    -fx-background-color:-color-primary;
+.dashboard-pane {
+    -fx-background-color: -color-primary;
     -fx-padding: 16;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
@@ -122,7 +133,7 @@
     -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
     -fx-alignment: center;
     -fx-text-fill: -color-light !important;
-   -fx-pref-width: 300px;
+    -fx-pref-width: 300px;
     -fx-pref-height: 200px;
     -fx-max-width: 300px;
     -fx-max-height: 200px;
@@ -130,12 +141,12 @@
     -fx-min-height: 200px;
 }
 
-.dashboard-pane-image{
+.dashboard-pane-image {
     -fx-fit-width: 80;
     -fx-fit-height: 80;
 }
 
-.dashboard-pane-title{
+.dashboard-pane-title {
     -fx-fit-width: 100;
     -fx-wrap-text: true;
     -fx-font-size: 22px;
@@ -143,9 +154,35 @@
     -fx-text-fill: -color-light !important;
 }
 
-.dashboard-pane-value{
+.dashboard-pane-value {
     -fx-fit-width: 100;
     -fx-wrap-text: true;
     -fx-font-size: 20px;
     -fx-text-fill: -color-light;
 }
+
+.text-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary-color;
+    -fx-background-radius: 16px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 4 10;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 16px;
+}
+
+.bullet-point {
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-dark;
+}
+
+.grid-item {
+    -fx-padding: 6px 10px;
+    -fx-border-color: #333;
+    -fx-border-width: 1px;
+    -fx-border-radius: 16px;
+}
+

@@ -18,18 +18,21 @@
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeController">
     <center>
         <VBox fx:id="containerVBox" BorderPane.alignment="CENTER">
-            <GridPane fx:id="categoryGrid"  BorderPane.alignment="CENTER">
+            <GridPane fx:id="categoryGrid" BorderPane.alignment="CENTER" vgap="12" hgap="12"
+                      style="-fx-padding: 16px 40px 0px 40px">
                 <!-- Content goes here -->
             </GridPane>
             <!-- My Recipes -->
             <StackPane>
-                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="recipe-card-grid">
+                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="no-scroll-bars"
+                            style="-fx-background-color: transparent; -fx-padding: 16px 24px 24px 24px">
+                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" vgap="24" hgap="24">
                         <!-- Content goes here -->
                     </GridPane>
                 </ScrollPane>
 
-                <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false" HBox.hgrow="ALWAYS">
+                <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false"
+                      HBox.hgrow="ALWAYS">
                     <ProgressIndicator minHeight="60" minWidth="60"/>
                     <Label styleClass="table-header-main" text="Loading Recipes..."/>
                 </VBox>
@@ -39,17 +42,22 @@
     <top>
         <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
             <children>
-                <Text fx:id="navTitle" styleClass="table-header-main" text="Explore Recipes" />
-                <Text styleClass="table-header-desc" text="This is the list of recipes that all the users have created throughout the application" />
-                <HBox spacing="700.0" VBox.vgrow="ALWAYS">
-                    <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search" HBox.hgrow="ALWAYS" fx:id="searchField"/>
-                    <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#onFilterClicked" text="Filter By Category" >
-                        <graphic>
-                            <ImageView fx:id="filterIcon" fitWidth="16" fitHeight="16" preserveRatio="true">
-                                <Image url="@../../../assets/sidemenu/tag_active.png"/>
-                            </ImageView>
-                        </graphic>
-                    </Button>
+                <Text fx:id="navTitle" styleClass="table-header-main" text="Explore Recipes"/>
+                <Text styleClass="table-header-desc"
+                      text="This is the list of recipes that all the users have created throughout the application"/>
+                <HBox VBox.vgrow="ALWAYS" alignment="CENTER_LEFT" spacing="16">
+                    <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search"
+                               fx:id="searchField"/>
+                    <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+                        <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT"
+                                onMouseClicked="#onFilterClicked" text="Filter By Category">
+                            <graphic>
+                                <ImageView fx:id="filterIcon" fitWidth="16" fitHeight="16" preserveRatio="true">
+                                    <Image url="@../../../assets/sidemenu/tag_active.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </HBox>
                 </HBox>
             </children>
         </VBox>

@@ -37,8 +37,7 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
-        Image image =  new Image("file:src/main/resources/assets/logo.png");
-        imageView.setImage(image);
+        ImageUtil.loadImageAsync("src/main/resources/assets/logo.png", imageView);
 
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
