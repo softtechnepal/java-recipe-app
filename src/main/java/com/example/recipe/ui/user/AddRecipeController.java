@@ -328,8 +328,12 @@ public class AddRecipeController {
     private void handleEditStep(Steps step) {
         var dialog = new AddStepDialog("Edit Step", step, (Steps data) -> {
             if (data != null) {
-                steps.remove(step);
-                steps.add(data);
+                int index = steps.indexOf(step);
+                if (index != -1) {
+                    steps.set(index, data);
+                } else {
+                    steps.add(data);
+                }
             }
         });
         dialog.showAndWait();
