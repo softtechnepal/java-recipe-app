@@ -29,7 +29,7 @@
                     </Text>
                 </children>
             </HBox>
-            <ScrollPane style="-fx-background-color: white; -fx-background: white;"
+            <ScrollPane style="-fx-background-color: transparent; -fx-background: transparent;"
                         styleClass="no-scroll-bars">
                 <HBox alignment="CENTER_LEFT">
                     <children>
@@ -68,16 +68,16 @@
                                           onMouseClicked="#openReviewDialog">
                                         <Label fx:id="recipeReview" text="24 Reviews"/>
                                         <Label fx:id="viewRecipe" text="(Show Reviews)"
-                                               style="-fx-text-fill: blue;"/>
+                                               styleClass="text-button"/>
                                     </HBox>
                                     <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
                                     <HBox alignment="CENTER">
                                         <Label fx:id="addReview" text="Add Review"
-                                               style="-fx-text-fill: blue; -fx-cursor: hand"
+                                               styleClass="text-button"
                                                onMouseClicked="#addReview"/>
 
                                         <Label fx:id="editRecipe" text="Edit Recipe"
-                                               style="-fx-cursor: hand; -fx-text-fill: blue;"
+                                               styleClass="text-button"
                                                onMouseClicked="#editRecipe"
                                                visible="false"
                                         />

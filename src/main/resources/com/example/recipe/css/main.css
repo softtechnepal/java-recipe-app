@@ -149,3 +149,22 @@
     -fx-font-size: 20px;
     -fx-text-fill: -color-light;
 }
+
+.text-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary-color;
+    -fx-background-radius: 16px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 4 10;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 16px;
+}
+
+.bullet-point {
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-dark;
+}
+
