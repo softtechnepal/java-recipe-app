@@ -15,6 +15,8 @@ public class Recipe {
     private String videoUrl;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private Integer totalServings;
+    private Integer prepTime;
     private User user;
     private boolean isSaved;
 
@@ -163,5 +165,21 @@ public class Recipe {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getTotalServings() {
+        return totalServings;
+    }
+
+    public void setTotalServings(Integer totalServings) {
+        this.totalServings = totalServings;
+    }
+
+    public Integer getPrepTime() {
+        return prepTime;
+    }
+
+    public void setPrepTime(Integer prepTime) {
+        this.prepTime = prepTime;
     }
 }

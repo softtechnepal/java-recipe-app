@@ -50,6 +50,23 @@
                                        visible="false"/>
                             </children>
                         </VBox>
+                        <VBox prefWidth="800.0" spacing="4.0">
+                            <children>
+                                <Label text="Total Servings"/>
+                                <TextField fx:id="tfTotalServings" styleClass="text-field-form"/>
+                                <Label fx:id="totalServingError" managed="false" styleClass="error-label"
+                                       visible="false"/>
+                            </children>
+                        </VBox>
+
+                        <VBox prefWidth="800.0" spacing="4.0">
+                            <children>
+                                <Label text="Total Preparation Time"/>
+                                <TextField fx:id="tvPreparationTime" styleClass="text-field-form"/>
+                                <Label fx:id="preparationTimeError" managed="false" styleClass="error-label"
+                                       visible="false"/>
+                            </children>
+                        </VBox>
                         <VBox spacing="6">
                             <Label text="Categories"/>
                             <GridPane fx:id="gridCategories" hgap="6" vgap="6"/>
@@ -178,7 +195,7 @@
                                 <TextField fx:id="tfWarnings" styleClass="text-field-form"/>
                             </children>
                         </VBox>
-                        <HBox/>
+                        <Region prefHeight="20.0" prefWidth="200.0"/>
                         <Button fx:id="btnUpdateRecipe" onAction="#onAddRecipe" text="Add Recipe"/>
                     </children>
                 </VBox>
