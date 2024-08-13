@@ -97,3 +97,6 @@ VALUES (107, 'Spaghetti Carbonara', 'A classic Italian pasta dish made with eggs
         NOW(), NOW());
 
 UPDATE Recipes SET image = 'dbimages/20240805011246_992.JPG' WHERE recipes.user_id = 107;
+
+
+SELECT COUNT(*) FROM users WHERE is_admin = false AND status = 'ACTIVE';

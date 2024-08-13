@@ -4,6 +4,9 @@ import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class ValidationUtil {
 
@@ -11,8 +14,10 @@ public class ValidationUtil {
         if (url == null || url.trim().isEmpty()) {
             return true;
         }
-        String regex = "^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$";
-        boolean isValid = url.matches(regex);
+        String REGEX = "^(https?|ftp):\\/\\/([a-zA-Z0-9\\-\\.]+)(:\\d+)?(\\/[^\\s]*)?(\\?[^\\s]*)?(#[^\\s]*)?$";
+        logger.info("URL: {}", url);
+        final Pattern URL_PATTERN = Pattern.compile(REGEX);
+        boolean isValid = URL_PATTERN.matcher(url.trim()).matches();
         if (!isValid) {
             ViewUtil.setTextAndVisibility(fieldName, title + " should be valid URL", true);
         } else {

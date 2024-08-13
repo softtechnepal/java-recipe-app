@@ -179,7 +179,7 @@
                             </children>
                         </VBox>
                         <HBox/>
-                        <Button onAction="#onAddRecipe" text="Add Recipe"/>
+                        <Button fx:id="btnUpdateRecipe" onAction="#onAddRecipe" text="Add Recipe"/>
                     </children>
                 </VBox>
             </ScrollPane>
@@ -196,7 +196,7 @@
                             <Image url="@../../../assets/ic_back.png"/>
                         </image>
                     </ImageView>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Recipe">
+                    <Text fx:id="textTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Recipe">
                         <font>
                             <Font name="System Bold" size="20.0"/>
                         </font>

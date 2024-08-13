@@ -226,8 +226,15 @@ public class RecipeDetailController {
         dialog.showAndWait();
     }
 
-    public void editRecipe(MouseEvent mouseEvent) {
-
+    public void onEditRecipe(MouseEvent mouseEvent) {
+        logger.error("{}", currentRecipe);
+        if (currentRecipe != null && currentRecipe.getUser().getUserId() == UserDetailStore.getInstance().getUserId()) {
+            Map<String, Recipe> params = new HashMap<>();
+            params.put(Constants.RECIPE_DETAIL_PARAM, currentRecipe);
+            AddRecipeController.navigateToEditRecipe(params);
+        } else {
+            DialogUtil.showErrorDialog("Error", "You are not allowed to edit this recipe");
+        }
     }
 
     public void onViewProfile(MouseEvent mouseEvent) {

@@ -78,7 +78,7 @@
 
                                         <Label fx:id="editRecipe" text="Edit Recipe"
                                                styleClass="text-button"
-                                               onMouseClicked="#editRecipe"
+                                               onMouseClicked="#onEditRecipe"
                                                visible="false"
                                         />
                                     </HBox>

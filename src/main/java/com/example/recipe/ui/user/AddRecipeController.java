@@ -1,5 +1,6 @@
 package com.example.recipe.ui.user;
 
+import com.example.recipe.Constants;
 import com.example.recipe.domain.recipe.*;
 import com.example.recipe.services.user.UserCategoryService;
 import com.example.recipe.services.user.UserRecipeService;
@@ -22,11 +23,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
@@ -77,6 +80,10 @@ public class AddRecipeController {
     @FXML
     public Label videoError;
     @FXML
+    public Text textTitle;
+    @FXML
+    public Button btnUpdateRecipe;
+    @FXML
     private TableView<Ingredient> ingredientsTable;
     @FXML
     private TableColumn<Ingredient, String> ingredientNameColumn;
@@ -102,9 +109,22 @@ public class AddRecipeController {
     private final ObservableList<Steps> steps = FXCollections.observableArrayList();
     private final UserCategoryService userCategoryService = new UserCategoryService();
     private final UserRecipeService userRecipeService = new UserRecipeService();
+    private Recipe updateRecipe;
+
+    public static void navigateToEditRecipe(Map<String, Recipe> params) {
+        NavigationUtil.insertChild("add-recipe-view.fxml", params);
+    }
+
+    public static void navigateToAddRecipe() {
+        NavigationUtil.insertChild("add-recipe-view.fxml");
+    }
 
     @FXML
     private void initialize() {
+        updateRecipe = (Recipe) NavigationUtil.getParam(Constants.RECIPE_DETAIL_PARAM);
+        if (updateRecipe != null) {
+            loadUpdateRecipe(updateRecipe);
+        }
         ingredientNameColumn.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
         ingredientUnitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
         ingredientQtyColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -186,8 +206,37 @@ public class AddRecipeController {
 
     }
 
+    private void loadUpdateRecipe(Recipe updateRecipe) {
+        textTitle.setText("Edit Recipe");
+        tfRecipeName.setText(updateRecipe.getTitle());
+        tfRecipeDescription.setText(updateRecipe.getDescription());
+
+        categories.addAll(updateRecipe.getCategory());
+        addCategoriesToGridPane(categories.stream().map(Category::getCategoryName).toList());
+
+        ingredients.addAll(updateRecipe.getIngredients());
+        steps.addAll(updateRecipe.getSteps());
+
+        imagePath = updateRecipe.getImage();
+        addSelectedImage(updateRecipe.getImage());
+
+        tfVideoLink.setText(updateRecipe.getVideoUrl());
+        tfWarnings.setText(updateRecipe.getWarnings());
+
+        tfCalories.setText(String.valueOf(updateRecipe.getNutritionalInformation().getCalories()));
+        tfProtein.setText(String.valueOf(updateRecipe.getNutritionalInformation().getProtein()));
+        tfFat.setText(String.valueOf(updateRecipe.getNutritionalInformation().getFat()));
+        tfCarbohydrates.setText(String.valueOf(updateRecipe.getNutritionalInformation().getCarbohydrates()));
+        tfOther.setText(updateRecipe.getNutritionalInformation().getOther());
+
+        btnUpdateRecipe.setText("Update Recipe");
+    }
+
     public void onAddRecipe(ActionEvent actionEvent) {
         Recipe recipe = new Recipe();
+        if (updateRecipe != null) {
+            recipe.setRecipeId(updateRecipe.getRecipeId());
+        }
         recipe.setTitle(tfRecipeName.getText());
         recipe.setDescription(tfRecipeDescription.getText());
         recipe.setIngredients(ingredients);
@@ -199,14 +248,28 @@ public class AddRecipeController {
 
         if (validateRecipe(recipe) && getNutritionalInformation() != null) {
             recipe.setNutritionalInformation(getNutritionalInformation());
-            userRecipeService.addRecipe(recipe, response -> {
-                if (response.isSuccess()) {
-                    DialogUtil.showInfoDialog("Success", "Recipe added successfully");
-                    NavigationUtil.insertChild("my-recipe-view.fxml");
-                } else {
-                    DialogUtil.showErrorDialog("Error", response.getMessage());
-                }
-            });
+
+            if (updateRecipe == null) {
+                userRecipeService.addRecipe(recipe, response -> {
+                    if (response.isSuccess()) {
+                        DialogUtil.showInfoDialog("Success", "Recipe added successfully");
+                        NavigationUtil.insertChild("my-recipe-view.fxml");
+                    } else {
+                        DialogUtil.showErrorDialog("Error", response.getMessage());
+                    }
+                });
+            } else {
+                userRecipeService.updateRecipe(recipe, response -> {
+                    if (response.isSuccess()) {
+                        DialogUtil.showInfoDialog("Success", "Recipe updated successfully");
+
+                        /*Map<String, Long> params = Map.of(Constants.RECIPE_ID_PARAM, updateRecipe.getRecipeId());
+                        RecipeDetailController.navigate(params);*/
+                    } else {
+                        DialogUtil.showErrorDialog("Error", response.getMessage());
+                    }
+                });
+            }
         }
     }
 
@@ -282,18 +345,21 @@ public class AddRecipeController {
         if (selectedFile != null) {
 
             imagePath = selectedFile.getAbsolutePath();
-            logger.info("Selected file: {}", imagePath);
-            Image image = new Image("file:" + imagePath);
-            ImageView imageView = new ImageView();
-            imageView.setId("recipe-image");
-            imageView.setImage(image);
-            imageView.setFitHeight(200);
-            imageView.setFitWidth(200);
-            imageView.setPreserveRatio(true);
-
-            hBoxImageSection.getChildren().clear();
-            hBoxImageSection.getChildren().add(imageView);
+            addSelectedImage(imagePath);
         }
+    }
+
+    private void addSelectedImage(String imagePath) {
+        Image image = new Image("file:" + imagePath);
+        ImageView imageView = new ImageView();
+        imageView.setId("recipe-image");
+        imageView.setImage(image);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
+        imageView.setPreserveRatio(true);
+
+        hBoxImageSection.getChildren().clear();
+        hBoxImageSection.getChildren().add(imageView);
     }
 
     public void onBackPressed(MouseEvent event) {
@@ -302,6 +368,10 @@ public class AddRecipeController {
 
     private NutritionalInformation getNutritionalInformation() {
         NutritionalInformation nutritionalInformation = new NutritionalInformation();
+
+        if (updateRecipe != null) {
+            nutritionalInformation.setRecipeId(updateRecipe.getNutritionalInformation().getRecipeId());
+        }
 
         if (!isValidIntNutrition(tfCalories.getText(), caloriesError, "Calories", nutritionalInformation::setCalories)) {
             return null;
