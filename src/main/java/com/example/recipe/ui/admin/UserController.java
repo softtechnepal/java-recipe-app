@@ -1,5 +1,6 @@
 package com.example.recipe.ui.admin;
 
+import com.example.recipe.domain.Recipe;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
 
@@ -7,7 +8,9 @@ import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
+import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -33,13 +36,25 @@ public class UserController {
     @FXML
     public TableColumn<User, String> statusColumn;
     @FXML
+    public TableColumn<User, Integer> totalRecipesColumn;
+    @FXML
     private TableColumn<User, String> createdAtColumn;
     @FXML
+    public TableColumn<User, String> useremailColumn;
+    @FXML
     private TableColumn<User, Void> actions;
+    @FXML
+    public TextField searchInput;
+
+    private final AdminRecipeService adminRecipeService = new AdminRecipeService();
+    private final AdminUserService userService = new AdminUserService();
 
     public void initialize() {
         configureTable();
         loadTableData();
+        searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchUser(newValue);
+        });
     }
 
     private void configureTable() {
@@ -47,6 +62,7 @@ public class UserController {
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        useremailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         typeColumn.setCellValueFactory(cellData -> {
             boolean isAdmin = cellData.getValue().isAdmin();
             return new SimpleStringProperty(isAdmin ? "Admin" : "User");
@@ -59,6 +75,15 @@ public class UserController {
             String[] parts = cellData.getValue().getCreated_at().toString().split(" ");
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
+        });
+        totalRecipesColumn.setCellValueFactory(cellData -> {
+            User user = cellData.getValue();
+            DbResponse<ArrayList<Recipe>> response = adminRecipeService.getRecipesByUserId(user.getUserId());
+            if (response.isSuccess()) {
+                return new SimpleIntegerProperty(response.getData().size()).asObject();
+            } else {
+                return new SimpleIntegerProperty(0).asObject();
+            }
         });
 
         // Add buttons to the actions column
@@ -110,7 +135,6 @@ public class UserController {
     }
 
     private void loadTableData() {
-        AdminUserService userService = new AdminUserService();
         DbResponse<ArrayList<User>> response = userService.getAllUsers();
         if (response.isSuccess()) {
             ArrayList<User> userList = response.getData();
@@ -121,7 +145,6 @@ public class UserController {
     }
 
     private void handleStatusChange(long userId, String status) {
-        AdminUserService userService = new AdminUserService();
         DbResponse<User> response = userService.toggleUserStatus(userId, status);
         if (response.isSuccess()) {
             showInfoDialog("Success", "User status changed to " + status);
@@ -132,5 +155,13 @@ public class UserController {
         }
     }
 
-
+    private void searchUser(String searchValue) {
+        DbResponse<ArrayList<User>> response = userService.getAllUsersByParams(searchValue);
+        if (response.isSuccess()) {
+            ArrayList<User> filteredUsers = response.getData();
+            userTable.getItems().setAll(filteredUsers);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
+        }
+    }
 }

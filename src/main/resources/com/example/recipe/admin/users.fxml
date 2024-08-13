@@ -14,14 +14,16 @@
         <VBox fx:id="containerVBox" styleClass="table-container" BorderPane.alignment="CENTER">
             <TableView fx:id="userTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="userId" minWidth="150"  text="User Id" />
-                    <TableColumn fx:id="firstNameColumn" minWidth="150"  text="First Name" />
-                    <TableColumn fx:id="lastNameColumn" minWidth="150"  text="Last Name" />
+                    <TableColumn fx:id="userId" minWidth="80"  text="User Id" />
+                    <TableColumn fx:id="firstNameColumn" minWidth="120"  text="First Name" />
+                    <TableColumn fx:id="lastNameColumn" minWidth="120"  text="Last Name" />
                     <TableColumn fx:id="usernameColumn" minWidth="150"  text="Username" />
-                    <TableColumn fx:id="typeColumn" minWidth="150"  text="Type" />
-                    <TableColumn fx:id="statusColumn" minWidth="150"  text="Status" />
+                    <TableColumn fx:id="useremailColumn" minWidth="200"  text="Email" />
+                    <TableColumn fx:id="typeColumn" minWidth="80"  text="Type" />
+                    <TableColumn fx:id="statusColumn" minWidth="80"  text="Status" />
+                    <TableColumn fx:id="totalRecipesColumn" minWidth="100"  text="Total Recipes" />
                     <TableColumn fx:id="createdAtColumn" minWidth="150"  text="Created At" />
-                    <TableColumn fx:id="actions" minWidth="160" text="Actions" />
+                    <TableColumn fx:id="actions" minWidth="100" text="Actions" />
                 </columns>
             </TableView>
         </VBox>
@@ -32,7 +34,7 @@
                 <Text styleClass="table-header-main" text="List of Users" />
                 <Text styleClass="table-header-desc" text="This is the list of users that has registered in the application" />
                 <HBox spacing="300.0" VBox.vgrow="ALWAYS">
-                    <TextField promptText="Please search users using the username" styleClass="table-header-search" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="searchInput" promptText="Search users using the first name, last name, email or username...." styleClass="table-header-search" HBox.hgrow="ALWAYS" />
                 </HBox>
             </children>
         </VBox>

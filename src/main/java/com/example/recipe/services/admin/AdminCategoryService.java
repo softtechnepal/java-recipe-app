@@ -29,4 +29,7 @@ public class AdminCategoryService {
     public DbResponse<Category> deleteCategory(long categoryId){
         return categoryRepository.deleteCategory(categoryId);
     }
+    public DbResponse<ArrayList<Category>> getAllByParams(String pararms){
+        return categoryRepository.getAllByParams(pararms);
+    }
 }

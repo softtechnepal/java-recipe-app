@@ -53,6 +53,10 @@
     -fx-font-size: 14px;
 }
 
+.custom-menu-item.active .label{
+    -fx-text-fill: -color-light;
+}
+
 .sidemenu-logout-class{
     -fx-border-radius: 4;
     -fx-background-color: -color-primary;
@@ -62,6 +66,10 @@
     -fx-cursor: hand;
     -fx-font-size: 14px;
     -fx-font-weight: 600;
+}
+
+.sidemenu-logout-class .label{
+    -fx-text-fill: -color-light;
 }
 
 .sidemenu-logout-class:hover{

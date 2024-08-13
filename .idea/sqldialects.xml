@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/recipe/repositories/impl/CategoryRepositoryImpl.java" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/recipe/repositories/impl/RecipeRepositoryImpl.java" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/recipe/repositories/impl/UserRepositoryImpl.java" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migrations/V1__create_tables.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migrations/V2__alter_tables.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migrations/V3__populate_data.sql" dialect="PostgreSQL" />
+    <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

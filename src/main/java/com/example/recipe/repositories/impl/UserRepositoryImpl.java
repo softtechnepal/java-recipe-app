@@ -4,6 +4,7 @@ import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 import com.example.recipe.repositories.iuser.UserRepository;
 import com.example.recipe.utils.DatabaseThread;
@@ -126,4 +127,36 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
             return new DbResponse.Success<>("User details updated successfully", updateRequest);
         }, result);
     }
-}
+    @Override
+    public DbResponse<ArrayList<User>> getAllUsersByParams(String params) {
+        ArrayList<User> users = new ArrayList<>();
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            String query = "SELECT * FROM users WHERE first_name ILIKE ? OR last_name ILIKE ? OR username ILIKE ? OR email ILIKE ?";
+            try (PreparedStatement st = conn.prepareStatement(query)) {
+                st.setString(1, "%" + params + "%");
+                st.setString(2, "%" + params + "%");
+                st.setString(3, "%" + params + "%");
+                st.setString(4, "%" + params + "%");
+                ResultSet rs = st.executeQuery();
+                while (rs.next()) {
+                    User user = new User(
+                            rs.getLong("user_id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getString("gender"),
+                            rs.getDate("dob"),
+                            rs.getBoolean("is_admin"),
+                            rs.getString("status"),
+                            rs.getDate("created_at")
+                    );
+                    users.add(user);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error while retrieving data", e);
+            return new DbResponse.Failure<>(e.getMessage());
+        }
+        return new DbResponse.Success<>("Get users by params success", users);
+    }}

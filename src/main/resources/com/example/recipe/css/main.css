@@ -119,3 +119,41 @@
     -fx-font-weight: 800;
     -fx-text-fill: -color-dark;
 }
+
+.dashboard-pane{
+    -fx-background-color:-color-primary;
+    -fx-padding: 16;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-border-width: 1;
+    -fx-border-color: -color-primary;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
+    -fx-alignment: center;
+    -fx-text-fill: -color-light !important;
+   -fx-pref-width: 300px;
+    -fx-pref-height: 200px;
+    -fx-max-width: 300px;
+    -fx-max-height: 200px;
+    -fx-min-width: 300px;
+    -fx-min-height: 200px;
+}
+
+.dashboard-pane-image{
+    -fx-fit-width: 80;
+    -fx-fit-height: 80;
+}
+
+.dashboard-pane-title{
+    -fx-fit-width: 100;
+    -fx-wrap-text: true;
+    -fx-font-size: 22px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: -color-light !important;
+}
+
+.dashboard-pane-value{
+    -fx-fit-width: 100;
+    -fx-wrap-text: true;
+    -fx-font-size: 20px;
+    -fx-text-fill: -color-light;
+}

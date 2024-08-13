@@ -15,10 +15,13 @@
                 <columns>
                     <TableColumn fx:id="recipeId" prefWidth="150" text="Recipe ID" />
                     <TableColumn fx:id="title" prefWidth="150" text="Recipe Title" />
-                    <TableColumn fx:id="user" prefWidth="150" text="Made By" />
-                    <TableColumn fx:id="createdAt" prefWidth="150" text="Created At" />
-                    <TableColumn fx:id="updatedAt" prefWidth="150" text="Updated At" />
-                    <TableColumn fx:id="actions" prefWidth="150" text="Action" />
+                    <TableColumn fx:id="user" prefWidth="150" text="User Name" />
+                    <TableColumn fx:id="category" prefWidth="150" text="Category" />
+                    <TableColumn fx:id="ingredients" prefWidth="150" text="Ingredients" />
+                    <TableColumn fx:id="totalReviews" prefWidth="140" text="Total Reviews" />
+                    <TableColumn fx:id="totalSaved" prefWidth="100" text="Saved Times" />
+                    <TableColumn fx:id="createdAt" prefWidth="100" text="Created At" />
+                    <TableColumn fx:id="actions" prefWidth="100" text="Action" />
                 </columns>
             </TableView>
         </VBox>
@@ -29,7 +32,7 @@
                 <Text styleClass="table-header-main" text="List of Recipes" />
                 <Text styleClass="table-header-desc" text="This is the list of recipes that all the users have created throughout the application" />
                 <HBox spacing="300.0" VBox.vgrow="ALWAYS">
-                    <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="searchInput" promptText="Search recipe using recipe title, username, category or ingredients..." styleClass="table-header-search" HBox.hgrow="ALWAYS" />
                 </HBox>
                 </children>
         </VBox>

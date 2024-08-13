@@ -133,4 +133,27 @@ public class CategoryRepositoryImpl implements IAdminCategoryRepository, IUserCa
         }
         return new DbResponse.Success<>("Category deleted successfully", null);
     }
+
+    @Override
+    public DbResponse<ArrayList<Category>> getAllByParams(String params) {
+        ArrayList<Category> categories = new ArrayList<>();
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            String query = "SELECT * FROM categories WHERE category_name ILIKE ?";
+            try (PreparedStatement st = conn.prepareStatement(query)) {
+                st.setString(1, "%" + params + "%");
+                ResultSet rs = st.executeQuery();
+                while (rs.next()) {
+                    Category category = new Category(
+                            rs.getLong("category_id"),
+                            rs.getString("category_name")
+                    );
+                    categories.add(category);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error while retrieving data", e);
+            return new DbResponse.Failure<>(e.getMessage());
+        }
+        return new DbResponse.Success<>("Get categories by params success", categories);
+    }
 }

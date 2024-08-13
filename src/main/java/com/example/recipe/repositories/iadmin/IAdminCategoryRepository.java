@@ -15,4 +15,6 @@ public interface IAdminCategoryRepository {
     DbResponse<Category> updateCategory(Category category);
 
     DbResponse<Category> deleteCategory(long categoryId);
+
+    DbResponse<ArrayList<Category>> getAllByParams(String pararms);
 }

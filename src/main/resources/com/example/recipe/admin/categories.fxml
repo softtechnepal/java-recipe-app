@@ -15,8 +15,8 @@
         <VBox fx:id="containerVBox" styleClass="table-container" BorderPane.alignment="CENTER">
             <TableView fx:id="categoryTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="categoryId" minWidth="150"  text="Category Id" />
-                    <TableColumn fx:id="categoryName"  minWidth="800" text="Category Name" />
+                    <TableColumn fx:id="categoryId" minWidth="150"  text="Category Id"/>
+                    <TableColumn fx:id="categoryName"  minWidth="800" text="Category Name"/>
                     <TableColumn fx:id="actions"  text="Actions" />
                 </columns>
             </TableView>
@@ -27,8 +27,8 @@
             <children>
                 <Text styleClass="table-header-main" text="List of Categories" />
                 <Text styleClass="table-header-desc" text="This is the list of categories that the admin creates so the user can be able to add it in recipes" />
-                <HBox spacing="300.0" VBox.vgrow="ALWAYS">
-                    <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search" HBox.hgrow="ALWAYS" />
+                <HBox spacing="300.0" VBox.vgrow="ALWAYS" >
+                    <TextField fx:id="searchInput" promptText="Search by category name...." styleClass="table-header-search" HBox.hgrow="ALWAYS"/>
                     <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#handleAddCategory" text="Add New Category" >
                     </Button>
                 </HBox>

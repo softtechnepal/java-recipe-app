@@ -13,5 +13,5 @@
     <Label fx:id="dialogTitle" text="Category Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <TextField fx:id="categoryNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="table-header-search"/>
     <Button fx:id="dialogButton" onAction="#handleSubmit"
-           text="Add"  GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+           text="Add"  GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" style="-fx-background-color: green; -fx-text-fill: white" />
 </GridPane>
