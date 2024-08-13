@@ -44,7 +44,7 @@
                                       text="Description of the recipe"
                                       wrappingWidth="800.0" style="-fx-font-size: 18px"/>
                                 <VBox fx:id="recipeByContainer" prefHeight="200.0" prefWidth="100.0"
-                                      style="-fx-cursor: hand">
+                                      style="-fx-cursor: hand" onMouseClicked="#onViewProfile">
                                     <children>
                                         <Label text="Recipe By" style="-fx-text-fill: #363535"/>
                                         <Label fx:id="recipeByName" text="Prachan Ghale"
@@ -56,31 +56,32 @@
                                 <ImageView fx:id="recipeImage" fitWidth="800.0" pickOnBounds="true" preserveRatio="true"
                                            VBox.vgrow="ALWAYS">
                                 </ImageView>
-                                <HBox spacing="80.0" alignment="CENTER_LEFT">
-                                    <children>
-                                        <HBox alignment="CENTER_LEFT" spacing="12">
-                                            <ImageView fx:id="starIcon" fitHeight="18.0" fitWidth="18.0"
-                                                       pickOnBounds="true" preserveRatio="true"/>
-                                            <Label fx:id="recipeRating" text="4.5 Star"/>
-                                        </HBox>
-                                        <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
-                                            <Label fx:id="recipeReview" text="24 Reviews"/>
-                                            <Label fx:id="viewRecipe" text="(Show Reviews)"
-                                                   style="-fx-text-fill: blue;"
-                                                   onMouseClicked="#openReviewDialog"/>
-                                        </HBox>
-                                        <HBox spacing="8" alignment="CENTER" style="-fx-cursor: hand">
-                                            <Label fx:id="addReview" text="Add Review"
-                                                   style="-fx-text-fill: blue;"
-                                                   onMouseClicked="#addReview"/>
-                                        </HBox>
-                                        <HBox fx:id="editRecipe" spacing="8" alignment="CENTER" style="-fx-cursor: hand"
-                                              onMouseClicked="#editRecipe" visible="false">
-                                            <Label text="Edit Recipe"
-                                                   style="-fx-text-fill: blue;"
-                                            />
-                                        </HBox>
-                                    </children>
+                                <HBox spacing="20.0" alignment="CENTER_LEFT">
+                                    <HBox alignment="CENTER_LEFT" spacing="12">
+                                        <ImageView fx:id="starIcon" fitHeight="18.0" fitWidth="18.0"
+                                                   pickOnBounds="true" preserveRatio="true"/>
+                                        <Label fx:id="recipeRating" text="4.5 Star"/>
+                                    </HBox>
+                                    <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
+                                    <HBox fx:id="viewReviewsContainer" spacing="8" alignment="CENTER"
+                                          style="-fx-cursor: hand"
+                                          onMouseClicked="#openReviewDialog">
+                                        <Label fx:id="recipeReview" text="24 Reviews"/>
+                                        <Label fx:id="viewRecipe" text="(Show Reviews)"
+                                               style="-fx-text-fill: blue;"/>
+                                    </HBox>
+                                    <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="10.0"/>
+                                    <HBox alignment="CENTER">
+                                        <Label fx:id="addReview" text="Add Review"
+                                               style="-fx-text-fill: blue; -fx-cursor: hand"
+                                               onMouseClicked="#addReview"/>
+
+                                        <Label fx:id="editRecipe" text="Edit Recipe"
+                                               style="-fx-cursor: hand; -fx-text-fill: blue;"
+                                               onMouseClicked="#editRecipe"
+                                               visible="false"
+                                        />
+                                    </HBox>
                                     <padding>
                                         <Insets bottom="12.0"/>
                                     </padding>

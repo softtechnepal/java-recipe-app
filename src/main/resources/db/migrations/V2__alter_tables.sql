@@ -1,8 +1,4 @@
 -- Step 1: Add the status column
--- TODO: Prachan active status is added on the table.
---  Please check it during login of the user.
---  log in if user is active and show popup user is disabled and
---  contact the administrator
 ALTER TABLE Users
     ADD COLUMN status VARCHAR(10) DEFAULT 'ACTIVE';
 
@@ -45,3 +41,6 @@ ALTER TABLE users
 ALTER TABLE reviews
     ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE users
+    ADD COLUMN profile_picture TEXT DEFAULT NULL;

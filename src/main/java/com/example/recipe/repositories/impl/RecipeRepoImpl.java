@@ -46,7 +46,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 "(user_id, title, description, image, video_url, warnings) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING recipe_id";
         try (PreparedStatement statement = connection.prepareStatement(insertRecipeQuery, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, 108);
+            statement.setLong(1, UserDetailStore.getInstance().getUserId());
             statement.setString(2, recipe.getTitle());
             statement.setString(3, recipe.getDescription());
             statement.setString(4, recipe.getImage());
@@ -128,7 +128,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
         final String SELECT_RECIPE_DETAIL_QUERY = """
                 SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
-                       u.user_id, u.username, u.email, u.first_name, u.last_name,
+                       u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture,
                        c.category_id, c.category_name,
                        i.ingredient_id, i.ingredient_name, i.quantity, i.unit,
                        s.step_id, s.step_description, s.step_order, s.step_name,
@@ -360,7 +360,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback) {
         final String SELECT_RECIPE_REVIEWS_QUERY = """
                 SELECT r.review_id, r.rating, r.review, r.created_at, r.updated_at,
-                       u.user_id, u.username, u.email, u.first_name, u.last_name
+                       u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture
                 FROM reviews r
                 JOIN users u ON r.user_id = u.user_id
                 WHERE r.recipe_id = ?;

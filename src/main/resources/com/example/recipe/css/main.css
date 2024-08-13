@@ -81,14 +81,6 @@
     -fx-border-radius: 8;
 }
 
-.circle-image {
-    -fx-border-color: black;
-    -fx-border-width: 2;
-    -fx-border-radius: 50%;
-    -fx-background-radius: 50%;
-}
-
-
 .logout-class {
     -fx-background-color: -logout-color;
     -fx-text-fill: -text-color;
@@ -109,5 +101,13 @@
     -fx-pref-height: 0;
     -fx-min-width: 0;
     -fx-min-height: 0;
+}
+
+.circle-image {
+    -fx-shape: "M 100, 50 m -50, 0 a 50,50 0 1,0 100,0 a 50,50 0 1,0 -100,0";
+    -fx-background-radius: 50%;
+    -fx-clip: null;
+    -fx-fit-width: 100px;
+    -fx-fit-height: 100px;
 }
 
