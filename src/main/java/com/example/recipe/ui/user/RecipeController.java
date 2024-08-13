@@ -45,10 +45,7 @@ public class RecipeController extends BaseRecipeListing {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getAllRecipes(response -> {
             if (response.isSuccess()) {
-                if (!response.getData().isEmpty())
-                    loadRecipeComponents(response.getData());
-                else
-                    progressContainer.setVisible(false);
+                loadRecipeComponents(response.getData());
             } else {
                 logger.error("Failed to fetch recipes {}", response.getMessage());
             }

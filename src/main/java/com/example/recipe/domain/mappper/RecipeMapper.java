@@ -98,6 +98,7 @@ public class RecipeMapper {
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));
         user.setEmail(resultSet.getString("email"));
+        user.setProfilePicture(resultSet.getString("profile_picture"));
         return user;
     }
 }

@@ -128,7 +128,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
         final String SELECT_RECIPE_DETAIL_QUERY = """
                 SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
-                       u.user_id, u.username, u.email, u.first_name, u.last_name,
+                       u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture,
                        c.category_id, c.category_name,
                        i.ingredient_id, i.ingredient_name, i.quantity, i.unit,
                        s.step_id, s.step_description, s.step_order, s.step_name,

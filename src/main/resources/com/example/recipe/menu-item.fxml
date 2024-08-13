@@ -8,6 +8,7 @@
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:id="root"
       fx:controller="com.example.recipe.ui.user.MenuItemController"
+      style="-fx-cursor: hand"
       onMouseClicked="#navigateToDetail">
     <children>
         <ImageView fx:id="recipeImage" cache="true" cacheHint="SCALE" fitHeight="220" fitWidth="315">
@@ -42,6 +43,7 @@
                                maxWidth="222"/>
                         <ImageView fx:id="savedImage" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true"
                                    preserveRatio="true"
+                                   style="-fx-cursor: hand"
                                    onMouseClicked="#onSave"/>
                         <ImageView fx:id="reviewImage" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true"
                                    preserveRatio="true"
