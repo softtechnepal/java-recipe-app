@@ -20,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -50,10 +51,8 @@ public class AddRecipeController {
     public TextField tfOther;
     @FXML
     public TextField tfWarnings;
-//    @FXML
-//    public VBox vBoxAddedSteps;
-    @FXML
-    public TextField tfCategories;
+    /*@FXML
+    public TextField tfCategories;*/
     @FXML
     public Label recipeNameError;
     @FXML
@@ -66,6 +65,8 @@ public class AddRecipeController {
     public Label stepError;
     @FXML
     public HBox hBoxImageSection;
+    @FXML
+    public GridPane gridCategories;
     @FXML
     private TableView<Ingredient> ingredientsTable;
     @FXML
@@ -88,8 +89,6 @@ public class AddRecipeController {
 
     private String imagePath;
     private final List<Category> categories = new ArrayList<>();
-//    private final List<Ingredient> ingredients = new ArrayList<>();
-//    private final List<Steps> steps = new ArrayList<>();
     private final ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
     private final ObservableList<Steps> steps = FXCollections.observableArrayList();
     private final UserCategoryService userCategoryService = new UserCategoryService();
@@ -97,7 +96,7 @@ public class AddRecipeController {
 
     @FXML
     private void initialize() {
-        tfCategories.setOnMouseClicked((event) -> onAddCategories(null));
+        // tfCategories.setOnMouseClicked((event) -> onAddCategories(null));
         // TODO: Prachan: CRUD For Ingredients
         ingredientNameColumn.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
         ingredientUnitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
@@ -106,17 +105,19 @@ public class AddRecipeController {
             private final Button editButton = new Button("Edit");
             private final Button deleteButton = new Button("Delete");
             private final HBox pane = new HBox(10, editButton, deleteButton);
+
             {
                 editButton.getStyleClass().add("table-header-button");
                 deleteButton.getStyleClass().add("table-header-button");
             }
+
             {
                 editButton.setOnAction(event -> {
                     Ingredient ingredient = getTableView().getItems().get(getIndex());
                     if (ingredient != null) {
                         handleEditIngredient(ingredient);
                     }
-                    });
+                });
                 deleteButton.setOnAction(event -> {
                     Ingredient ingredient = getTableView().getItems().get(getIndex());
                     ingredients.remove(ingredient);
@@ -145,10 +146,12 @@ public class AddRecipeController {
             private final Button editButton = new Button("Edit");
             private final Button deleteButton = new Button("Delete");
             private final HBox pane = new HBox(10, editButton, deleteButton);
+
             {
                 editButton.getStyleClass().add("table-header-button");
                 deleteButton.getStyleClass().add("table-header-button");
             }
+
             {
                 editButton.setOnAction(event -> {
                     Steps step = getTableView().getItems().get(getIndex());
@@ -177,7 +180,6 @@ public class AddRecipeController {
         stepsTable.setItems(steps);
 
     }
-
 
 
     public void onAddRecipe(ActionEvent actionEvent) {
@@ -229,13 +231,23 @@ public class AddRecipeController {
                 var dialog = new CategoryDialog("Add Categories", categories, response.getData(), data -> {
                     categories.clear();
                     categories.addAll(data);
-                    StringBuilder categoryNames = new StringBuilder();
-                    categories.forEach(category -> categoryNames.append(category.getCategoryName()).append(", "));
-                    tfCategories.setText(categoryNames.toString());
+                    addCategoriesToGridPane(categories.stream().map(Category::getCategoryName).toList());
                 });
                 dialog.showAndWait();
             }
         });
+    }
+
+    private void addCategoriesToGridPane(List<String> categories) {
+        gridCategories.getChildren().clear(); // Clear existing items
+        int columns = 6; // Maximum 5 items per row
+        for (int i = 0; i < categories.size(); i++) {
+            Label categoryLabel = new Label(categories.get(i));
+            categoryLabel.getStyleClass().add("grid-item");
+            int row = i / columns;
+            int col = i % columns;
+            gridCategories.add(categoryLabel, col, row);
+        }
     }
 
     public void onAddStep(ActionEvent actionEvent) {
@@ -264,7 +276,7 @@ public class AddRecipeController {
     }
 
     private void handleEditStep(Steps step) {
-        var dialog = new AddStepDialog("Edit Step",  step, (Steps data) -> {
+        var dialog = new AddStepDialog("Edit Step", step, (Steps data) -> {
             if (data != null) {
                 steps.remove(step);
                 steps.add(data);
