@@ -105,32 +105,36 @@
                             </TableView>
                             <Label fx:id="stepError" managed="false" styleClass="error-label" visible="false"/>
                         </VBox>
-
-                        <HBox alignment="CENTER_LEFT" spacing="20">
-                            <children>
-                                <VBox alignment="CENTER" maxHeight="100" maxWidth="100" minHeight="100" minWidth="100"
-                                      onMouseClicked="#onSelectImage" spacing="6.0"
-                                      style="-fx-background-color: #8bbdf3; -fx-background-radius: 12px">
-                                    <children>
-                                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
-                                                   preserveRatio="true" style="-fx-background-radius: 10;">
-                                            <image>
-                                                <Image url="@../../../assets/ic_add_image.png"/>
-                                            </image>
-                                        </ImageView>
-                                        <Label text="Add Image"/>
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0"/>
-                                    </padding>
-                                </VBox>
-                                <HBox fx:id="hBoxImageSection"/>
-                            </children>
-                        </HBox>
+                        <VBox>
+                            <HBox alignment="CENTER_LEFT" spacing="20">
+                                <children>
+                                    <VBox alignment="CENTER" maxHeight="100" maxWidth="100" minHeight="100"
+                                          minWidth="100"
+                                          onMouseClicked="#onSelectImage" spacing="6.0"
+                                          style="-fx-background-color: #8bbdf3; -fx-background-radius: 12px">
+                                        <children>
+                                            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
+                                                       preserveRatio="true" style="-fx-background-radius: 10;">
+                                                <image>
+                                                    <Image url="@../../../assets/ic_add_image.png"/>
+                                                </image>
+                                            </ImageView>
+                                            <Label text="Add Image"/>
+                                        </children>
+                                        <padding>
+                                            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0"/>
+                                        </padding>
+                                    </VBox>
+                                    <HBox fx:id="hBoxImageSection"/>
+                                </children>
+                            </HBox>
+                            <Label fx:id="imageError" managed="false" styleClass="error-label" visible="false"/>
+                        </VBox>
                         <VBox prefWidth="800.0" spacing="4.0">
                             <children>
                                 <Label text="Video link"/>
                                 <TextField fx:id="tfVideoLink" styleClass="text-field-form"/>
+                                <Label fx:id="videoError" managed="false" styleClass="error-label" visible="false"/>
                             </children>
                         </VBox>
                         <VBox prefWidth="800.0" spacing="4.0">
@@ -142,8 +146,8 @@
                         </VBox>
                         <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label fx:id="tfProtein" text="Protein"/>
-                                <TextField styleClass="text-field-form"/>
+                                <Label text="Protein"/>
+                                <TextField fx:id="tfProtein" styleClass="text-field-form"/>
                                 <Label fx:id="proteinError" managed="false" styleClass="error-label" visible="false"/>
                             </children>
                         </VBox>
