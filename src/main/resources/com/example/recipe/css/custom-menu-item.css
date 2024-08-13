@@ -1,49 +1,77 @@
 /* menu-item.css */
 .custom-menu-item {
-    -fx-background-color: -logout-color;
-    -fx-text-fill: -text-color;
-    -fx-border-radius: 9;
-    -fx-background-radius: 9;
-    -fx-spacing: 16;
-    -fx-padding: 10 20;
-    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #2d2d2d;
+    -fx-border-radius: 4;
+    -fx-spacing: 10;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
     -fx-fill-width: true;
-    -fx-max-width: 600px;
+    -fx-max-width: 500px;
+    -fx-top-margin: 0;
+    -fx-bottom-margin: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-padding: 8px 10px;
 }
 
-.custom-menu-item.active {
-    -fx-background-color: #E9F5FE;
+.logo-container{
+    -fx-padding: 8px 0 30px 0;
+    -fx-alignment: center;
 }
 
+.side-nav-logo{
+    -fx-max-width: 150px;
+    -fx-fit-width: 150px;
+
+}
 .custom-menu-item.inactive {
-    -fx-background-color: #FFFFFF;
-}
-
-.custom-menu-item .image-view {
-    -fx-fit-width: 24;
-    -fx-fit-height: 24;
-}
-
-.custom-menu-item.active .label {
-    -fx-font-size: 14px;
-    -fx-text-fill: #0C7FDA;
+    -fx-background-color: unset;
 }
 
 .custom-menu-item.inactive .label {
     -fx-font-size: 14px;
-    -fx-text-fill: #5D7285;
+    -fx-text-fill: -color-dark;
+    -fx-font-weight: 600;
 }
 
 .custom-menu-item.active:hover,
-.custom-menu-item.inactive:hover {
-    -fx-background-color: #d8e3ed;
-    -fx-scale-y: 1.1;
+.custom-menu-item.inactive:hover{
+    -fx-border-color: -color-primary;
+    -fx-border-radius: 4;
+}
+.custom-menu-item.active {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: -color-light;
 }
 
 .custom-menu-item.active:hover .label,
-.custom-menu-item.inactive:hover .label {
-    -fx-text-fill: #272b27;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
+.custom-menu-item.inactive:hover .label ,
+.custom-menu-item.active .label{
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+}
+
+.custom-menu-item.active .label{
+    -fx-text-fill: -color-light;
+}
+
+.sidemenu-logout-class{
+    -fx-border-radius: 4;
+    -fx-background-color: -color-primary;
+    -fx-text-fill: -color-light;
+    -fx-padding: 8px 10px;
+    -fx-margin: 0 0 0 30px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.sidemenu-logout-class .label{
+    -fx-text-fill: -color-light;
+}
+
+.sidemenu-logout-class:hover{
+    -fx-background-color: -color-tertiary;
 }

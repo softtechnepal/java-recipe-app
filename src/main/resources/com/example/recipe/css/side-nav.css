@@ -1,0 +1,21 @@
+.side-nav {
+        -fx-background-color: #ffffff;
+        -fx-border-color: -border-color;
+        -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
+        -fx-padding: 24px;
+        -fx-font-family: 'Poppins', sans-serif;
+        -fx-border-radius: 10px;
+        -fx-pref-height: 100%;
+        -fx-min-width:300px;
+        -fx-max-width: 300px;
+        -fx-spacing: 12px;
+}
+
+.side-nav-logo {
+        -fx-max-width: 200px;
+        -fx-fit-width: 200px;
+}
+
+.menu-list{
+        -fx-spacing: 10px;
+}

@@ -2,63 +2,63 @@
 
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity"
-          xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.example.recipe.ui.admin.DashboardController">
-    <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints maxHeight="155.60001220703126" minHeight="10.0" prefHeight="136.4" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="185.19998779296876" minHeight="10.0" prefHeight="184.4" vgrow="SOMETIMES"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-    </rowConstraints>
-    <children>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;">
-            <children>
-                <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="58.0" layoutY="36.0" pickOnBounds="true"
-                           preserveRatio="true">
+<?import javafx.scene.layout.HBox?>
+<BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.admin.DashboardController" >
+    <center>
+        <HBox spacing="15" style="-fx-padding: 25px 18px" >
+            <VBox alignment="CENTER" styleClass="dashboard-pane">
+                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
                     <image>
-                        <Image url="@../../../../assets/users.png"/>
+                        <Image url="@../../../../assets/users.png" />
                     </image>
                 </ImageView>
-                <Text layoutX="54.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Users"/>
-                <Text layoutX="77.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="totalUsers"/>
-            </children>
-        </Pane>
-        <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: pink;"
-              GridPane.columnIndex="1">
-            <children>
-                <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="58.0" layoutY="36.0" pickOnBounds="true"
-                           preserveRatio="true">
+                <Text text="Total Users" styleClass="dashboard-pane-title"/>
+                <Text fx:id="totalUsers" styleClass="dashboard-pane-value"/>
+            </VBox>
+
+            <VBox alignment="CENTER" styleClass="dashboard-pane">
+                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
                     <image>
-                        <Image url="@../../../../assets/category.png"/>
+                        <Image url="@../../../../assets/category.png" />
                     </image>
                 </ImageView>
-                <Text layoutX="40.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Categories"/>
-                <Text layoutX="77.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="totalCategories"/>
-            </children>
-        </Pane>
-        <Pane layoutX="204.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0"
-              style="-fx-background-color: lightgrey;" GridPane.columnIndex="2">
-            <children>
-                <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="58.0" layoutY="36.0" pickOnBounds="true"
-                           preserveRatio="true">
+                <Text text="Total Categories" styleClass="dashboard-pane-title"/>
+                <Text fx:id="totalCategories" styleClass="dashboard-pane-value"/>
+            </VBox>
+
+            <VBox alignment="CENTER" styleClass="dashboard-pane">
+                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
                     <image>
-                        <Image url="@../../../../assets/receipe.png"/>
+                        <Image url="@../../../../assets/receipe.png" />
                     </image>
                 </ImageView>
-                <Text layoutX="48.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Recipes"/>
-                <Text layoutX="77.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="totalRecipes"/>
+                <Text text="Total Recipes" styleClass="dashboard-pane-title"/>
+                <Text fx:id="totalRecipes" styleClass="dashboard-pane-value"/>
+            </VBox>
+
+            <VBox alignment="CENTER" styleClass="dashboard-pane">
+                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
+                    <image>
+                        <Image url="@../../../../assets/receipe.png" />
+                    </image>
+                </ImageView>
+                <Text text="Total Saved Recipes" styleClass="dashboard-pane-title"/>
+                <Text  text="hehe" styleClass="dashboard-pane-value"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <top>
+        <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
+            <children>
+                <Text styleClass="table-header-main" text="Application Overview" />
+                <Text styleClass="table-header-desc" text="This is overview analytics of the application" />
             </children>
-        </Pane>
-    </children>
-</GridPane>
+        </VBox>
+    </top>
+</BorderPane>

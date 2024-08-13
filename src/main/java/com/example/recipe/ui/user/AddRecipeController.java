@@ -10,12 +10,13 @@ import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.ValidationUtil;
 import com.example.recipe.utils.ViewUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -49,10 +50,8 @@ public class AddRecipeController {
     public TextField tfOther;
     @FXML
     public TextField tfWarnings;
-    @FXML
-    public VBox vBoxAddedSteps;
-    @FXML
-    public TextField tfIngredientName;
+//    @FXML
+//    public VBox vBoxAddedSteps;
     @FXML
     public TextField tfCategories;
     @FXML
@@ -67,20 +66,119 @@ public class AddRecipeController {
     public Label stepError;
     @FXML
     public HBox hBoxImageSection;
+    @FXML
+    private TableView<Ingredient> ingredientsTable;
+    @FXML
+    private TableColumn<Ingredient, String> ingredientNameColumn;
+    @FXML
+    private TableColumn<Ingredient, String> ingredientQtyColumn;
+    @FXML
+    private TableColumn<Ingredient, String> ingredientUnitColumn;
+    @FXML
+    private TableColumn<Ingredient, Void> actionsColumn;
+    @FXML
+    private TableView<Steps> stepsTable;
+    @FXML
+    private TableColumn<Steps, String> stepNameColumn;
+    @FXML
+    private TableColumn<Steps, String> stepDescColumn;
+    @FXML
+    private TableColumn<Steps, Void> stepActionsColumn;
+
 
     private String imagePath;
     private final List<Category> categories = new ArrayList<>();
-    private final List<Ingredient> ingredients = new ArrayList<>();
-    private final List<Steps> steps = new ArrayList<>();
-
+//    private final List<Ingredient> ingredients = new ArrayList<>();
+//    private final List<Steps> steps = new ArrayList<>();
+    private final ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
+    private final ObservableList<Steps> steps = FXCollections.observableArrayList();
     private final UserCategoryService userCategoryService = new UserCategoryService();
     private final UserRecipeService userRecipeService = new UserRecipeService();
 
     @FXML
     private void initialize() {
-        tfIngredientName.setOnMouseClicked((event) -> onAddIngredient(null));
         tfCategories.setOnMouseClicked((event) -> onAddCategories(null));
+        // TODO: Prachan: CRUD For Ingredients
+        ingredientNameColumn.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
+        ingredientUnitColumn.setCellValueFactory(new PropertyValueFactory<>("unit"));
+        ingredientQtyColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+            private final HBox pane = new HBox(10, editButton, deleteButton);
+            {
+                editButton.getStyleClass().add("table-header-button");
+                deleteButton.getStyleClass().add("table-header-button");
+            }
+            {
+                editButton.setOnAction(event -> {
+                    Ingredient ingredient = getTableView().getItems().get(getIndex());
+                    if (ingredient != null) {
+                        handleEditIngredient(ingredient);
+                    }
+                    });
+                deleteButton.setOnAction(event -> {
+                    Ingredient ingredient = getTableView().getItems().get(getIndex());
+                    ingredients.remove(ingredient);
+                });
+            }
+
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                }
+            }
+        });
+
+        ingredientsTable.setItems(ingredients);
+
+
+        // TODO: Prachan: CRUD For Steps
+        stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("stepName"));
+        stepDescColumn.setCellValueFactory(new PropertyValueFactory<>("stepDescription"));
+        stepActionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+            private final HBox pane = new HBox(10, editButton, deleteButton);
+            {
+                editButton.getStyleClass().add("table-header-button");
+                deleteButton.getStyleClass().add("table-header-button");
+            }
+            {
+                editButton.setOnAction(event -> {
+                    Steps step = getTableView().getItems().get(getIndex());
+                    if (step != null) {
+                        handleEditStep(step);
+                    }
+                });
+                deleteButton.setOnAction(event -> {
+                    Steps step = getTableView().getItems().get(getIndex());
+                    steps.remove(step);
+                });
+            }
+
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                }
+            }
+        });
+
+        stepsTable.setItems(steps);
+
     }
+
+
 
     public void onAddRecipe(ActionEvent actionEvent) {
         Recipe recipe = new Recipe();
@@ -107,13 +205,19 @@ public class AddRecipeController {
     }
 
     public void onAddIngredient(ActionEvent actionEvent) {
-        var dialog = new IngredientDialog("Add Ingredient", data -> {
+        var dialog = new IngredientDialog("Add Ingredient", null, (Ingredient data) -> {
             if (data != null)
                 ingredients.add(data);
+        });
+        dialog.showAndWait();
+    }
 
-            StringBuilder ingredientNames = new StringBuilder();
-            ingredients.forEach(ingredient -> ingredientNames.append(ingredient.getIngredientName()).append(", "));
-            tfIngredientName.setText(ingredientNames.toString());
+    private void handleEditIngredient(Ingredient ingredient) {
+        var dialog = new IngredientDialog("Edit Ingredient", ingredient, (Ingredient data) -> {
+            if (data != null) {
+                ingredients.remove(ingredient);
+                ingredients.add(data);
+            }
         });
         dialog.showAndWait();
     }
@@ -135,25 +239,36 @@ public class AddRecipeController {
     }
 
     public void onAddStep(ActionEvent actionEvent) {
-        var dialog = new AddStepDialog("Add Step", data -> {
+        var dialog = new AddStepDialog("Add Step", null, data -> {
             if (data != null)
                 steps.add(data);
 
-            List<VBox> stepViews = new ArrayList<>();
-            steps.forEach(step -> {
-                VBox vBox = new VBox(10);
-                vBox.setStyle("-fx-background-radius: 10px; -fx-padding: 10px; -fx-background-color: #eae2e2; -fx-border-radius: 8px; -fx-max-width: 500px");
-                Label title = new Label(step.getStepName());
-                title.setStyle("-fx-font-weight: bold; -fx-font-size: 22px; -fx-text-fill: #3e8ee4");
-                Text description = new Text(step.getStepDescription());
-                description.setStyle("-fx-font-size: 16px; -fx-text-fill: #000000; -fx-wrap-text: true; max-width: 400px");
-                description.setWrappingWidth(480);
-                vBox.getChildren().addAll(title, description);
-                stepViews.add(vBox);
-            });
+//            List<VBox> stepViews = new ArrayList<>();
+//            steps.forEach(step -> {
+//                VBox vBox = new VBox(4);
+//                vBox.setStyle("-fx-background-radius: 4px; -fx-padding: 10px; -fx-background-color:  #dcdcdc; " +
+//                        "-fx-border-radius: 4px; -fx-max-width: 500px; -fx-border-color: #dcdcdc; -fx-border-width: 1px");
+//                Label title = new Label(step.getStepName());
+//                title.setStyle("-fx-font-weight: bold; -fx-font-size: 20px; -fx-text-fill: #293846");
+//                Text description = new Text(step.getStepDescription());
+//                description.setStyle("-fx-font-size: 16px; -fx-text-fill:  #2d2d2d; -fx-wrap-text: true; max-width: 400px");
+//                description.setWrappingWidth(480);
+//                vBox.getChildren().addAll(title, description);
+//                stepViews.add(vBox);
+//            });
+//
+//            vBoxAddedSteps.getChildren().clear();
+//            vBoxAddedSteps.getChildren().addAll(stepViews);
+        });
+        dialog.showAndWait();
+    }
 
-            vBoxAddedSteps.getChildren().clear();
-            vBoxAddedSteps.getChildren().addAll(stepViews);
+    private void handleEditStep(Steps step) {
+        var dialog = new AddStepDialog("Edit Step",  step, (Steps data) -> {
+            if (data != null) {
+                steps.remove(step);
+                steps.add(data);
+            }
         });
         dialog.showAndWait();
     }

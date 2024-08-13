@@ -2,6 +2,7 @@ package com.example.recipe.services.admin;
 
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.repositories.impl.UserRepositoryImpl;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 
@@ -24,5 +25,9 @@ public class AdminUserService {
 
     public DbResponse<User> toggleUserStatus(long userId, String status){
         return userRepository.toggleUserStatus(userId, status);
+    }
+
+    public DbResponse<ArrayList<User>> getAllUsersByParams(String pararms){
+        return userRepository.getAllUsersByParams(pararms);
     }
 }

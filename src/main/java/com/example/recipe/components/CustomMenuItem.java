@@ -26,7 +26,8 @@ public class CustomMenuItem extends HBox {
     public CustomMenuItem() {
         this.setAlignment(Pos.CENTER_LEFT);
         this.getStyleClass().add("custom-menu-item");
-
+        menuIcon.getStyleClass().add("side-nav-icon");
+        menuLabel.getStyleClass().add("label");
         this.getChildren().addAll(menuIcon, menuLabel);
         this.initialize();
     }
@@ -44,6 +45,9 @@ public class CustomMenuItem extends HBox {
         if (path != null && !path.isEmpty()) {
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + path)));
             menuIcon.setImage(image);
+            menuIcon.setFitWidth(24);
+            menuIcon.setFitHeight(24);
+            menuIcon.setPreserveRatio(true);
         }
     }
 

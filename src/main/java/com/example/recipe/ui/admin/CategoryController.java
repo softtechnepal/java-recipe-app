@@ -30,6 +30,8 @@ public class CategoryController {
     private TableColumn<Category, String> categoryName;
     @FXML
     private TableColumn<Category, Void> actions;
+    @FXML
+    public TextField searchInput;
 
     private AdminCategoryService categoryService;
 
@@ -37,12 +39,14 @@ public class CategoryController {
         categoryService = new AdminCategoryService();
         configureTable();
         loadTableData();
+        searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchCategories(newValue);
+        });
     }
 
     private void configureTable() {
         categoryId.setCellValueFactory(new PropertyValueFactory<>("categoryId"));
         categoryName.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
-
         // Add buttons to the actions column
         actions.setCellFactory(new Callback<TableColumn<Category, Void>, TableCell<Category, Void>>() {
             @Override
@@ -51,7 +55,10 @@ public class CategoryController {
                     private final Button editButton = new Button("Edit");
                     private final Button deleteButton = new Button("Delete");
                     private final HBox hBox = new HBox(10, editButton, deleteButton);
-
+                    {
+                        editButton.getStyleClass().add("table-header-button");
+                        deleteButton.getStyleClass().add("table-header-button");
+                    }
                     {
                         // Handle delete button action
                         deleteButton.setOnAction(event -> {
@@ -87,6 +94,16 @@ public class CategoryController {
 
     private void loadTableData() {
         DbResponse<ArrayList<Category>> response = categoryService.getAllCategories();
+        if (response.isSuccess()) {
+            ArrayList<Category> categoryArrayList = response.getData();
+            categoryTable.getItems().setAll(categoryArrayList);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
+        }
+    }
+
+    private void searchCategories(String query) {
+        DbResponse<ArrayList<Category>> response = categoryService.getAllByParams(query);
         if (response.isSuccess()) {
             ArrayList<Category> categoryArrayList = response.getData();
             categoryTable.getItems().setAll(categoryArrayList);

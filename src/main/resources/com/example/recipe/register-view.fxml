@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
@@ -8,50 +7,54 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.recipe.ui.common.authentication.RegisterController">
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background: #293846; -fx-border-color: #293846">
-            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #293846;">
-                <padding>
-                    <Insets bottom="60" left="60" right="60" top="20"/>
-                </padding>
+            <VBox alignment="CENTER" spacing="10" maxWidth="500">
                 <ImageView fx:id="logoImageView" fitWidth="200.0" preserveRatio="true"/>
-                <Label text="Welcome to My Recipe" textFill="#FFFFFF"/>
-                <VBox alignment="CENTER" spacing="10">
+                <Label text="Register to Application" styleClass="auth_header"/>
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="First Name" />
                     <TextField fx:id="firstNameField" promptText="First Name" style="-fx-background-radius: 6;"/>
                     <Label fx:id="firstNameErrorLabel" visible="false" managed="false"
                            styleClass="error-label"/>
                 </VBox>
-                <VBox alignment="CENTER" spacing="10">
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="Last Name" />
                     <TextField fx:id="lastNameField" promptText="Last Name" style="-fx-background-radius: 6;"/>
                     <Label fx:id="lastNameErrorLabel" visible="false" managed="false"
                            styleClass="error-label"/>
                 </VBox>
-                <VBox alignment="CENTER" spacing="10">
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="Username" />
                     <TextField fx:id="usernameField" promptText="Username" style="-fx-background-radius: 6;"/>
                     <Label fx:id="usernameErrorLabel" visible="false" managed="false"
                            styleClass="error-label"/>
                 </VBox>
-                <VBox alignment="CENTER" spacing="10">
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="Email" />
                     <TextField fx:id="emailField" promptText="Email" style="-fx-background-radius: 6;"/>
                     <Label fx:id="emailErrorLabel" visible="false" managed="false"
                            styleClass="error-label"/>
                 </VBox>
-                <VBox alignment="CENTER" spacing="10">
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="Password" />
                     <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-radius: 6;"/>
                     <Label fx:id="passwordErrorLabel" visible="false" managed="false"
                            styleClass="error-label"/>
                 </VBox>
-                <VBox alignment="CENTER" spacing="10">
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="Confirm Password" />
                     <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password"
                                    style="-fx-background-radius: 6;"/>
                     <Label fx:id="confirmPasswordErrorLabel" visible="false" managed="false"
                            styleClass="error-label"/>
                 </VBox>
-                <Button fx:id="registerButton" contentDisplay="TOP" text="Register"/>
-                <Label alignment="CENTER" onMouseClicked="#handleLogin" text="Already have an account? Login"
-                       textFill="#007bff"/>
-                <Label alignment="CENTER" onMouseClicked="#handleContinueAsGuest" text="Continue as Guest"
-                       textFill="#007bff"/>
+                <VBox alignment="CENTER" spacing="10">
+                    <Button fx:id="registerButton" contentDisplay="TOP" text="Register" maxWidth="500"/>
+                    <Label alignment="CENTER" onMouseClicked="#handleLogin" text="Already have an account? Login"
+                          textFill="#293846" style="-fx-cursor: hand"/>
+                    <Label alignment="CENTER" onMouseClicked="#handleContinueAsGuest" text="Continue as Guest"
+                          textFill="#293846" style="-fx-cursor: hand"/>
+                </VBox>
+
             </VBox>
-        </ScrollPane>
     </center>
 </BorderPane>

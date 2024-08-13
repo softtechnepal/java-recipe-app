@@ -46,7 +46,7 @@ public class RegisterController {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
     public void initialize() {
-        Image logoImage = new Image("file:src/main/resources/assets/app_logo.png");
+        Image logoImage = new Image("file:src/main/resources/assets/logo.png");
         logoImageView.setImage(logoImage);
         registerButton.setOnAction(event -> {
             handleRegister();
@@ -69,7 +69,7 @@ public class RegisterController {
         authenticationService.register(request, data -> {
             if (data.isSuccess()) {
                 DialogUtil.showInfoDialog("Success", data.getMessage());
-                // NavigationUtil.navigateTo("login-view.fxml");
+                NavigationUtil.navigateTo("login-view.fxml");
             } else {
                 DialogUtil.showErrorDialog("Error", data.getMessage());
             }

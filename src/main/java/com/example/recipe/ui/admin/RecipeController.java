@@ -1,10 +1,12 @@
 package com.example.recipe.ui.admin;
 
+import com.example.recipe.domain.Category;
 import com.example.recipe.domain.Recipe;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -30,21 +32,41 @@ public class RecipeController {
 
     @FXML
     public TableColumn<Recipe, String> createdAt;
-
+    @FXML
+    public TableColumn<Recipe, String> category;
+    @FXML
+    public TableColumn<Recipe, String> ingredients;
+    @FXML
+    public TableColumn<Recipe, Integer> totalReviews;
+    @FXML
+    public TableColumn<Recipe, Integer> totalSaved;
     @FXML
     public TableColumn<Recipe, Void> actions;
-
+    @FXML
+    public TextField searchInput;
     @FXML
     public TableView<Recipe> recipeTable;
 
-    private AdminRecipeService recipeService;
-    private AdminUserService userService;
+    private final AdminRecipeService recipeService = new AdminRecipeService();
+    private final AdminUserService userService = new AdminUserService();
+
 
     public void initialize() {
-        recipeService = new AdminRecipeService();
-        userService = new AdminUserService();
         configureTable();
         loadTableData();
+        searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchRecipe(newValue);
+        });
+    }
+
+    private void searchRecipe(String newValue) {
+        DbResponse<ArrayList<Recipe>> response = recipeService.searchRecipe(newValue);
+        if (response.isSuccess()) {
+            ArrayList<Recipe> recipeArrayList = response.getData();
+            recipeTable.getItems().setAll(recipeArrayList);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
+        }
     }
 
     private void configureTable() {
@@ -59,7 +81,44 @@ public class RecipeController {
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
         });
-
+        category.setCellValueFactory(cellData -> {
+            Recipe recipe = cellData.getValue();
+            DbResponse<ArrayList<String>> response = recipeService.getCategoriesByRecipeId(recipe.getRecipeId());
+            if (response.isSuccess()) {
+                ArrayList<String> categories = response.getData();
+                return new SimpleStringProperty(String.join(", ", categories));
+            } else {
+                return new SimpleStringProperty("Unknown");
+            }
+        });
+        ingredients.setCellValueFactory(cellData -> {
+            Recipe recipe = cellData.getValue();
+            DbResponse<ArrayList<String>> response = recipeService.getIngredientsByRecipeId(recipe.getRecipeId());
+            if (response.isSuccess()) {
+                ArrayList<String> ingredients = response.getData();
+                return new SimpleStringProperty(String.join(", ", ingredients));
+            } else {
+                return new SimpleStringProperty("Unknown");
+            }
+        });
+        totalReviews.setCellValueFactory(cellData -> {
+            Recipe recipe = cellData.getValue();
+            DbResponse<Integer> response = recipeService.getTotalReviewsByRecipeId(recipe.getRecipeId());
+            if (response.isSuccess()) {
+                return new SimpleIntegerProperty(response.getData()).asObject();
+            } else {
+                return new SimpleIntegerProperty(0).asObject();
+            }
+        });
+        totalSaved.setCellValueFactory(cellData -> {
+            Recipe recipe = cellData.getValue();
+            DbResponse<Integer> response = recipeService.getTotalSavedByRecipeId(recipe.getRecipeId());
+            if (response.isSuccess()) {
+                return new SimpleIntegerProperty(response.getData()).asObject();
+            } else {
+                return new SimpleIntegerProperty(0).asObject();
+            }
+        });
         // Add buttons to the actions column
         actions.setCellFactory(new Callback<TableColumn<Recipe, Void>, TableCell<Recipe, Void>>() {
             @Override
@@ -96,7 +155,10 @@ public class RecipeController {
         DbResponse<ArrayList<Recipe>> response = recipeService.getAllRecipes();
         if (response.isSuccess()) {
             ArrayList<Recipe> recipeArrayList = response.getData();
-            recipeTable.getItems().setAll(recipeArrayList);
+            Thread thread = new Thread(() -> {
+                recipeTable.getItems().setAll(recipeArrayList);
+            });
+            new Thread(thread).start();
         } else {
             logger.error("Error retrieving data: " + response.getMessage());
         }

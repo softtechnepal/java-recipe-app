@@ -10,4 +10,9 @@ public interface IAdminRecipeRepository {
     DbResponse<Recipe> getRecipeById(long recipeId);
     DbResponse<ArrayList<Recipe>> getRecipeByUserId(long userId);
     DbResponse<Recipe> deleteRecipe(long recipeId);
+    DbResponse<ArrayList<String>> getIngredientsByRecipeId(long recipeId);
+    DbResponse<ArrayList<String>> getCategoriesByRecipeId(long recipeId);
+    DbResponse<Integer> getTotalReviewsByRecipeId(long recipeId);
+    DbResponse<Integer> getTotalSavedByRecipeId(long recipeId);
+    DbResponse<ArrayList<Recipe>> searchRecipe(String searchTerm);
 }

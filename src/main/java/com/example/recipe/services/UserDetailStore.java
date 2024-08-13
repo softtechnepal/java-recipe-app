@@ -17,6 +17,12 @@ public class UserDetailStore {
         return instance;
     }
 
+    public void clear() {
+        userName = null;
+        userEmail = null;
+        userId = 0;
+    }
+
     public String getUserName() {
         return userName;
     }

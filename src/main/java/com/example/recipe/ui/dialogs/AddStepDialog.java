@@ -19,16 +19,16 @@ public class AddStepDialog extends Stage {
     private final TextArea tfStepDescription;
     private final AlertCallback<Steps> callback;
 
-    public AddStepDialog(String title, AlertCallback<Steps> callback) {
+    public AddStepDialog(String title, Steps step, AlertCallback<Steps> callback) {
         this.callback = callback;
         setTitle(title);
         initModality(Modality.APPLICATION_MODAL);
 
         Label nameLabel = new Label("Step Name:");
-        tfStepName = new TextField();
+        tfStepName = new TextField(step != null ? step.getStepName() : "");
         tfStepName.setPromptText("Step 1 | Step 2 | Step 3");
         Label quantityLabel = new Label("Step Description: ");
-        tfStepDescription = new TextArea();
+        tfStepDescription = new TextArea(step != null ? step.getStepDescription() : "");
         tfStepDescription.setPromptText("Description of the step");
         tfStepDescription.setStyle("-fx-pref-height: 120; -fx-alignment: top-left;");
         tfStepDescription.setWrapText(true);

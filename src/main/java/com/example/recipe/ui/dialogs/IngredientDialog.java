@@ -18,18 +18,17 @@ public class IngredientDialog extends Stage {
     private final TextField tfUnit;
     private final AlertCallback<Ingredient> callback;
 
-    public IngredientDialog(String title, AlertCallback<Ingredient> callback) {
+    public IngredientDialog(String title,Ingredient ingredient, AlertCallback<Ingredient> callback) {
         this.callback = callback;
         setTitle(title);
         initModality(Modality.APPLICATION_MODAL);
 
         Label nameLabel = new Label("Ingredient Name:");
-        tfIngredientName = new TextField();
+        tfIngredientName = new TextField(ingredient != null ? ingredient.getIngredientName() : "");
         Label quantityLabel = new Label("Quantity:");
-        tfQuantity = new TextField();
+        tfQuantity = new TextField(ingredient != null && ingredient.getQuantity() != null ? ingredient.getQuantity().toString() : "");
         Label unitLabel = new Label("Unit:");
-        tfUnit = new TextField();
-
+        tfUnit = new TextField(ingredient != null ? ingredient.getUnit() : "");
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> onAdd());
         addButton.setStyle("-fx-background-color: #3e8ee4; -fx-text-fill: #ffffff; -fx-border-radius: 5px; -fx-pref-width: 60");

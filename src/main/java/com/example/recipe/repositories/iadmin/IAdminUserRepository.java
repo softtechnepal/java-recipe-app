@@ -9,4 +9,5 @@ public interface IAdminUserRepository {
     DbResponse<ArrayList<User>> getAllUsers();
     DbResponse<User> getUserById(long userId);
     DbResponse<User> toggleUserStatus(long userId, String status);
+    DbResponse<ArrayList<User>> getAllUsersByParams(String pararms);
 }

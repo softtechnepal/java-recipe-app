@@ -105,7 +105,7 @@ public class AuthRepositoryImpl implements AuthRepository {
             insertStmt.setString(3, register.getUsername());
             insertStmt.setString(4, register.getFirstName());
             insertStmt.setString(5, register.getLastName());
-            insertStmt.setBoolean(6, false); // todo Assuming new users are not admins by default
+            insertStmt.setBoolean(6, true); // todo Assuming new users are not admins by default
             insertStmt.executeUpdate();
         }
     }
