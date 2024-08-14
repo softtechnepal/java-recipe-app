@@ -8,8 +8,12 @@ import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 import com.example.recipe.repositories.iuser.UserRepository;
 import com.example.recipe.services.UserDetailStore;
+import com.example.recipe.services.UserService;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.utils.DatabaseThread;
 import com.example.recipe.utils.ImageUtil;
+import com.example.recipe.utils.NavigationUtil;
+import com.example.recipe.utils.PasswordUtil;
 import com.example.recipe.utils.PasswordUtil;
 
 import java.io.File;
@@ -18,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class UserRepositoryImpl implements IAdminUserRepository, UserRepository {
@@ -26,7 +31,7 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
     public DbResponse<ArrayList<User>> getAllUsers() {
         ArrayList<User> users = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT * FROM users ORDER BY user_id DESC";
+            String query = "SELECT * FROM users WHERE is_admin  = false ORDER BY user_id DESC";
             try (PreparedStatement st = conn.prepareStatement(query)) {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
@@ -205,5 +210,49 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
             return new DbResponse.Failure<>(e.getMessage());
         }
         return new DbResponse.Success<>("Get users by params success", users);
+    }
+
+    @Override
+    public DbResponse<Void> changePassword(String oldPassword, String newPassword) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            // Retrieve hashed password
+            String validateQuery = "SELECT password FROM users WHERE user_id = ?";
+            String hashedPassword;
+            try (PreparedStatement validateStmt = conn.prepareStatement(validateQuery)) {
+                validateStmt.setLong(1, getCurrentUserId());
+                ResultSet rs = validateStmt.executeQuery();
+                if (rs.next()) {
+                    hashedPassword = rs.getString("password");
+                } else {
+                    return new DbResponse.Failure<>("User not found");
+                }
+            }
+
+            // Verify old password
+            if (!PasswordUtil.verifyPassword(oldPassword, hashedPassword)) {
+                return new DbResponse.Failure<>("Old password is incorrect");
+            }
+
+            // Update to new password
+            String updateQuery = "UPDATE users SET password = ? WHERE user_id = ?";
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, PasswordUtil.hashPassword(newPassword));
+                updateStmt.setLong(2, getCurrentUserId());
+                int rowsAffected = updateStmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    return new DbResponse.Failure<>("Failed to update password");
+                }
+                NavigationUtil.navigateTo("login-view.fxml");
+            }
+        } catch (Exception e) {
+            logger.error("Error while changing password", e);
+            return new DbResponse.Failure<>(e.getMessage());
+        }
+        return new DbResponse.Success<>("Password changed successfully", null);
+    }
+
+
+    private long getCurrentUserId() {
+       return UserDetailStore.getInstance().getUserId();
     }
 }

@@ -7,13 +7,18 @@ import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
@@ -45,6 +50,10 @@ public class RecipeController {
     public TextField searchInput;
     @FXML
     public TableView<Recipe> recipeTable;
+    @FXML
+    public Text totalRecipesText;
+    @FXML
+    public ComboBox<String> sortByValue;
 
     private final AdminRecipeService recipeService = new AdminRecipeService();
     private final AdminUserService userService = new AdminUserService();
@@ -58,14 +67,27 @@ public class RecipeController {
         });
     }
 
+    Task<Void> searchTask;
+
     private void searchRecipe(String newValue) {
-        DbResponse<ArrayList<Recipe>> response = recipeService.searchRecipe(newValue);
-        if (response.isSuccess()) {
-            ArrayList<Recipe> recipeArrayList = response.getData();
-            recipeTable.getItems().setAll(recipeArrayList);
-        } else {
-            logger.error("Error retrieving data: " + response.getMessage());
+        if (searchTask != null && searchTask.isRunning()) {
+            searchTask.cancel();
         }
+        searchTask = new Task<>() {
+            @Override
+            protected Void call() {
+                recipeService.searchRecipe(newValue, (response -> {
+                    if (response.isSuccess()) {
+                        recipeTable.getItems().setAll(response.getData());
+                    } else {
+                        logger.error("Error retrieving data: " + response.getMessage());
+                    }
+                }));
+                return null;
+            }
+        };
+
+        new Thread(searchTask).start();
     }
 
     private void configureTable() {
@@ -80,44 +102,10 @@ public class RecipeController {
             String datePart = parts[0];
             return new SimpleStringProperty(datePart);
         });
-        category.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<ArrayList<String>> response = recipeService.getCategoriesByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                ArrayList<String> categories = response.getData();
-                return new SimpleStringProperty(String.join(", ", categories));
-            } else {
-                return new SimpleStringProperty("Unknown");
-            }
-        });
-        ingredients.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<ArrayList<String>> response = recipeService.getIngredientsByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                ArrayList<String> ingredients = response.getData();
-                return new SimpleStringProperty(String.join(", ", ingredients));
-            } else {
-                return new SimpleStringProperty("Unknown");
-            }
-        });
-        totalReviews.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<Integer> response = recipeService.getTotalReviewsByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                return new SimpleIntegerProperty(response.getData()).asObject();
-            } else {
-                return new SimpleIntegerProperty(0).asObject();
-            }
-        });
-        totalSaved.setCellValueFactory(cellData -> {
-            Recipe recipe = cellData.getValue();
-            DbResponse<Integer> response = recipeService.getTotalSavedByRecipeId(recipe.getRecipeId());
-            if (response.isSuccess()) {
-                return new SimpleIntegerProperty(response.getData()).asObject();
-            } else {
-                return new SimpleIntegerProperty(0).asObject();
-            }
-        });
+        totalReviews.setCellValueFactory(new PropertyValueFactory<>("totalReviews"));
+        totalSaved.setCellValueFactory(new PropertyValueFactory<>("totalSaved"));
+        category.setCellValueFactory(new PropertyValueFactory<>("categories"));
+        ingredients.setCellValueFactory(new PropertyValueFactory<>("ingredients"));
         // Add buttons to the actions column
         actions.setCellFactory(new Callback<TableColumn<Recipe, Void>, TableCell<Recipe, Void>>() {
             @Override
@@ -156,6 +144,7 @@ public class RecipeController {
             ArrayList<Recipe> recipeArrayList = response.getData();
             Thread thread = new Thread(() -> {
                 recipeTable.getItems().setAll(recipeArrayList);
+                totalRecipesText.setText("List of Recipes (Total Recipes: " + recipeArrayList.size() + ")");
             });
             new Thread(thread).start();
         } else {
@@ -182,6 +171,40 @@ public class RecipeController {
         } else {
             logger.error("Error retrieving user: " + response.getMessage());
             return "Unknown User";
+        }
+    }
+
+    public void handleSortByValue(ActionEvent actionEvent) {
+        String selectedValue = sortByValue.getValue();
+        if (selectedValue != null) {
+            sortTableData(selectedValue);
+        }
+    }
+
+    private void sortTableData(String sortBy) {
+        DbResponse<ArrayList<Recipe>> response = recipeService.getAllRecipes();
+        if (response.isSuccess()) {
+            ArrayList<Recipe> recipeArrayList = response.getData();
+            switch (sortBy) {
+                case "Sort By title in descending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getTitle));
+                    break;
+                case "Sort By title in ascending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getTitle).reversed());
+                    break;
+                case "Sort By created date in ascending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getCreatedAt));
+                    break;
+                case "Sort By created date in descending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getCreatedAt).reversed());
+                    break;
+                default:
+                    logger.error("Unknown sort option: " + sortBy);
+                    return;
+            }
+            recipeTable.getItems().setAll(recipeArrayList);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
         }
     }
 }

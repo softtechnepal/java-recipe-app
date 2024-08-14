@@ -10,6 +10,9 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.control.ComboBox?>
 <BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.admin.CategoryController">
     <center>
         <VBox fx:id="containerVBox" styleClass="table-container" BorderPane.alignment="CENTER">
@@ -25,10 +28,19 @@
     <top>
         <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
             <children>
-                <Text styleClass="table-header-main" text="List of Categories" />
+                <Text fx:id="totalCategoriesText" styleClass="table-header-main" text="List of Categories (Total: 0)" />
                 <Text styleClass="table-header-desc" text="This is the list of categories that the admin creates so the user can be able to add it in recipes" />
-                <HBox spacing="300.0" VBox.vgrow="ALWAYS" >
+                <HBox spacing="20" VBox.vgrow="ALWAYS" >
                     <TextField fx:id="searchInput" promptText="Search by category name...." styleClass="table-header-search" HBox.hgrow="ALWAYS"/>
+
+                    <ComboBox fx:id="sortByValue" promptText="Sort By" minHeight="40" minWidth="300" onAction="#handleSortByValue">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Sort By Name in descending"/>
+                                <String fx:value="Sort By Name in ascending"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
                     <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#handleAddCategory" text="Add New Category" >
                     </Button>
                 </HBox>

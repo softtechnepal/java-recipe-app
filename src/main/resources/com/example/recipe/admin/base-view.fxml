@@ -39,6 +39,12 @@
                     label="Users"
                     iconPath="assets/sidemenu/user.png"
                     activeIconPath="assets/sidemenu/user_active.png"/>
+            <CustomMenuItem
+                    fx:id="changePwdMenuItem"
+                    navigateToPath="admin/change-password.fxml"
+                    label="Change Password"
+                    iconPath="assets/sidemenu/key.png"
+                    activeIconPath="assets/sidemenu/key_active.png"/>
         </VBox>
         <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
             <CustomMenuItem

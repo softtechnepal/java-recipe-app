@@ -11,17 +11,23 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class CategoryController {
+    @FXML
+    public ComboBox sortByValue;
+    @FXML
+    public Text totalCategoriesText;
     @FXML
     private TableView<Category> categoryTable;
     @FXML
@@ -42,6 +48,32 @@ public class CategoryController {
         searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
             searchCategories(newValue);
         });
+    }
+
+    @FXML
+    public void handleSortByValue() {
+        String selectedValue = (String) sortByValue.getValue();
+        if (selectedValue != null) {
+            sortTableData(selectedValue);
+        }
+    }
+
+    private void sortTableData(String sortBy) {
+        DbResponse<ArrayList<Category>> response = categoryService.getAllCategories();
+        if (response.isSuccess()) {
+            ArrayList<Category> categoryArrayList = response.getData();
+            switch (sortBy) {
+                case "Sort By Name in ascending":
+                    categoryArrayList.sort(Comparator.comparing(Category::getCategoryName));
+                    break;
+                case "Sort By Name in descending":
+                    categoryArrayList.sort(Comparator.comparing(Category::getCategoryName).reversed());
+                    break;
+            }
+            categoryTable.getItems().setAll(categoryArrayList);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
+        }
     }
 
     private void configureTable() {
@@ -97,6 +129,7 @@ public class CategoryController {
         if (response.isSuccess()) {
             ArrayList<Category> categoryArrayList = response.getData();
             categoryTable.getItems().setAll(categoryArrayList);
+            totalCategoriesText.setText("List of Categories (Total: " +  categoryArrayList.size() + ")");
         } else {
             logger.error("Error retrieving data: " + response.getMessage());
         }

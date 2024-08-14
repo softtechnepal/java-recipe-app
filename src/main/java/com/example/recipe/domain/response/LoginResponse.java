@@ -8,8 +8,9 @@ public class LoginResponse {
     private String firstName;
     private String lastName;
     private boolean isAdmin;
+    private String status;
 
-    public LoginResponse(String token, int id, String username, String email, String firstName, String lastName, boolean isAdmin) {
+    public LoginResponse(String token, int id, String username, String email, String firstName, String lastName, boolean isAdmin, String status) {
         this.token = token;
         this.id = id;
         this.username = username;
@@ -17,6 +18,7 @@ public class LoginResponse {
         this.firstName = firstName;
         this.lastName = lastName;
         this.isAdmin = isAdmin;
+        this.status = status;
     }
 
     public String getToken() {
@@ -75,6 +77,14 @@ public class LoginResponse {
         isAdmin = admin;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "LoginResponse{" +
@@ -85,6 +95,7 @@ public class LoginResponse {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", isAdmin=" + isAdmin +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

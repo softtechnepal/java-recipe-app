@@ -30,4 +30,8 @@ public class AdminUserService {
     public DbResponse<ArrayList<User>> getAllUsersByParams(String pararms){
         return userRepository.getAllUsersByParams(pararms);
     }
+
+    public DbResponse<Void> changePassword(String oldPassword, String newPassword){
+        return userRepository.changePassword(oldPassword, newPassword);
+    }
 }

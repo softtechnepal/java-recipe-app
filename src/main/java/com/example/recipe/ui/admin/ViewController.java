@@ -23,8 +23,9 @@ public class ViewController {
     @FXML
     public CustomMenuItem logoutMenuItem;
     @FXML
-
     public ImageView imageView;
+    @FXML
+    public CustomMenuItem changePwdMenuItem;
     @FXML
     private CustomMenuItem activeMenuItem;
 
@@ -34,7 +35,7 @@ public class ViewController {
         imageView.setImage(logoImage);
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
-        List<CustomMenuItem> menuItems = List.of(dashboardMenuItem, categoryMenuitem, recipeMenuItem, userMenuItem);
+        List<CustomMenuItem> menuItems = List.of(dashboardMenuItem, categoryMenuitem, recipeMenuItem, userMenuItem,changePwdMenuItem);
 
         for (CustomMenuItem menuItem : menuItems) {
             menuItem.deactivate();

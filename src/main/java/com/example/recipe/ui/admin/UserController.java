@@ -12,15 +12,22 @@ import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class UserController {
+    @FXML
+    public Text totalUsersText;
+    @FXML
+    public ComboBox<String> sortByValue;
     @FXML
     private TableView<User> userTable;
     @FXML
@@ -55,6 +62,41 @@ public class UserController {
         searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
             searchUser(newValue);
         });
+    }
+
+    @FXML
+    public void handleSortByValue() {
+        String selectedValue = sortByValue.getValue();
+        if (selectedValue != null) {
+            sortTableData(selectedValue);
+        }
+    }
+
+    private void sortTableData(String sortBy) {
+        DbResponse<ArrayList<User>> response = userService.getAllUsers();
+        if (response.isSuccess()) {
+            ArrayList<User> userArrayList = response.getData();
+            switch (sortBy) {
+                case "Sort By username in ascending":
+                    userArrayList.sort(Comparator.comparing(User::getUsername));
+                    break;
+                case "Sort By username in descending":
+                    userArrayList.sort(Comparator.comparing(User::getUsername).reversed());
+                    break;
+                case "Sort By created date in ascending":
+                    userArrayList.sort(Comparator.comparing(User::getCreated_at));
+                    break;
+                case "Sort By created date in descending":
+                    userArrayList.sort(Comparator.comparing(User::getCreated_at).reversed());
+                    break;
+                default:
+                    logger.error("Unknown sort option: " + sortBy);
+                    return;
+            }
+            userTable.getItems().setAll(userArrayList);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
+        }
     }
 
     private void configureTable() {
@@ -139,6 +181,7 @@ public class UserController {
         if (response.isSuccess()) {
             ArrayList<User> userList = response.getData();
             userTable.getItems().setAll(userList);
+            totalUsersText.setText("List of Users (Total: " + userList.size() + ")");
         } else {
             logger.error("Error retrieving data: " + response.getMessage());
         }

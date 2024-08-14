@@ -138,7 +138,7 @@ public class CategoryRepositoryImpl implements IAdminCategoryRepository, IUserCa
     public DbResponse<ArrayList<Category>> getAllByParams(String params) {
         ArrayList<Category> categories = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT * FROM categories WHERE category_name ILIKE ?";
+            String query = "SELECT * FROM categories WHERE category_name ILIKE ? ORDER BY category_id DESC";
             try (PreparedStatement st = conn.prepareStatement(query)) {
                 st.setString(1, "%" + params + "%");
                 ResultSet rs = st.executeQuery();
