@@ -71,7 +71,7 @@ public class LoginController {
                 NavigationUtil.navigateTo("admin/base-view.fxml");
                 return;
             }
-            if (response.getData().getStatus().equals(UserStatus.DISABLED.name())) {
+            if (response.getData().getStatus().equalsIgnoreCase(UserStatus.DISABLED.name())) {
                 DialogUtil.showErrorDialog("Login Failed", "Your account is disabled. Please contact the administrator.");
                 return;
             }
