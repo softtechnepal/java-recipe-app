@@ -26,12 +26,12 @@
                                        text="Russian Salad" VBox.vgrow="ALWAYS"/>
                             </children>
                         </VBox>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                       <!-- <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../../assets/ic_start.png"/>
                             </image>
                         </ImageView>
-                        <Label fx:id="rating" style="-fx-text-fill: #ADADAD" text="4.5"/>
+                        <Label fx:id="rating" style="-fx-text-fill: #ADADAD" text="4.5"/>-->
                     </children>
                 </HBox>
                 <HBox prefHeight="25.0" prefWidth="284.0" spacing="12.0">

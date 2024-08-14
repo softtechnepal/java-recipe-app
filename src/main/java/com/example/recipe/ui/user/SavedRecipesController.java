@@ -4,6 +4,7 @@ import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -14,10 +15,13 @@ public class SavedRecipesController extends BaseRecipeListing {
     public GridPane menuGrid;
     @FXML
     public VBox progressContainer;
+    @FXML
+    public TextField searchField;
 
     @FXML
     public void initialize() {
         fetchSavedRecipes();
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchRecipes(newValue));
     }
 
     private void fetchSavedRecipes() {

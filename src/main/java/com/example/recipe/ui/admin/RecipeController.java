@@ -1,6 +1,5 @@
 package com.example.recipe.ui.admin;
 
-import com.example.recipe.domain.Category;
 import com.example.recipe.domain.Recipe;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;

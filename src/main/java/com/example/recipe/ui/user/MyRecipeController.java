@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -21,6 +22,8 @@ public class MyRecipeController extends BaseRecipeListing {
     public Button btnAddRecipe;
     @FXML
     public VBox progressContainer;
+    @FXML
+    public TextField searchField;
 
     private static final UserRecipeService userRecipeService = new UserRecipeService();
 
@@ -28,6 +31,9 @@ public class MyRecipeController extends BaseRecipeListing {
     public void initialize() {
         btnAddRecipe.setOnAction(this::onAddRecipe);
         fetchRecipes();
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchRecipes(newValue);
+        });
     }
 
     private void onAddRecipe(ActionEvent actionEvent) {

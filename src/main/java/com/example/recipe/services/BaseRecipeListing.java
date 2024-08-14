@@ -127,7 +127,8 @@ public abstract class BaseRecipeListing {
     }
 
     protected void searchRecipes(String query) {
-        List<UiModel> filteredResult = menuComponentStore.getAllMenuModel().stream().filter(vBox -> {
+        var currentRecipes = menuComponentStore.getMenuModel(getMenuListingType());
+        List<UiModel> filteredResult = currentRecipes.stream().filter(vBox -> {
             MenuItemController controller = vBox.getMenuItemController();
             return controller.getRecipe().getTitle().toLowerCase().contains(query.toLowerCase());
         }).toList();
