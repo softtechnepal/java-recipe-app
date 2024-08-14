@@ -4,6 +4,7 @@ import com.example.recipe.Constants;
 import com.example.recipe.domain.common.RefreshCallback;
 import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.domain.recipe.Recipe;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
@@ -85,21 +86,25 @@ public class MenuItemController {
     }
 
     public void onSave(MouseEvent mouseEvent) {
-        userRecipeService.addToFavourite(recipe.getRecipeId(), response -> {
-            if (!response.isSuccess()) {
-                DialogUtil.showErrorDialog("Error", response.getMessage());
-                return;
-            }
-            if (!response.getData()) {
-                savedImage.setImage(new Image("file:src/main/resources/assets/ic_like.png"));
-            } else {
-                savedImage.setImage(new Image("file:src/main/resources/assets/ic_like_filled.png"));
-            }
+        if (!UserDetailStore.getInstance().isLoggedIn()) {
+            DialogUtil.showInfoDialog("Info", "Please login to save the recipe");
+        } else {
+            userRecipeService.addToFavourite(recipe.getRecipeId(), response -> {
+                if (!response.isSuccess()) {
+                    DialogUtil.showErrorDialog("Error", response.getMessage());
+                    return;
+                }
+                if (!response.getData()) {
+                    savedImage.setImage(new Image("file:src/main/resources/assets/ic_like.png"));
+                } else {
+                    savedImage.setImage(new Image("file:src/main/resources/assets/ic_like_filled.png"));
+                }
 
-            if (refreshCallback != null) {
-                refreshCallback.refresh();
-            }
-        });
+                if (refreshCallback != null) {
+                    refreshCallback.refresh();
+                }
+            });
+        }
         mouseEvent.consume();
     }
 
