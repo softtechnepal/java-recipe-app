@@ -5,6 +5,7 @@ import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
+import com.example.recipe.services.user.UserRecipeService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
@@ -153,14 +154,16 @@ public class RecipeController {
     }
 
     private void handleDeleteAction(long recipeId) {
-        DbResponse<Recipe> res = recipeService.deleteRecipe(recipeId);
-        if (res.isSuccess()) {
-            showInfoDialog("Success", "Recipe deleted successfully.");
-            loadTableData();
-        } else {
-            logger.error("Error deleting recipe: " + res.getMessage());
-            showErrorDialog("Error", "Failed to delete recipe: " + res.getMessage());
-        }
+        UserRecipeService recipeService = new UserRecipeService();
+        recipeService.deleteRecipe(recipeId, (response -> {
+            if (response.isSuccess()) {
+                showInfoDialog("Success", "Recipe deleted successfully.");
+                loadTableData();
+            } else {
+                logger.error("Error deleting recipe: " + response.getMessage());
+                showErrorDialog("Error", "Failed to delete recipe: " + response.getMessage());
+            }
+        }));
     }
 
     private String getUserName(long userId) {

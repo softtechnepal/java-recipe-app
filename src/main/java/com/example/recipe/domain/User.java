@@ -100,7 +100,7 @@ public class User {
     }
 
     public String getStatus() {
-        return status;
+        return status.toUpperCase();
     }
 
     public void setStatus(String status) {

@@ -4,6 +4,7 @@ import com.example.recipe.config.DatabaseConfig;
 import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DatabaseCallback;
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.enums.UserStatus;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 import com.example.recipe.repositories.iuser.UserRepository;
@@ -132,23 +133,24 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
 
     @Override
     public DbResponse<User> toggleUserStatus(long userId, String status) {
-        if (!status.equals("active") && !status.equals("disabled")) {
+        if (!status.equalsIgnoreCase(UserStatus.ACTIVE.name()) && !status.equalsIgnoreCase(UserStatus.DISABLED.name())) {
             return new DbResponse.Failure<>("Invalid status parameter");
         }
+        logger.info("Updating user status to {}", status);
         String query = "UPDATE users SET status = ? WHERE user_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement st = conn.prepareStatement(query)) {
-            st.setString(1, status);
+            st.setString(1, status.toUpperCase());
             st.setLong(2, userId);
             int rowsAffected = st.executeUpdate();
             if (rowsAffected == 0) {
                 return new DbResponse.Failure<>("User not found");
             }
+            return new DbResponse.Success<>("User status updated to " + status, null);
         } catch (Exception e) {
             logger.error("Error while updating user status", e);
             return new DbResponse.Failure<>(e.getMessage());
         }
-        return new DbResponse.Success<>("User status updated to " + status, null);
     }
 
     @Override
@@ -253,6 +255,6 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
 
 
     private long getCurrentUserId() {
-       return UserDetailStore.getInstance().getUserId();
+        return UserDetailStore.getInstance().getUserId();
     }
 }

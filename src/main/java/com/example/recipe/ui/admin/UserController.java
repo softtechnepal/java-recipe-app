@@ -8,6 +8,7 @@ import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
+import com.example.recipe.domain.enums.UserStatus;
 import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -135,14 +136,17 @@ public class UserController {
                 return new TableCell<User, Void>() {
                     private final ToggleButton toggleButton = new ToggleButton("Active");
                     private final HBox hBox = new HBox(10, toggleButton);
+
                     {
                         toggleButton.getStyleClass().add("button");
                     }
+
                     {
                         toggleButton.setOnAction(event -> {
                             User user = getTableView() != null ? getTableView().getItems().get(getIndex()) : null;
                             if (user != null) {
-                                String newStatus = toggleButton.isSelected() ? "active" : "disabled";
+                                // String newStatus = toggleButton.isSelected() ? UserStatus.DISABLED.name() : UserStatus.ACTIVE.name();
+                                String newStatus = user.getStatus().equals(UserStatus.DISABLED.name()) ? UserStatus.ACTIVE.name() : UserStatus.DISABLED.name();
                                 handleStatusChange(user.getUserId(), newStatus);
                             }
                         });

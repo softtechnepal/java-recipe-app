@@ -80,17 +80,20 @@ public class CategoryController {
         categoryId.setCellValueFactory(new PropertyValueFactory<>("categoryId"));
         categoryName.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         // Add buttons to the actions column
-        actions.setCellFactory(new Callback<TableColumn<Category, Void>, TableCell<Category, Void>>() {
+        actions.setCellFactory(new Callback<>() {
             @Override
             public TableCell<Category, Void> call(TableColumn<Category, Void> param) {
-                return new TableCell<Category, Void>() {
+                return new TableCell<>() {
                     private final Button editButton = new Button("Edit");
                     private final Button deleteButton = new Button("Delete");
-                    private final HBox hBox = new HBox(10, editButton, deleteButton);
+
+                    private final HBox hBox = new HBox(10, editButton);
+
                     {
                         editButton.getStyleClass().add("table-header-button");
                         deleteButton.getStyleClass().add("table-header-button");
                     }
+
                     {
                         // Handle delete button action
                         deleteButton.setOnAction(event -> {
