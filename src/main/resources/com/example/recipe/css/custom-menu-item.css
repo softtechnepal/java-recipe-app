@@ -27,7 +27,7 @@
 
 }
 .custom-menu-item.inactive {
-    -fx-background-color: unset;
+    -fx-background-color: transparent;
 }
 
 .custom-menu-item.inactive .label {

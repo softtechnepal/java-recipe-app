@@ -1,6 +1,6 @@
 .side-nav {
         -fx-background-color: #ffffff;
-        -fx-border-color: -border-color;
+        -fx-border-color: -color-primary;
         -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
         -fx-padding: 24px;
         -fx-font-family: 'Poppins', sans-serif;
