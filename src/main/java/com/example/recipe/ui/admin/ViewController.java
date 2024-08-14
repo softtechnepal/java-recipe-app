@@ -1,10 +1,15 @@
 // src/main/java/com/example/recipe/ui/user/DashboardController.java
 package com.example.recipe.ui.admin;
+
 import com.example.recipe.components.CustomMenuItem;
+import com.example.recipe.services.UserDetailStore;
+import com.example.recipe.utils.DialogUtil;
+import com.example.recipe.utils.NavigationUtil;
 import com.example.recipe.utils.SingletonObjects;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.util.List;
@@ -35,7 +40,7 @@ public class ViewController {
         imageView.setImage(logoImage);
         SingletonObjects.getInstance().setMainBox(hBoxContainer);
 
-        List<CustomMenuItem> menuItems = List.of(dashboardMenuItem, categoryMenuitem, recipeMenuItem, userMenuItem,changePwdMenuItem);
+        List<CustomMenuItem> menuItems = List.of(dashboardMenuItem, categoryMenuitem, recipeMenuItem, userMenuItem, changePwdMenuItem);
 
         for (CustomMenuItem menuItem : menuItems) {
             menuItem.deactivate();
@@ -51,5 +56,11 @@ public class ViewController {
         }
         menuItem.activate();
         activeMenuItem = menuItem;
+    }
+
+    public void onLogout(MouseEvent mouseEvent) {
+        if (DialogUtil.showLogoutConfirmation()) {
+            NavigationUtil.logout();
+        }
     }
 }

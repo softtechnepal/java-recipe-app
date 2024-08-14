@@ -51,6 +51,7 @@
                     fx:id="logoutMenuItem"
                     navigateToPath="admin/login-view.fxml"
                     label="Logout"
+                    onMouseClicked="#onLogout"
                     styleClass="sidemenu-logout-class"
                     iconPath="assets/ic_log_out.png"/>
         </VBox>
