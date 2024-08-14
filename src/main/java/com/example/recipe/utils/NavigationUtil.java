@@ -118,14 +118,14 @@ public class NavigationUtil {
         if (navigationStack.isEmpty()) {
             return;
         }
-        NavigationStack currentStack = navigationStack.pop();;
+        NavigationStack currentStack = navigationStack.pop();
+        ;
         synchronized (currentParams) {
             currentParams.clear();
             currentParams.putAll(currentStack.getParams());
         }
         replaceChild(currentStack.getPath());
     }
-
 
     public static class NavigationStack {
         private final String path;
@@ -143,5 +143,11 @@ public class NavigationUtil {
         public Map<String, ?> getParams() {
             return params;
         }
+    }
+
+    public static void clearCache() {
+        navigationStack.clear();
+        currentChild = "";
+        currentParams.clear();
     }
 }

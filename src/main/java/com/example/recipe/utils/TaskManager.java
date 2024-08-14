@@ -40,4 +40,9 @@ public class TaskManager {
             tasks.remove(taskId);
         }
     }
+
+    public void cancelAllTasks() {
+        tasks.values().forEach(Task::cancel);
+        tasks.clear();
+    }
 }
