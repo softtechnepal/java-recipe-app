@@ -7,7 +7,6 @@ import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.dialogs.AddReviewDialog;
 import com.example.recipe.ui.dialogs.ReviewListingDialog;
 import com.example.recipe.utils.*;
-//import com.example.recipe.utils.TextToSpeech;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -330,7 +329,7 @@ public class RecipeDetailController {
     }
 
     public void onBackPressed(MouseEvent mouseEvent) {
-
+        NavigationUtil.goBack();
     }
 
     public void onViewReviews(MouseEvent mouseEvent) {

@@ -377,7 +377,8 @@ public class AddRecipeController {
     }
 
     public void onBackPressed(MouseEvent event) {
-        NavigationUtil.insertChild("my-recipe-view.fxml");
+        logger.info("Back Pressed");
+        NavigationUtil.goBack();
     }
 
     private NutritionalInformation getNutritionalInformation() {
