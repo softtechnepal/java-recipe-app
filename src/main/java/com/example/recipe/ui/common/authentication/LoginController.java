@@ -103,6 +103,6 @@ public class LoginController {
     }
 
     public void handleContinueAsGuest() {
-        // Navigate to home screen as guest
+        NavigationUtil.navigateTo("dashboard-view.fxml");
     }
 }

@@ -60,11 +60,7 @@ public class DashboardController {
 
     public void onLogout(MouseEvent mouseEvent) {
         if (DialogUtil.showLogoutConfirmation()) {
-            NavigationUtil.clearCache();
-            UserDetailStore.getInstance().clear();
-            MenuComponentStore.getInstance().clearAllMenuComponents();
-            TaskManager.getInstance().cancelAllTasks();
-            NavigationUtil.navigateTo(LoginController.LOGIN_ROUTE);
+            NavigationUtil.logout();
         }
 
     }

@@ -1,5 +1,8 @@
 package com.example.recipe.utils;
 
+import com.example.recipe.services.MenuComponentStore;
+import com.example.recipe.services.UserDetailStore;
+import com.example.recipe.ui.common.authentication.LoginController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -85,6 +88,13 @@ public class NavigationUtil {
 
     private static void replaceChild(String fxmlFile) {
         try {
+            logger.error("Navigating to {}", fxmlFile);
+            if (!UserDetailStore.getInstance().isLoggedIn() && !fxmlFile.equals("recipe-view.fxml")) {
+                DialogUtil.showInfoDialog("Login Information", "Please login you explore more features");
+                navigateTo("login-view.fxml");
+                return;
+            }
+
             stopSpeaking();
             currentChild = fxmlFile;
             HBox hBoxContainer = SingletonObjects.getInstance().getMainBox();
@@ -149,5 +159,14 @@ public class NavigationUtil {
         navigationStack.clear();
         currentChild = "";
         currentParams.clear();
+    }
+
+
+    public static void logout() {
+        NavigationUtil.clearCache();
+        UserDetailStore.getInstance().clear();
+        MenuComponentStore.getInstance().clearAllMenuComponents();
+        TaskManager.getInstance().cancelAllTasks();
+        NavigationUtil.navigateTo(LoginController.LOGIN_ROUTE);
     }
 }
