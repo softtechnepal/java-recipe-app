@@ -17,6 +17,7 @@ public class User {
 
     public User() {
     }
+
     public User(long userId, String firstName, String lastName, String username, String email, String gender, Date dob, boolean isAdmin, String status, Date created_at) {
         this.userId = userId;
         this.firstName = firstName;

@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class DashboardController {
 
     private final AdminDashboardService adminDashboard = new AdminDashboardService();
 
-    public void initialize(){
+    public void initialize() {
         // Create and start a thread to load all data
         Thread loadDataThread = new Thread(this::loadAllData);
         loadDataThread.start();
@@ -103,17 +104,14 @@ public class DashboardController {
             VBox userBox = new VBox();
             userBox.getStyleClass().add("user-box");
 
-                String imagePath = (userData.get("profilePicture") != null && !userData.get("profilePicture").isEmpty()) ? userData.get("profilePicture") : "/assets/placeholder_user.png";
-                try {
-                    URL url = new URL("file:" + imagePath);
-                    Image profileImage = new Image(url.toString());
-                    ImageView profilePictureView = new ImageView(profileImage);
-                    profilePictureView.getStyleClass().add("user-profile-picture");
-                    userBox.getChildren().add(profilePictureView);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            String imagePath = (userData.get("profilePicture") != null && !userData.get("profilePicture").isEmpty()) ? userData.get("profilePicture") : "src/main/resources/assets/placeholder_user.png";
+            ImageView profilePictureView = new ImageView();
+            profilePictureView.setFitWidth(100);
+            profilePictureView.setFitHeight(100);
+            profilePictureView.setCache(true);
+            ImageUtil.loadImageAsync(imagePath, profilePictureView);
+            profilePictureView.getStyleClass().add("user-profile-picture");
+            userBox.getChildren().add(profilePictureView);
 
 
             Text fullName = new Text(userData.get("fullName"));
@@ -136,7 +134,7 @@ public class DashboardController {
         }
     }
 
-    private  void  populateTopSavedRecipeList(List<Map<String, String>> topSavedRecipesData) {
+    private void populateTopSavedRecipeList(List<Map<String, String>> topSavedRecipesData) {
         for (Map<String, String> recipeData : topSavedRecipesData) {
             VBox recipeBox = new VBox();
             recipeBox.getStyleClass().add("recipe-box");

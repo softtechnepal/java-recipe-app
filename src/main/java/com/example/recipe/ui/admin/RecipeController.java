@@ -8,6 +8,7 @@ import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -18,6 +19,7 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
@@ -58,7 +60,6 @@ public class RecipeController {
     private final AdminUserService userService = new AdminUserService();
 
 
-
     public void initialize() {
         configureTable();
         loadTableData();
@@ -67,14 +68,27 @@ public class RecipeController {
         });
     }
 
+    Task<Void> searchTask;
+
     private void searchRecipe(String newValue) {
-        DbResponse<ArrayList<Recipe>> response = recipeService.searchRecipe(newValue);
-        if (response.isSuccess()) {
-            ArrayList<Recipe> recipeArrayList = response.getData();
-            recipeTable.getItems().setAll(recipeArrayList);
-        } else {
-            logger.error("Error retrieving data: " + response.getMessage());
+        if (searchTask != null && searchTask.isRunning()) {
+            searchTask.cancel();
         }
+        searchTask = new Task<>() {
+            @Override
+            protected Void call() {
+                recipeService.searchRecipe(newValue, (response -> {
+                    if (response.isSuccess()) {
+                        recipeTable.getItems().setAll(response.getData());
+                    } else {
+                        logger.error("Error retrieving data: " + response.getMessage());
+                    }
+                }));
+                return null;
+            }
+        };
+
+        new Thread(searchTask).start();
     }
 
     private void configureTable() {

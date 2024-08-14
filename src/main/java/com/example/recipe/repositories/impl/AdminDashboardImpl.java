@@ -1,6 +1,7 @@
 package com.example.recipe.repositories.impl;
 
 import com.example.recipe.domain.AdminDashboard;
+import com.example.recipe.domain.User;
 import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.repositories.iadmin.IAdminDashboard;
 import com.example.recipe.config.DatabaseConfig;
@@ -17,18 +18,19 @@ import java.util.concurrent.CompletableFuture;
 public class AdminDashboardImpl implements IAdminDashboard {
     @Override
     public DbResponse<AdminDashboard> populateDashboard() {
-        CompletableFuture<Integer> totalUsersFuture = CompletableFuture.supplyAsync(() -> getCount("SELECT COUNT(*) FROM users WHERE is_admin = false"));
-        CompletableFuture<Integer> totalActiveUsersFuture = CompletableFuture.supplyAsync(() -> getCount("SELECT " +
-                "COUNT(*) FROM users WHERE is_admin = false"));
-        CompletableFuture<Integer> totalRecipesFuture = CompletableFuture.supplyAsync(() -> getCount("SELECT COUNT(*) FROM recipes"));
-        CompletableFuture<Integer> totalCategoriesFuture = CompletableFuture.supplyAsync(() -> getCount("SELECT COUNT(*) FROM categories"));
-        CompletableFuture<Integer> totalReviewsFuture = CompletableFuture.supplyAsync(() -> getCount("SELECT COUNT(*) FROM reviews"));
-        CompletableFuture<Integer> totalIngredientsFuture = CompletableFuture.supplyAsync(() -> getCount("SELECT COUNT(*) FROM ingredients"));
-        CompletableFuture<Void> allFutures = CompletableFuture.allOf(
-                totalUsersFuture, totalActiveUsersFuture, totalRecipesFuture,
-                totalCategoriesFuture, totalReviewsFuture, totalIngredientsFuture
-        );
-        try {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            CompletableFuture<Integer> totalUsersFuture = CompletableFuture.supplyAsync(() -> getCount(connection, "SELECT COUNT(*) FROM users WHERE is_admin = false"));
+            CompletableFuture<Integer> totalActiveUsersFuture = CompletableFuture.supplyAsync(() -> getCount(connection, "SELECT " +
+                    "COUNT(*) FROM users WHERE is_admin = false"));
+            CompletableFuture<Integer> totalRecipesFuture = CompletableFuture.supplyAsync(() -> getCount(connection, "SELECT COUNT(*) FROM recipes"));
+            CompletableFuture<Integer> totalCategoriesFuture = CompletableFuture.supplyAsync(() -> getCount(connection, "SELECT COUNT(*) FROM categories"));
+            CompletableFuture<Integer> totalReviewsFuture = CompletableFuture.supplyAsync(() -> getCount(connection, "SELECT COUNT(*) FROM reviews"));
+            CompletableFuture<Integer> totalIngredientsFuture = CompletableFuture.supplyAsync(() -> getCount(connection, "SELECT COUNT(*) FROM ingredients"));
+            CompletableFuture<Void> allFutures = CompletableFuture.allOf(
+                    totalUsersFuture, totalActiveUsersFuture, totalRecipesFuture,
+                    totalCategoriesFuture, totalReviewsFuture, totalIngredientsFuture
+            );
+
             allFutures.join();
             AdminDashboard dashboard = new AdminDashboard();
             dashboard.setUsersCount(totalUsersFuture.get());
@@ -44,9 +46,8 @@ public class AdminDashboardImpl implements IAdminDashboard {
         }
     }
 
-    private int getCount(String query) {
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
+    private int getCount(Connection connection, String query) {
+        try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -160,31 +161,31 @@ public class AdminDashboardImpl implements IAdminDashboard {
 
     @Override
     public List<Map<String, String>> getTopSavedRecipes() {
-            String query =  "SELECT recipes.title as recipe_name, COUNT(wishlist.recipe_id) as saved_count, users.username, " +
-                    "recipes.created_at " +
-                    "FROM recipes " +
-                    "JOIN wishlist ON recipes.recipe_id = wishlist.recipe_id " +
-                    "JOIN users ON recipes.user_id = users.user_id " +
-                    "GROUP BY recipes.recipe_id, recipes.title, users.username, recipes.created_at " +
-                    "ORDER BY saved_count DESC " +
-                    "LIMIT 5";
-            List<Map<String, String>> topSavedRecipesData = new ArrayList<>();
+        String query = "SELECT recipes.title as recipe_name, COUNT(wishlist.recipe_id) as saved_count, users.username, " +
+                "recipes.created_at " +
+                "FROM recipes " +
+                "JOIN wishlist ON recipes.recipe_id = wishlist.recipe_id " +
+                "JOIN users ON recipes.user_id = users.user_id " +
+                "GROUP BY recipes.recipe_id, recipes.title, users.username, recipes.created_at " +
+                "ORDER BY saved_count DESC " +
+                "LIMIT 5";
+        List<Map<String, String>> topSavedRecipesData = new ArrayList<>();
 
-            try (Connection conn = DatabaseConfig.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Map<String, String> recipeData = new HashMap<>();
-                    recipeData.put("recipeName", rs.getString("recipe_name"));
-                    recipeData.put("username", rs.getString("username"));
-                    recipeData.put("savedCount", String.valueOf(rs.getInt("saved_count")));
-                    recipeData.put("createdDate", rs.getString("created_at"));
-                    topSavedRecipesData.add(recipeData);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Map<String, String> recipeData = new HashMap<>();
+                recipeData.put("recipeName", rs.getString("recipe_name"));
+                recipeData.put("username", rs.getString("username"));
+                recipeData.put("savedCount", String.valueOf(rs.getInt("saved_count")));
+                recipeData.put("createdDate", rs.getString("created_at"));
+                topSavedRecipesData.add(recipeData);
             }
-            return topSavedRecipesData;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return topSavedRecipesData;
+    }
 
 }
