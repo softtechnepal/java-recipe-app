@@ -54,7 +54,7 @@
                                                        pickOnBounds="true"
                                                        cache="true">
                                                 <image>
-                                                    <Image url="@../../../assets/users.png"/>
+                                                    <Image url="@../../../assets/profile_placeholder_img.png"/>
                                                 </image>
                                                 <clip>
                                                     <Circle radius="20" centerX="20" centerY="20"/>

@@ -14,7 +14,7 @@
             <VBox alignment="CENTER" styleClass="dashboard-pane">
                 <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
                     <image>
-                        <Image url="@../../../../assets/users.png" />
+                        <Image url="@../../../../assets/profile_placeholder_img.png" />
                     </image>
                 </ImageView>
                 <Text text="Total Users" styleClass="dashboard-pane-title"/>

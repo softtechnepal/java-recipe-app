@@ -75,7 +75,7 @@ public class ReviewListingDialog extends Stage {
         imageView.setClip(ImageUtil.createCircle(50, 50));
         String profilePicture = review.getUser().getProfilePicture();
         if (profilePicture == null || profilePicture.isEmpty()) {
-            profilePicture = "src/main/resources/assets/users.png";
+            profilePicture = "src/main/resources/assets/profile_placeholder_img.png";
         }
         ImageUtil.loadImageAsync(profilePicture, imageView);
 
