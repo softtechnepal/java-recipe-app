@@ -76,6 +76,7 @@ public class RecipeController extends BaseRecipeListing {
             for (int i = 0; i < categories.size(); i++) {
                 Label categoryLabel = new Label(categories.get(i).getCategoryName());
                 categoryLabel.getStyleClass().add("grid-item");
+
                 int row = i / rowItems;
                 int col = i % rowItems;
                 categoryGrid.add(categoryLabel, col, row);
