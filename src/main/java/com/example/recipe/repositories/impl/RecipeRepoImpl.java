@@ -232,7 +232,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     @Override
     public void getRecipeByUserId(long userId, DatabaseCallback<List<Recipe>> callback) {
-        final String SELECT_RECIPE_BY_ID_QUERY = "SELECT * FROM recipes WHERE user_id = ?";
+        final String SELECT_RECIPE_BY_ID_QUERY = "SELECT * FROM recipes WHERE user_id = ? ORDER BY created_at DESC";
 
         DatabaseThread.runDataOperation(() -> {
             try (
@@ -258,6 +258,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                          LEFT JOIN recipecategories rc ON r.recipe_id = rc.recipe_id
                          LEFT JOIN categories c ON rc.category_id = c.category_id
                          LEFT JOIN wishlist w ON r.recipe_id = w.recipe_id AND w.user_id = ?
+                ORDER BY r.created_at DESC;
                 """;
 
         DatabaseThread.runDataOperation(() -> {
@@ -288,7 +289,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     public void updateRecipe(Recipe recipe, DatabaseCallback<Recipe> callback) {
         String UPDATE_RECIPE_QUERY = """
                     UPDATE recipes
-                    SET title = ?, description = ?, image = ?, video_url = ?, warnings = ?, updated_at = NOW()
+                    SET title = ?, description = ?, image = ?, video_url = ?, warnings = ?,total_preparation_time = ?, number_of_servings = ?, updated_at = NOW()
                     WHERE recipe_id = ? AND user_id = ?
                 """;
         DatabaseThread.runDataOperation(() -> {
@@ -305,8 +306,10 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                     statement.setString(3, imagePath);
                     statement.setString(4, recipe.getVideoUrl());
                     statement.setString(5, recipe.getWarnings());
-                    statement.setLong(6, recipe.getRecipeId());
-                    statement.setLong(7, UserDetailStore.getInstance().getUserId());
+                    statement.setInt(6, recipe.getPrepTime() == null ? 0 : recipe.getPrepTime());
+                    statement.setInt(7, recipe.getTotalServings() == null ? 0 : recipe.getTotalServings());
+                    statement.setLong(8, recipe.getRecipeId());
+                    statement.setLong(9, UserDetailStore.getInstance().getUserId());
                     statement.executeUpdate();
 
                     // Update Ingredients

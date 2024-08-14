@@ -10,7 +10,12 @@
     /*-fx-min-width: 1000px;*/
     /*-fx-background-color: -color-dark;*/
     /*-fx-background-color: -background-color;*/
+    -fx-background-color: white;
     -fx-font-family: -font-family;
+}
+
+.scroll-pane, .scroll-pane > .viewport, grid-pane, .scroll-pane > .content {
+    -fx-background-color: white;
 }
 
 .label {
