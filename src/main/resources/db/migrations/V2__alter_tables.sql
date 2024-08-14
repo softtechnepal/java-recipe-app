@@ -44,3 +44,7 @@ ALTER TABLE reviews
 
 ALTER TABLE users
     ADD COLUMN profile_picture TEXT DEFAULT NULL;
+
+ALTER TABLE recipes
+    ADD COLUMN number_of_servings INT DEFAULT 0,
+    ADD COLUMN total_preparation_time INT DEFAULT 0;

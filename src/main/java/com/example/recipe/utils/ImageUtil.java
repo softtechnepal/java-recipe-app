@@ -2,8 +2,10 @@ package com.example.recipe.utils;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -96,5 +98,14 @@ public class ImageUtil {
             writer.setOutput(outputStream);
             writer.write(null, new javax.imageio.IIOImage(image, null, null), param);
         }
+    }
+
+    public static Node createCircle(int width, int height) {
+        Circle circle = new Circle();
+        double radius = Math.min(width, height) / 2.0;
+        circle.setRadius(radius);
+        circle.setCenterX(width / 2.0);
+        circle.setCenterY(height / 2.0);
+        return circle;
     }
 }

@@ -84,6 +84,15 @@ public class AddRecipeController {
     @FXML
     public Button btnUpdateRecipe;
     @FXML
+    public TextField tfTotalServings;
+    @FXML
+    public Label totalServingError;
+    @FXML
+    public TextField tvPreparationTime;
+    @FXML
+    public Label preparationTimeError;
+
+    @FXML
     private TableView<Ingredient> ingredientsTable;
     @FXML
     private TableColumn<Ingredient, String> ingredientNameColumn;
@@ -210,6 +219,8 @@ public class AddRecipeController {
         textTitle.setText("Edit Recipe");
         tfRecipeName.setText(updateRecipe.getTitle());
         tfRecipeDescription.setText(updateRecipe.getDescription());
+        tfTotalServings.setText(String.valueOf(updateRecipe.getTotalServings()));
+        tvPreparationTime.setText(String.valueOf(updateRecipe.getPrepTime()));
 
         categories.addAll(updateRecipe.getCategory());
         addCategoriesToGridPane(categories.stream().map(Category::getCategoryName).toList());
@@ -424,6 +435,8 @@ public class AddRecipeController {
     private boolean validateRecipe(Recipe recipe) {
         return ValidationUtil.isValidString(recipe.getTitle(), recipeNameError, "Recipe Name") &&
                 ValidationUtil.isValidString(recipe.getDescription(), descriptionError, "Description") &&
+                isValidIntNutrition(tfTotalServings.getText(), totalServingError, "Total Servings", recipe::setTotalServings) &&
+                isValidIntNutrition(tvPreparationTime.getText(), preparationTimeError, "Preparation Time", recipe::setPrepTime) &&
                 ValidationUtil.isValidList(recipe.getCategory(), categoriesError, "Categories") &&
                 ValidationUtil.isValidList(recipe.getIngredients(), ingredientError, "Ingredients") &&
                 ValidationUtil.isValidList(recipe.getSteps(), stepError, "Steps") &&

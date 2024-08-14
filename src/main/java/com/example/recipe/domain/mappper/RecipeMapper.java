@@ -40,6 +40,8 @@ public class RecipeMapper {
                 recipe.setWarnings(resultSet.getString("warnings"));
                 recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
                 recipe.setUpdatedAt(resultSet.getTimestamp("updated_at"));
+                recipe.setPrepTime(resultSet.getInt("total_preparation_time"));
+                recipe.setTotalServings(resultSet.getInt("number_of_servings"));
                 if (hasIsSavedColumn) {
                     recipe.setSaved(resultSet.getBoolean("is_saved"));
                 }
@@ -72,6 +74,8 @@ public class RecipeMapper {
         recipe.setCreatedAt(resultSet.getTimestamp("created_at"));
         recipe.setUpdatedAt(resultSet.getTimestamp("updated_at"));
         recipe.setWarnings(resultSet.getString("warnings"));
+        recipe.setPrepTime(resultSet.getInt("total_preparation_time"));
+        recipe.setTotalServings(resultSet.getInt("number_of_servings"));
         return recipe;
     }
 

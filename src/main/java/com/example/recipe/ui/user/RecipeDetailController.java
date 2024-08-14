@@ -10,23 +10,33 @@ import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.*;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class RecipeDetailController {
 
+    private static final Logger log = LoggerFactory.getLogger(RecipeDetailController.class);
     @FXML
     public Label recipeTitle;
     @FXML
@@ -63,6 +73,14 @@ public class RecipeDetailController {
     public Label editRecipe;
     @FXML
     public HBox viewReviewsContainer;
+    @FXML
+    public Label deleteRecipe;
+    @FXML
+    public Label lbPreTime;
+    @FXML
+    public Label lbServings;
+    @FXML
+    public ImageView profileImage;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -97,9 +115,13 @@ public class RecipeDetailController {
                             addReview.setVisible(false);
                             addReview.setManaged(false);
                             editRecipe.setVisible(true);
+                            deleteRecipe.setVisible(true);
                         } else if (reviewedUsers.anyMatch(user -> user.getUserId() == UserDetailStore.getInstance().getUserId())) {
                             addReview.setVisible(false);
                             addReview.setManaged(false);
+                        } else {
+                            addReview.setVisible(true);
+                            addReview.setManaged(true);
                         }
                     }
 
@@ -134,8 +156,18 @@ public class RecipeDetailController {
         // Set Recipe Description
         recipeDescription.setText(data.getDescription());
 
+        if (data.getUser().getProfilePicture() != null) {
+            ImageUtil.loadImageAsync(data.getUser().getProfilePicture(), profileImage);
+        }
+
         // Set Recipe Create Date
         recipeCreateDate.setText(data.getCreatedAt().toString());
+
+        // Set Recipe Preparation Time
+        lbPreTime.setText("Preparation Time: " + data.getPrepTime() + " minutes");
+
+        // Set Recipe Servings
+        lbServings.setText("Can Servings: " + data.getTotalServings());
 
         // Set Recipe Image
         ImageUtil.loadImageAsync(data.getImage(), recipeImage);
@@ -144,7 +176,11 @@ public class RecipeDetailController {
         recipeByName.setText(data.getUser().getFullName());
 
         // Set Recipe Warnings
-        recipeWarnings.setText(data.getWarnings());
+        if (data.getWarnings() == null || data.getWarnings().isEmpty()) {
+            recipeWarnings.setText("No warnings");
+        } else {
+            recipeWarnings.setText(data.getWarnings());
+        }
 
         loadSteps(data.getSteps());
         loadIngredients(data.getIngredients());
@@ -204,15 +240,16 @@ public class RecipeDetailController {
 
     }
 
-    public void openReviewDialog(MouseEvent mouseEvent) {
+    public void onViewReviews(MouseEvent mouseEvent) {
         userRecipeService.getRecipeReview(recipeId, response -> {
             if (response.isSuccess()) {
                 if (response.getData() != null) {
                     if (response.getData().isEmpty()) {
                         DialogUtil.showErrorDialog("Error", "No reviews found");
                     } else {
-                        var dialog = new ReviewListingDialog(response.getData());
+                        var dialog = new ReviewListingDialog(response.getData(), userRecipeService);
                         dialog.showAndWait();
+                        fetchReview();
                     }
                 }
             } else {
@@ -241,5 +278,83 @@ public class RecipeDetailController {
         Map<String, Long> params = new HashMap<>();
         params.put(Constants.USER_ID_PARAM, currentRecipe.getUser().getUserId());
         OtherUserController.navigate(params);
+    }
+
+    public void onDeleteRecipe(MouseEvent mouseEvent) {
+        if (currentRecipe.getUser().getUserId() == UserDetailStore.getInstance().getUserId()) {
+            userRecipeService.deleteRecipe(recipeId, response -> {
+                if (response.isSuccess()) {
+                    DialogUtil.showInfoDialog("Success", "Recipe deleted successfully");
+                    NavigationUtil.insertChild("recipe-view.fxml");
+                } else {
+                    DialogUtil.showErrorDialog("Error", response.getMessage());
+                }
+            });
+        } else {
+            DialogUtil.showErrorDialog("Error", "You are not allowed to delete this recipe");
+        }
+    }
+
+    public void onWatchVideo(MouseEvent mouseEvent) {
+        if (currentRecipe.getVideoUrl() == null && currentRecipe.getVideoUrl().isEmpty()) {
+            DialogUtil.showErrorDialog("Error", "No video found for this recipe");
+            return;
+        }
+        openUrl(currentRecipe.getVideoUrl());
+    }
+
+    private void openUrl(String url) {
+        try {
+            URI uri = new URI(url);
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(uri);
+            }
+        } catch (Exception e) {
+            logger.error("Error: ", e);
+            DialogUtil.showErrorDialog("Error", "Failed to open URL");
+        }
+    }
+
+    public void onShareRecipe(MouseEvent mouseEvent) {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem gmailItem = getMenuItemGmail();
+
+        MenuItem facebookItem = new MenuItem("Share on Facebook");
+        facebookItem.setOnAction(e -> {
+            if (currentRecipe.getVideoUrl() == null || currentRecipe.getVideoUrl().isEmpty()) {
+                DialogUtil.showErrorDialog("Error", "No video found to share for this recipe.");
+                return;
+            }
+            String url = "https://www.facebook.com/sharer/sharer.php?u=" + URLEncoder.encode(currentRecipe.getVideoUrl(), StandardCharsets.UTF_8);
+            openUrl(url);
+        });
+
+        contextMenu.getItems().addAll(gmailItem, facebookItem);
+
+        contextMenu.show((Label) mouseEvent.getSource(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+    }
+
+    private MenuItem getMenuItemGmail() {
+        MenuItem gmailItem = new MenuItem("Share via Gmail");
+        gmailItem.setOnAction(e -> {
+            String subject = URLEncoder.encode("Check out this recipe", StandardCharsets.UTF_8);
+            String body = shareRecipeBody();
+            String url = "https://mail.google.com/mail/?view=cm&fs=1&to=&su=" + subject + "&body=" + body + "&ui=2&tf=1";
+            openUrl(url);
+        });
+        return gmailItem;
+    }
+
+    private String shareRecipeBody() {
+        String stepsFormatted = currentRecipe.getSteps().stream()
+                .map(step -> step.getStepName() + ":\n" + step.getStepDescription())
+                .collect(Collectors.joining("\n\n"));
+
+        return URLEncoder.encode(
+                currentRecipe.getTitle() + " - " + currentRecipe.getDescription() + "\n\n" +
+                        "Steps:\n" + stepsFormatted + "\n\nWatch Video: " + currentRecipe.getVideoUrl(),
+                StandardCharsets.UTF_8
+        );
     }
 }

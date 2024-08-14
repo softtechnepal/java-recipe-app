@@ -20,7 +20,7 @@ public interface UserRecipeRepository {
 
     void updateRecipe(Recipe recipe, DatabaseCallback<Recipe> callback);
 
-    void deleteRecipe(long recipeId, DatabaseCallback<Recipe> callback);
+    void deleteRecipe(long recipeId, DatabaseCallback<Boolean> callback);
 
     void addRecipeFavorite(long recipeId, long userId, DatabaseCallback<Boolean> callback);
 
@@ -31,6 +31,8 @@ public interface UserRecipeRepository {
     void getRecipeReviews(long recipeId, DatabaseCallback<List<Review>> callback);
 
     void addReview(long recipeId, Review review, DatabaseCallback<Review> callback);
+
+    void deleteReview(Long reviewId, DatabaseCallback<Boolean> callback);
 }
 
 
