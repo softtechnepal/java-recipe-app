@@ -44,7 +44,7 @@ public abstract class BaseRecipeListing {
             return;
         }
         noRecipeFound.setVisible(false);
-        if (loadRecipeIfExists(data)) return;
+        // if (loadRecipeIfExists(data)) return;
 
         final Task<Void> loadingTask;
         if (isPreviousTaskRunningForCurrentScreen()) {

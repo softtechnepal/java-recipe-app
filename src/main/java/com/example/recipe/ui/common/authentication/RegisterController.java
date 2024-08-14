@@ -43,7 +43,9 @@ public class RegisterController {
     @FXML
     public TextField firstNameField;
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+//    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n");
 
     public void initialize() {
         Image logoImage = new Image("file:src/main/resources/assets/logo.png");
@@ -54,12 +56,12 @@ public class RegisterController {
     }
 
     private void handleRegister() {
-        String email = emailField.getText();
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
+        String email = emailField.getText().trim();
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
+        String confirmPassword = confirmPasswordField.getText().trim();
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
 
         UserRequest request = new UserRequest(email, username, password, firstName, lastName, confirmPassword);
         if (!validateRegistration(request)) {
@@ -101,7 +103,7 @@ public class RegisterController {
             ViewUtil.setTextAndVisibility(usernameErrorLabel, "", false);
         }
 
-        if (!EMAIL_PATTERN.matcher(request.getEmail()).matches()) {
+        if (!EMAIL_PATTERN.matcher(request.getEmail().trim()).matches()) {
             ViewUtil.setTextAndVisibility(emailErrorLabel, "Invalid email format", true);
             isValid = false;
         } else {
