@@ -203,7 +203,7 @@ public class RecipeDetailController implements GlobalCallBack<String> {
         }
 
         // Set Recipe Create Date
-        recipeCreateDate.setText(data.getCreatedAt().toString());
+        recipeCreateDate.setText(DateUtil.formatDateTime(data.getCreatedAt().toLocalDateTime()));
 
         // Set Recipe Preparation Time
         lbPreTime.setText("Preparation Time: " + data.getPrepTime() + " minutes");
@@ -496,7 +496,11 @@ public class RecipeDetailController implements GlobalCallBack<String> {
     @Override
     public void onAlertResponse(String data) {
         Platform.runLater(() -> {
-            logger.info("Timer {}", formatTime(Integer.parseInt(data)));
+            int seconds = Integer.parseInt(data);
+            if (seconds == 0) {
+                startCooking.setText("Start Cooking");
+            }
+            logger.info("Timer {}", formatTime(seconds));
             lbTimer.setText(formatTime(Integer.parseInt(data)));
         });
     }
@@ -504,6 +508,6 @@ public class RecipeDetailController implements GlobalCallBack<String> {
     private String formatTime(int totalSeconds) {
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;
-        return String.format("%d:%02d minutes", minutes, seconds);
+        return String.format("Remaining Time: %d:%02d minutes", minutes, seconds);
     }
 }

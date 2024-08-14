@@ -3,7 +3,6 @@ package com.example.recipe.utils;
 import com.example.recipe.ui.dialogs.GlobalCallBack;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,10 +63,6 @@ public class TimerUtil {
 
     public boolean isRunning(long recipeId) {
         return timer != null && this.recipeId == recipeId;
-    }
-
-    public int getRemainingSeconds() {
-        return seconds;
     }
 
     private void notifyUser() {
