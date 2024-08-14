@@ -12,13 +12,13 @@ import static com.example.recipe.utils.LoggerUtil.logger;
 public class UpdatePasswordDialog extends Dialog<Void> {
     private final String email;
     private final AuthenticationService authenticationService;
-    private final AlertCallback<Void> callback;
+    private final GlobalCallBack<Void> callback;
     private final PasswordField passwordField;
     private final PasswordField confirmPasswordField;
     private final Label passwordErrorLabel;
     private final Label confirmPasswordErrorLabel;
 
-    public UpdatePasswordDialog(String email, AuthenticationService authenticationService, AlertCallback<Void> callback) {
+    public UpdatePasswordDialog(String email, AuthenticationService authenticationService, GlobalCallBack<Void> callback) {
         this.callback = callback;
         this.authenticationService = authenticationService;
         this.email = email;

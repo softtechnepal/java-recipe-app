@@ -1,6 +1,5 @@
 package com.example.recipe.ui.dialogs;
 
-import com.example.recipe.services.AuthenticationService;
 import com.example.recipe.utils.DialogUtil;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,14 +13,14 @@ import javafx.stage.Stage;
 
 public class EmailVerificationDialog extends Stage {
 
-    private final AlertCallback<DialogResponse> alertCallback;
+    private final GlobalCallBack<DialogResponse> alertCallback;
 
     public EmailVerificationDialog(
             String title,
             String label,
             String prompt,
             String bntLabel,
-            AlertCallback<DialogResponse> alertCallback
+            GlobalCallBack<DialogResponse> alertCallback
     ) {
         this.alertCallback = alertCallback;
         setTitle(title);

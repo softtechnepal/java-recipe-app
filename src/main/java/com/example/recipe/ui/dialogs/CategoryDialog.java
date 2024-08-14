@@ -18,7 +18,7 @@ public class CategoryDialog extends Stage {
     private final List<CheckBox> categoryCheckBoxes;
     private final List<Category> categories;
 
-    public CategoryDialog(String title, List<Category> selectedCategories, ArrayList<Category> categories, AlertCallback<List<Category>> callback) {
+    public CategoryDialog(String title, List<Category> selectedCategories, ArrayList<Category> categories, GlobalCallBack<List<Category>> callback) {
         this.categories = categories;
         setTitle(title);
         initModality(Modality.APPLICATION_MODAL);

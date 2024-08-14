@@ -5,15 +5,16 @@ import com.example.recipe.domain.recipe.*;
 import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.dialogs.AddReviewDialog;
+import com.example.recipe.ui.dialogs.GlobalCallBack;
 import com.example.recipe.ui.dialogs.ReviewListingDialog;
 import com.example.recipe.utils.*;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ContextMenu;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 import static com.example.recipe.Constants.SPEAKING_TASK_ID;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
-public class RecipeDetailController {
+public class RecipeDetailController implements GlobalCallBack<String> {
 
     private static final Logger log = LoggerFactory.getLogger(RecipeDetailController.class);
     @FXML
@@ -81,6 +82,10 @@ public class RecipeDetailController {
     public Label lbServings;
     @FXML
     public ImageView profileImage;
+    @FXML
+    public Label lbTimer;
+    @FXML
+    public Label startCooking;
 
     private HBox recentPlayIcon;
     private HBox recentPauseIcon;
@@ -98,6 +103,39 @@ public class RecipeDetailController {
         recipeId = (Long) NavigationUtil.getParam(Constants.RECIPE_ID_PARAM);
         ImageUtil.loadImageAsync("src/main/resources/assets/ic_start.png", starIcon);
         fetchRecipeDetail();
+
+        onStartTimer();
+    }
+
+    private void checkTimer() {
+        var timer = TimerUtil.getInstance();
+        if (timer.isRunning(currentRecipe.getRecipeId())) {
+            timer.setCallback(this);
+            startCooking.setText("Stop Cooking");
+        } else {
+            startCooking.setText("Start Cooking");
+        }
+    }
+
+    private void onStartTimer() {
+        var timer = TimerUtil.getInstance();
+        startCooking.setOnMouseClicked(event -> {
+            if (currentRecipe != null && currentRecipe.getPrepTime() > 0) {
+                if (timer.isRunning(currentRecipe.getRecipeId())) {
+                    timer.stop();
+                    startCooking.setText("Start Cooking");
+                } else {
+                    timer.start(
+                            currentRecipe.getPrepTime() * 60,
+                            currentRecipe.getRecipeId(),
+                            this
+                    );
+                    startCooking.setText("Stop Cooking");
+                }
+            } else {
+                DialogUtil.showInfoDialog("Info", "No preparation time found for this recipe");
+            }
+        });
     }
 
     private void fetchReview() {
@@ -145,6 +183,7 @@ public class RecipeDetailController {
                     currentRecipe = response.getData();
                     loadUI(currentRecipe);
                     fetchReview();
+                    checkTimer();
                 }
             } else {
                 logger.error("{}", response.getMessage());
@@ -452,5 +491,19 @@ public class RecipeDetailController {
                         "Steps:\n" + stepsFormatted + "\n\nWatch Video: " + currentRecipe.getVideoUrl(),
                 StandardCharsets.UTF_8
         );
+    }
+
+    @Override
+    public void onAlertResponse(String data) {
+        Platform.runLater(() -> {
+            logger.info("Timer {}", formatTime(Integer.parseInt(data)));
+            lbTimer.setText(formatTime(Integer.parseInt(data)));
+        });
+    }
+
+    private String formatTime(int totalSeconds) {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%d:%02d minutes", minutes, seconds);
     }
 }

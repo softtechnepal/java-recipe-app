@@ -16,9 +16,9 @@ public class IngredientDialog extends Stage {
     private final TextField tfIngredientName;
     private final TextField tfQuantity;
     private final TextField tfUnit;
-    private final AlertCallback<Ingredient> callback;
+    private final GlobalCallBack<Ingredient> callback;
 
-    public IngredientDialog(String title,Ingredient ingredient, AlertCallback<Ingredient> callback) {
+    public IngredientDialog(String title,Ingredient ingredient, GlobalCallBack<Ingredient> callback) {
         this.callback = callback;
         setTitle(title);
         initModality(Modality.APPLICATION_MODAL);

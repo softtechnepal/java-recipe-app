@@ -1,6 +1,5 @@
 package com.example.recipe.ui.dialogs;
 
-import com.example.recipe.domain.recipe.Ingredient;
 import com.example.recipe.domain.recipe.Steps;
 import com.example.recipe.utils.DialogUtil;
 import javafx.scene.Scene;
@@ -17,9 +16,9 @@ public class AddStepDialog extends Stage {
 
     private final TextField tfStepName;
     private final TextArea tfStepDescription;
-    private final AlertCallback<Steps> callback;
+    private final GlobalCallBack<Steps> callback;
 
-    public AddStepDialog(String title, Steps step, AlertCallback<Steps> callback) {
+    public AddStepDialog(String title, Steps step, GlobalCallBack<Steps> callback) {
         this.callback = callback;
         setTitle(title);
         initModality(Modality.APPLICATION_MODAL);
