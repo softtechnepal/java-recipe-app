@@ -20,4 +20,8 @@ public class UserService {
     public DbResponse<User> getUserById(long userId) {
         return userRepository.getUserById(userId);
     }
+
+    public void changePassword(String recentPassword, String newPassword, DatabaseCallback<Void> callback) {
+        userRepository.changePassword(recentPassword, newPassword, callback);
+    }
 }

@@ -23,6 +23,7 @@
                       text="This section contains the details of your profile. You can update your profile from here."/>
             </children>
         </VBox>
+
         <HBox VBox.vgrow="ALWAYS" alignment="TOP_CENTER">
             <HBox styleClass="elevated-card" maxHeight="400">
                 <children>
@@ -39,9 +40,13 @@
                                         <Circle radius="75" centerX="75" centerY="75"/>
                                     </clip>
                                 </ImageView>
-                                <Label style="-fx-text-fill: blue; -fx-cursor: hand; -fx-font-weight: bold; -fx-underline: true;"
-                                       text="Change Photo"
-                                       onMouseClicked="#changePhoto"/>
+                                <Hyperlink style="-fx-font-weight: bold; -fx-underline: true;"
+                                           text="Update Photo"
+                                           onMouseClicked="#changePhoto"/>
+
+                                <Hyperlink style="-fx-font-weight: bold; -fx-underline: true;"
+                                           text="Change Password"
+                                           onMouseClicked="#onChangePassword"/>
                             </VBox>
                             <Label fx:id="fullName" style="-fx-text-fill: black;" text="Sandip Thapa">
                                 <font>

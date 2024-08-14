@@ -8,4 +8,6 @@ public interface UserRepository {
     void updateProfile(User updateRequest, DatabaseCallback<User> callback);
 
     DbResponse<User> getUserById(long userId);
+
+    void changePassword(String recentPassword, String newPassword, DatabaseCallback<Void> callback);
 }

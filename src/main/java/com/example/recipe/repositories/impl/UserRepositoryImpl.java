@@ -7,8 +7,10 @@ import com.example.recipe.domain.common.DbResponse;
 import com.example.recipe.domain.recipe.Category;
 import com.example.recipe.repositories.iadmin.IAdminUserRepository;
 import com.example.recipe.repositories.iuser.UserRepository;
+import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.utils.DatabaseThread;
 import com.example.recipe.utils.ImageUtil;
+import com.example.recipe.utils.PasswordUtil;
 
 import java.io.File;
 import java.sql.Connection;
@@ -87,6 +89,43 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
     }
 
     @Override
+    public void changePassword(String recentPassword, String newPassword, DatabaseCallback<Void> callback) {
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                // Step 1: Retrieve the user by user_id
+                String getUserQuery = "SELECT password FROM users WHERE user_id = ?";
+                try (PreparedStatement getUserStmt = connection.prepareStatement(getUserQuery)) {
+                    getUserStmt.setLong(1, UserDetailStore.getInstance().getUserId());
+                    ResultSet rs = getUserStmt.executeQuery();
+                    if (rs.next()) {
+                        String storedPassword = rs.getString("password");
+
+                        // Step 2: Check if the provided recentPassword matches the stored encrypted password
+                        if (!PasswordUtil.verifyPassword(recentPassword, storedPassword)) {
+                            return new DbResponse.Failure<>("Invalid recent password");
+                        }
+
+                        // Step 3: Update the password
+                        String updatePasswordQuery = "UPDATE users SET password = ? WHERE user_id = ?";
+                        try (PreparedStatement updatePasswordStmt = connection.prepareStatement(updatePasswordQuery)) {
+                            String encryptedNewPassword = PasswordUtil.hashPassword(newPassword);
+                            updatePasswordStmt.setString(1, encryptedNewPassword);
+                            updatePasswordStmt.setLong(2, UserDetailStore.getInstance().getUserId());
+                            updatePasswordStmt.executeUpdate();
+                            return new DbResponse.Success<>("Password changed successfully", null);
+                        }
+                    } else {
+                        return new DbResponse.Failure<>("User not found");
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error while changing password", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    @Override
     public DbResponse<User> toggleUserStatus(long userId, String status) {
         if (!status.equals("active") && !status.equals("disabled")) {
             return new DbResponse.Failure<>("Invalid status parameter");
@@ -133,6 +172,7 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
             return new DbResponse.Success<>("User details updated successfully", updateRequest);
         }, result);
     }
+
     @Override
     public DbResponse<ArrayList<User>> getAllUsersByParams(String params) {
         ArrayList<User> users = new ArrayList<>();
@@ -165,4 +205,5 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
             return new DbResponse.Failure<>(e.getMessage());
         }
         return new DbResponse.Success<>("Get users by params success", users);
-    }}
+    }
+}
