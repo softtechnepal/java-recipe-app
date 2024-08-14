@@ -61,7 +61,7 @@
 
                         <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Total Preparation Time"/>
+                                <Label text="Total Preparation Time (minutes)"/>
                                 <TextField fx:id="tvPreparationTime" styleClass="text-field-form"/>
                                 <Label fx:id="preparationTimeError" managed="false" styleClass="error-label"
                                        visible="false"/>
@@ -185,7 +185,7 @@
                         </VBox>
                         <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Other"/>
+                                <Label text="Other nutritional information"/>
                                 <TextField fx:id="tfOther" styleClass="text-field-form"/>
                             </children>
                         </VBox>

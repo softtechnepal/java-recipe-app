@@ -215,3 +215,7 @@
     -fx-background-radius: 16px;
     -fx-alignment: center;
 }
+
+.text-field-form {
+    -fx-min-width: 800px;
+}
