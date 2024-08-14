@@ -66,9 +66,11 @@
                                     </children>
                                 </VBox>
                                 <HBox spacing="24.0">
-                                    <Label fx:id="lbPreTime" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
+                                    <Label fx:id="lbPreTime"
+                                           style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
                                     <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="10.0"/>
-                                    <Label fx:id="lbServings" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
+                                    <Label fx:id="lbServings"
+                                           style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
                                     <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="10.0"/>
                                     <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
                                           text="August 24, 2024"/>
