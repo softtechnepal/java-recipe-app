@@ -9,84 +9,99 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
+<?import javafx.scene.text.Text?>
 <AnchorPane prefHeight="700.0" prefWidth="562.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
             xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.recipe.ui.user.ProfileController">
-    <HBox>
-        <children>
-            <VBox alignment="TOP_CENTER">
+    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0" spacing="22">
+        <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
+            <children>
+                <Text styleClass="table-header-main" text="User Profile"/>
+                <Text styleClass="table-header-desc"
+                      text="This section contains the details of your profile. You can update your profile from here."/>
+            </children>
+        </VBox>
+        <HBox VBox.vgrow="ALWAYS" alignment="TOP_CENTER">
+            <HBox styleClass="elevated-card" maxHeight="400">
                 <children>
-                    <VBox spacing="20" alignment="CENTER">
-                        <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
-                                   pickOnBounds="true"
-                                   cache="true">
-                            <image>
-                                <Image url="@../../../assets/users.png"/>
-                            </image>
-                            <clip>
-                                <Circle radius="75" centerX="75" centerY="75"/>
-                            </clip>
-                        </ImageView>
-                        <Label style="-fx-text-fill: blue; -fx-cursor: hand; -fx-font-weight: bold; -fx-underline: true;"
-                               text="Change Photo"
-                               onMouseClicked="#changePhoto"/>
-                    </VBox>
-                    <Label fx:id="fullName" style="-fx-text-fill: black;" text="Sandip Thapa">
-                        <font>
-                            <Font name="System Bold" size="24.0"/>
-                        </font>
+                    <VBox alignment="TOP_CENTER">
+                        <children>
+                            <VBox spacing="20" alignment="CENTER">
+                                <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
+                                           pickOnBounds="true"
+                                           cache="true">
+                                    <image>
+                                        <Image url="@../../../assets/users.png"/>
+                                    </image>
+                                    <clip>
+                                        <Circle radius="75" centerX="75" centerY="75"/>
+                                    </clip>
+                                </ImageView>
+                                <Label style="-fx-text-fill: blue; -fx-cursor: hand; -fx-font-weight: bold; -fx-underline: true;"
+                                       text="Change Photo"
+                                       onMouseClicked="#changePhoto"/>
+                            </VBox>
+                            <Label fx:id="fullName" style="-fx-text-fill: black;" text="Sandip Thapa">
+                                <font>
+                                    <Font name="System Bold" size="24.0"/>
+                                </font>
+                                <padding>
+                                    <Insets top="12.0"/>
+                                </padding>
+                            </Label>
+                            <Label fx:id="email" style="-fx-text-fill: grey;" text="sandip.thapa@gmail.com"
+                                   textFill="#464343">
+                                <padding>
+                                    <Insets top="12.0"/>
+                                </padding>
+                            </Label>
+                        </children>
                         <padding>
-                            <Insets top="12.0"/>
+                            <Insets bottom="24.0" left="16.0" right="16.0" top="24.0"/>
                         </padding>
-                    </Label>
-                    <Label fx:id="email" style="-fx-text-fill: grey;" text="sandip.thapa@gmail.com" textFill="#464343">
+                    </VBox>
+                    <VBox spacing="24.0">
                         <padding>
-                            <Insets top="12.0"/>
+                            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0"/>
                         </padding>
-                    </Label>
+                        <children>
+                            <VBox>
+                                <children>
+                                    <Label style="-fx-text-fill: black;" text="First Name"/>
+                                    <TextField fx:id="tfFirstName"/>
+                                </children>
+                            </VBox>
+                            <VBox>
+                                <children>
+                                    <Label style="-fx-text-fill: black;" text="Last Name"/>
+                                    <TextField fx:id="tfLastName"/>
+                                </children>
+                            </VBox>
+                            <VBox>
+                                <children>
+                                    <Label text="Gender"/>
+                                    <ComboBox fx:id="genderComboBox" minHeight="45" minWidth="300">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="MALE"/>
+                                                <String fx:value="FEMALE"/>
+                                                <String fx:value="OTHER"/>
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                </children>
+                            </VBox>
+                            <VBox>
+                                <Label style="-fx-text-fill: black;" text="Date of Birth"/>
+                                <DatePicker fx:id="dobDatePicker" minHeight="45" minWidth="300"/>
+                            </VBox>
+                            <Button onAction="#saveProfile" text="Update Profile"/>
+                        </children>
+                    </VBox>
                 </children>
-                <padding>
-                    <Insets bottom="24.0" left="16.0" right="16.0" top="24.0"/>
-                </padding>
-            </VBox>
-            <VBox spacing="24.0">
-                <padding>
-                    <Insets bottom="24.0" left="24.0" right="24.0" top="24.0"/>
-                </padding>
-                <children>
-                    <VBox>
-                        <children>
-                            <Label style="-fx-text-fill: black;" text="First Name"/>
-                            <TextField fx:id="tfFirstName"/>
-                        </children>
-                    </VBox>
-                    <VBox>
-                        <children>
-                            <Label style="-fx-text-fill: black;" text="Last Name"/>
-                            <TextField fx:id="tfLastName"/>
-                        </children>
-                    </VBox>
-                    <VBox>
-                        <children>
-                            <Label text="Gender"/>
-                            <ComboBox fx:id="genderComboBox" minHeight="45" minWidth="300">
-                                <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="MALE"/>
-                                        <String fx:value="FEMALE"/>
-                                        <String fx:value="OTHER"/>
-                                    </FXCollections>
-                                </items>
-                            </ComboBox>
-                        </children>
-                    </VBox>
-                    <VBox>
-                        <Label style="-fx-text-fill: black;" text="Date of Birth"/>
-                        <DatePicker fx:id="dobDatePicker" minHeight="45" minWidth="300"/>
-                    </VBox>
-                    <Button onAction="#saveProfile" text="Update Profile"/>
-                </children>
-            </VBox>
-        </children>
-    </HBox>
+            </HBox>
+        </HBox>
+    </VBox>
 </AnchorPane>

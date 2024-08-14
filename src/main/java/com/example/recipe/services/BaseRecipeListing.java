@@ -143,11 +143,12 @@ public abstract class BaseRecipeListing {
     }
 
     public void updateGridPane(List<VBox> menuItems) {
+        int colums = 4;
         Platform.runLater(() -> {
             getProgressContainer().setVisible(false);
             getMenuGrid().getChildren().clear();
             for (int i = 0; i < menuItems.size(); i++) {
-                getMenuGrid().add(menuItems.get(i), i % 3, i / 3);
+                getMenuGrid().add(menuItems.get(i), i % colums, i / colums);
                 GridPane.setMargin(menuItems.get(i), new Insets(10));
             }
         });

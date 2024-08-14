@@ -25,8 +25,8 @@
             <!-- My Recipes -->
             <StackPane>
                 <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="no-scroll-bars"
-                            style="-fx-background-color: transparent; -fx-padding: 16px 24px 24px 24px">
-                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" vgap="24" hgap="24">
+                            style="-fx-background-color: transparent; -fx-padding: 8px">
+                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                         <!-- Content goes here -->
                     </GridPane>
                 </ScrollPane>
@@ -55,7 +55,7 @@
                         <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT"
                                 onMouseClicked="#onFilterClicked" text="Filter By Category">
                             <graphic>
-                                <ImageView fx:id="filterIcon" fitWidth="16" fitHeight="16" preserveRatio="true">
+                                <ImageView fx:id="filterIcon" fitWidth="14" fitHeight="14" preserveRatio="true">
                                     <Image url="@../../../assets/sidemenu/tag_active.png"/>
                                 </ImageView>
                             </graphic>

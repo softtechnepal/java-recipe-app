@@ -76,7 +76,7 @@ public class OtherUserController extends BaseRecipeListing {
     }
 
     public void onBackPressed(MouseEvent mouseEvent) {
-
+        NavigationUtil.goBack();
     }
 
     @Override
