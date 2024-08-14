@@ -9,6 +9,9 @@
 <?import javafx.scene.control.TextField?>
 
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.admin.UserController">
     <center>
         <VBox fx:id="containerVBox" styleClass="table-container" BorderPane.alignment="CENTER">
@@ -31,10 +34,20 @@
     <top>
         <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
             <children>
-                <Text styleClass="table-header-main" text="List of Users" />
+                <Text fx:id="totalUsersText" styleClass="table-header-main" text="List of Users (Total: 0)" />
                 <Text styleClass="table-header-desc" text="This is the list of users that has registered in the application" />
-                <HBox spacing="300.0" VBox.vgrow="ALWAYS">
+                <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                     <TextField fx:id="searchInput" promptText="Search users using the first name, last name, email or username...." styleClass="table-header-search" HBox.hgrow="ALWAYS" />
+                    <ComboBox fx:id="sortByValue" promptText="Sort By" minHeight="40" minWidth="300" onAction="#handleSortByValue">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Sort By username in descending"/>
+                                <String fx:value="Sort By username in ascending"/>
+                                <String fx:value="Sort By created date in ascending"/>
+                                <String fx:value="Sort By created date in descending"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
                 </HBox>
             </children>
         </VBox>

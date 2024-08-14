@@ -1,57 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.recipe.ui.admin.DashboardController" >
+<BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.admin.DashboardController">
     <center>
-        <HBox spacing="15" style="-fx-padding: 25px 18px" >
-            <VBox alignment="CENTER" styleClass="dashboard-pane">
-                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
-                    <image>
-                        <Image url="@../../../../assets/users.png" />
-                    </image>
-                </ImageView>
-                <Text text="Total Users" styleClass="dashboard-pane-title"/>
-                <Text fx:id="totalUsers" styleClass="dashboard-pane-value"/>
-            </VBox>
+     <ScrollPane fitToHeight="true" minWidth="200" prefWidth="200">
+         <VBox spacing="15" style="-fx-padding: 25px 18px">
+             <BarChart fx:id="userGrowthChart" title="User Growth" minWidth="800" minHeight="500">
+                 <xAxis>
+                     <CategoryAxis label="Date" />
+                 </xAxis>
+                 <yAxis>
+                     <NumberAxis label="Number of Users" />
+                 </yAxis>
+             </BarChart>
+             <LineChart fx:id="recipeCreationChart" title="Recipe Creation Over Time"  minWidth="800" minHeight="500">
+                 <xAxis>
+                     <CategoryAxis label="Date" />
+                 </xAxis>
+                 <yAxis>
+                     <NumberAxis label="Number of Recipes" />
+                 </yAxis>
+             </LineChart>
+             <PieChart fx:id="mostUsedCategoriesChart" title="Most Used Categories"   minWidth="800" minHeight="500"/>
+             <HBox spacing="20">
+                 <padding>
+                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                 </padding>
+                 <VBox fx:id="topUsersList" spacing="10" styleClass="top-users-list" minWidth="400">
+                     <Text text="Top 5 Users with Most Created Recipes" styleClass="top-users-title" />
+                 </VBox>
+                 <VBox fx:id="topSavedRecipesList" spacing="10" styleClass="top-recipe-list" minWidth="400">
+                     <children>
+                         <Text text="Top 5 Saved Recipes" styleClass="top-recipe-title"/>
+                     </children>
+                 </VBox>
+             </HBox>
+         </VBox>
 
-            <VBox alignment="CENTER" styleClass="dashboard-pane">
-                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
-                    <image>
-                        <Image url="@../../../../assets/category.png" />
-                    </image>
-                </ImageView>
-                <Text text="Total Categories" styleClass="dashboard-pane-title"/>
-                <Text fx:id="totalCategories" styleClass="dashboard-pane-value"/>
-            </VBox>
-
-            <VBox alignment="CENTER" styleClass="dashboard-pane">
-                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
-                    <image>
-                        <Image url="@../../../../assets/receipe.png" />
-                    </image>
-                </ImageView>
-                <Text text="Total Recipes" styleClass="dashboard-pane-title"/>
-                <Text fx:id="totalRecipes" styleClass="dashboard-pane-value"/>
-            </VBox>
-
-            <VBox alignment="CENTER" styleClass="dashboard-pane">
-                <ImageView pickOnBounds="true" preserveRatio="true" styleClass="dashboard-pane-image">
-                    <image>
-                        <Image url="@../../../../assets/receipe.png" />
-                    </image>
-                </ImageView>
-                <Text text="Total Saved Recipes" styleClass="dashboard-pane-title"/>
-                <Text  text="hehe" styleClass="dashboard-pane-value"/>
-            </VBox>
-        </HBox>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+     </ScrollPane>
     </center>
+    <left>
+       <ScrollPane fitToHeight="true" fitToWidth="true">
+           <VBox prefHeight="1646.0" prefWidth="250.0" spacing="20">
+               <VBox alignment="CENTER" styleClass="dashboard-pane">
+                   <Text styleClass="dashboard-pane-title" text="Total Users" />
+                   <Text  fx:id="totalUsers"  styleClass="dashboard-pane-value" />
+               </VBox>
+               <VBox alignment="CENTER" styleClass="dashboard-pane">
+                   <Text styleClass="dashboard-pane-title" text="Total Active Users" />
+                   <Text fx:id="totalActiveUsers" styleClass="dashboard-pane-value" />
+               </VBox>
+               <VBox alignment="CENTER" styleClass="dashboard-pane">
+                   <Text styleClass="dashboard-pane-title" text="Total Categories" />
+                   <Text fx:id="totalCategories" styleClass="dashboard-pane-value" />
+               </VBox>
+               <VBox alignment="CENTER" styleClass="dashboard-pane">
+                   <Text styleClass="dashboard-pane-title" text="Total Ingredients" />
+                   <Text fx:id="totalIngredients" styleClass="dashboard-pane-value" />
+               </VBox>
+               <VBox alignment="CENTER" styleClass="dashboard-pane">
+                   <Text styleClass="dashboard-pane-title" text="Total Recipes" />
+                   <Text  fx:id="totalRecipes" styleClass="dashboard-pane-value" />
+               </VBox>
+            <padding>
+               <Insets bottom="25" left="25" right="25" top="25" />
+            </padding>
+
+           </VBox>
+       </ScrollPane>
+    </left>
 
     <top>
         <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">

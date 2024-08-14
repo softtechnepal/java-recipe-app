@@ -8,13 +8,16 @@ import com.example.recipe.services.admin.AdminRecipeService;
 import com.example.recipe.services.admin.AdminUserService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.example.recipe.utils.DialogUtil.showErrorDialog;
 import static com.example.recipe.utils.DialogUtil.showInfoDialog;
@@ -46,9 +49,14 @@ public class RecipeController {
     public TextField searchInput;
     @FXML
     public TableView<Recipe> recipeTable;
+    @FXML
+    public Text totalRecipesText;
+    @FXML
+    public ComboBox<String> sortByValue;
 
     private final AdminRecipeService recipeService = new AdminRecipeService();
     private final AdminUserService userService = new AdminUserService();
+
 
 
     public void initialize() {
@@ -123,6 +131,7 @@ public class RecipeController {
             ArrayList<Recipe> recipeArrayList = response.getData();
             Thread thread = new Thread(() -> {
                 recipeTable.getItems().setAll(recipeArrayList);
+                totalRecipesText.setText("List of Recipes (Total Recipes: " + recipeArrayList.size() + ")");
             });
             new Thread(thread).start();
         } else {
@@ -149,6 +158,40 @@ public class RecipeController {
         } else {
             logger.error("Error retrieving user: " + response.getMessage());
             return "Unknown User";
+        }
+    }
+
+    public void handleSortByValue(ActionEvent actionEvent) {
+        String selectedValue = sortByValue.getValue();
+        if (selectedValue != null) {
+            sortTableData(selectedValue);
+        }
+    }
+
+    private void sortTableData(String sortBy) {
+        DbResponse<ArrayList<Recipe>> response = recipeService.getAllRecipes();
+        if (response.isSuccess()) {
+            ArrayList<Recipe> recipeArrayList = response.getData();
+            switch (sortBy) {
+                case "Sort By title in descending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getTitle));
+                    break;
+                case "Sort By title in ascending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getTitle).reversed());
+                    break;
+                case "Sort By created date in ascending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getCreatedAt));
+                    break;
+                case "Sort By created date in descending":
+                    recipeArrayList.sort(Comparator.comparing(Recipe::getCreatedAt).reversed());
+                    break;
+                default:
+                    logger.error("Unknown sort option: " + sortBy);
+                    return;
+            }
+            recipeTable.getItems().setAll(recipeArrayList);
+        } else {
+            logger.error("Error retrieving data: " + response.getMessage());
         }
     }
 }

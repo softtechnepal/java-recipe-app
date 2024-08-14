@@ -113,39 +113,75 @@
 }
 
 .dashboard-pane{
-    -fx-background-color:-color-primary;
+    /*-fx-background-color:-color-primary;*/
     -fx-padding: 16;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
-    -fx-border-width: 1;
-    -fx-border-color: -color-primary;
-    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
+    -fx-border-width: 2;
+    -fx-border-color: -color-light;
+    -fx-background-color: -color-light;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0.1, 0, 5);
     -fx-alignment: center;
-    -fx-text-fill: -color-light !important;
-   -fx-pref-width: 300px;
-    -fx-pref-height: 200px;
-    -fx-max-width: 300px;
-    -fx-max-height: 200px;
-    -fx-min-width: 300px;
-    -fx-min-height: 200px;
-}
-
-.dashboard-pane-image{
-    -fx-fit-width: 80;
-    -fx-fit-height: 80;
+    -fx-max-width: 190;
+    -fx-min-width: 190;
+    -fx-max-height: 110;
+    -fx-min-height: 110;
 }
 
 .dashboard-pane-title{
-    -fx-fit-width: 100;
-    -fx-wrap-text: true;
-    -fx-font-size: 22px;
-    -fx-font-weight: bolder;
-    -fx-text-fill: -color-light !important;
+    -fx-font-size: 16px;
 }
 
 .dashboard-pane-value{
-    -fx-fit-width: 100;
-    -fx-wrap-text: true;
-    -fx-font-size: 20px;
-    -fx-text-fill: -color-light;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.top-users-list, .top-recipe-list {
+    -fx-padding: 10;
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.top-users-title, .top-recipe-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0;
+}
+
+.user-box, .recipe-box {
+    -fx-padding: 10;
+    -fx-background-color: #fff;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-spacing: 5;
+}
+
+.user-fullname, .recipe-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.user-username, .recipe-creator {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+.user-total-recipes, .user-created-date, .recipe-saved-count {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999;
+}
+
+.user-profile-picture{
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+    -fx-border-width: 1;
+    -fx-border-color: #ddd;
+    -fx-min-width: 50;
+    -fx-min-height: 50;
 }

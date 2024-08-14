@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements IAdminUserRepository, UserRepository 
     public DbResponse<ArrayList<User>> getAllUsers() {
         ArrayList<User> users = new ArrayList<>();
         try (Connection conn = DatabaseConfig.getConnection()) {
-            String query = "SELECT * FROM users ORDER BY user_id DESC";
+            String query = "SELECT * FROM users WHERE is_admin  = false ORDER BY user_id DESC";
             try (PreparedStatement st = conn.prepareStatement(query)) {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
