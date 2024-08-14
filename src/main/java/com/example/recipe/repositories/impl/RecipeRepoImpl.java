@@ -43,8 +43,8 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     private Long insertRecipe(Connection connection, Recipe recipe) throws SQLException {
         String insertRecipeQuery = "INSERT INTO recipes " +
-                "(user_id, title, description, image, video_url, warnings) " +
-                "VALUES (?, ?, ?, ?, ?, ?) RETURNING recipe_id";
+                "(user_id, title, description, image, video_url, warnings, number_of_servings, total_preparation_time) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING recipe_id";
         try (PreparedStatement statement = connection.prepareStatement(insertRecipeQuery, Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, UserDetailStore.getInstance().getUserId());
             statement.setString(2, recipe.getTitle());
@@ -52,6 +52,8 @@ public class RecipeRepoImpl implements UserRecipeRepository {
             statement.setString(4, recipe.getImage());
             statement.setString(5, recipe.getVideoUrl());
             statement.setString(6, recipe.getWarnings());
+            statement.setInt(7, recipe.getTotalServings() != null ? recipe.getTotalServings() : 0);
+            statement.setInt(8, recipe.getPrepTime() != null ? recipe.getPrepTime() : 0);
             statement.execute();
             try (ResultSet resultSet = statement.getGeneratedKeys()) {
                 if (resultSet.next()) {
@@ -127,7 +129,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     @Override
     public void getRecipeDetailById(long recipeId, DatabaseCallback<Recipe> callback) {
         final String SELECT_RECIPE_DETAIL_QUERY = """
-                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at, r.number_of_servings, r.total_preparation_time,
                        u.user_id, u.username, u.email, u.first_name, u.last_name, u.profile_picture,
                        c.category_id, c.category_name,
                        i.ingredient_id, i.ingredient_name, i.quantity, i.unit,
@@ -249,7 +251,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     @Override
     public void getAllRecipes(DatabaseCallback<List<Recipe>> callback) {
         final String SELECT_RECIPE_QUERY = """
-                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,r.total_preparation_time, r.number_of_servings,
                        c.category_id, c.category_name,
                        CASE WHEN w.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_saved
                 FROM recipes r
@@ -284,12 +286,160 @@ public class RecipeRepoImpl implements UserRecipeRepository {
 
     @Override
     public void updateRecipe(Recipe recipe, DatabaseCallback<Recipe> callback) {
+        String UPDATE_RECIPE_QUERY = """
+                    UPDATE recipes
+                    SET title = ?, description = ?, image = ?, video_url = ?, warnings = ?, updated_at = NOW()
+                    WHERE recipe_id = ? AND user_id = ?
+                """;
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                connection.setAutoCommit(false);
 
+                String imagePath = recipe.getImage();
+                if (!imagePath.contains("dbimages/")) {
+                    imagePath = ImageUtil.copyImageToDbImages(new File(recipe.getImage()));
+                }
+                try (PreparedStatement statement = connection.prepareStatement(UPDATE_RECIPE_QUERY)) {
+                    statement.setString(1, recipe.getTitle());
+                    statement.setString(2, recipe.getDescription());
+                    statement.setString(3, imagePath);
+                    statement.setString(4, recipe.getVideoUrl());
+                    statement.setString(5, recipe.getWarnings());
+                    statement.setLong(6, recipe.getRecipeId());
+                    statement.setLong(7, UserDetailStore.getInstance().getUserId());
+                    statement.executeUpdate();
+
+                    // Update Ingredients
+                    deleteIngredients(connection, recipe.getRecipeId());
+                    insertIngredients(connection, recipe.getIngredients(), recipe.getRecipeId());
+
+                    // Update categories
+                    deleteCategories(connection, recipe.getRecipeId());
+                    insertCategories(connection, recipe.getCategory(), recipe.getRecipeId());
+
+                    // Update Steps
+                    deleteSteps(connection, recipe.getRecipeId());
+                    insertSteps(connection, recipe.getSteps(), recipe.getRecipeId());
+
+                    // Update Nutritional Information
+                    updateNutritionalInformation(connection, recipe.getNutritionalInformation(), recipe.getRecipeId());
+
+                    connection.commit();
+                    return DbResponse.success("Recipe updated successfully", recipe);
+                }
+            } catch (Exception exception) {
+                logger.error("Error while updating recipe", exception);
+                return DbResponse.failure(exception.getMessage());
+            }
+        }, callback);
+    }
+
+    private void deleteIngredients(Connection connection, long recipeId) throws SQLException {
+        String DELETE_INGREDIENT_QUERY = """
+                        DELETE FROM ingredients WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_INGREDIENT_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteCategories(Connection connection, long recipeId) throws SQLException {
+        String DELETE_CATEGORY_QUERY = """
+                        DELETE FROM recipecategories WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_CATEGORY_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    protected void deleteSteps(Connection connection, long recipeId) throws SQLException {
+        String DELETE_STEP_QUERY = """
+                        DELETE FROM recipesteps WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_STEP_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteNutritionalInformation(Connection connection, long recipeId) throws SQLException {
+        String DELETE_NUTRITIONAL_INFO_QUERY = """
+                        DELETE FROM nutritionalinformation WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_NUTRITIONAL_INFO_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void updateNutritionalInformation(Connection connection, NutritionalInformation nutritionalInformation, Long recipeId) throws SQLException {
+        String updateNutritionalInfoQuery = """
+                    UPDATE nutritionalinformation
+                    SET calories = ?, protein = ?, fat = ?, carbohydrates = ?, other = ?
+                    WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(updateNutritionalInfoQuery)) {
+            statement.setDouble(1, nutritionalInformation.getCalories() != null ? nutritionalInformation.getCalories() : 0);
+            statement.setDouble(2, nutritionalInformation.getProtein() != null ? nutritionalInformation.getProtein() : 0);
+            statement.setDouble(3, nutritionalInformation.getFat() != null ? nutritionalInformation.getFat() : 0);
+            statement.setDouble(4, nutritionalInformation.getCarbohydrates() != null ? nutritionalInformation.getCarbohydrates() : 0);
+            statement.setString(5, nutritionalInformation.getOther() != null ? nutritionalInformation.getOther() : "");
+            statement.setLong(6, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteRecipe(Connection connection, long recipeId) throws SQLException {
+        String DELETE_RECIPE_QUERY = """
+                        DELETE FROM recipes WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteRecipeReviews(Connection connection, long recipeId) throws SQLException {
+        String DELETE_RECIPE_REVIEWS_QUERY = """
+                        DELETE FROM reviews WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_REVIEWS_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteRecipeWishList(Connection connection, long recipeId) throws SQLException {
+        String DELETE_RECIPE_WISHLIST_QUERY = """
+                        DELETE FROM wishlist WHERE recipe_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_WISHLIST_QUERY)) {
+            statement.setLong(1, recipeId);
+            statement.executeUpdate();
+        }
     }
 
     @Override
-    public void deleteRecipe(long recipeId, DatabaseCallback<Recipe> callback) {
-
+    public void deleteRecipe(long recipeId, DatabaseCallback<Boolean> callback) {
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                connection.setAutoCommit(false);
+                deleteIngredients(connection, recipeId);
+                deleteCategories(connection, recipeId);
+                deleteSteps(connection, recipeId);
+                deleteNutritionalInformation(connection, recipeId);
+                deleteRecipeReviews(connection, recipeId);
+                deleteRecipeWishList(connection, recipeId);
+                deleteRecipe(connection, recipeId);
+                connection.commit();
+                return DbResponse.success("Recipe deleted successfully", true);
+            } catch (Exception e) {
+                logger.error("Error while deleting recipe", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
     }
 
     @Override
@@ -332,7 +482,7 @@ public class RecipeRepoImpl implements UserRecipeRepository {
     @Override
     public void getFavoriteRecipes(DatabaseCallback<List<Recipe>> callback) {
         final String SELECT_FAVORITE_RECIPE_QUERY = """
-                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at,
+                SELECT r.recipe_id, r.title, r.description, r.image, r.video_url, r.warnings, r.created_at, r.updated_at, r.total_preparation_time, r.number_of_servings,
                                        c.category_id, c.category_name
                                 FROM recipes r
                                          RIGHT JOIN wishlist w ON r.recipe_id = w.recipe_id
@@ -404,6 +554,26 @@ public class RecipeRepoImpl implements UserRecipeRepository {
                 }
             } catch (Exception e) {
                 logger.error("Error while adding review", e);
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    @Override
+    public void deleteReview(Long reviewId, DatabaseCallback<Boolean> callback) {
+        String DELETE_REVIEW_QUERY = "DELETE FROM reviews WHERE review_id = ?";
+
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                connection.setAutoCommit(false);
+                try (PreparedStatement statement = connection.prepareStatement(DELETE_REVIEW_QUERY)) {
+                    statement.setLong(1, reviewId);
+                    statement.executeUpdate();
+                    connection.commit();
+                    return DbResponse.success("Review deleted successfully", true);
+                }
+            } catch (Exception e) {
+                logger.error("Error while deleting review", e);
                 return DbResponse.failure(e.getMessage());
             }
         }, callback);

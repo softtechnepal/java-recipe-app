@@ -17,145 +17,186 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.AddRecipeController">
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Region?>
+<BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.recipe.ui.user.AddRecipeController">
     <center>
-        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="642.0" prefWidth="562.0" styleClass="no-scroll-bars" VBox.vgrow="ALWAYS">
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0">
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="642.0" prefWidth="562.0"
+                        styleClass="no-scroll-bars" VBox.vgrow="ALWAYS">
                 <VBox spacing="12.0">
                     <padding>
-                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
                     <children>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox spacing="4.0">
                             <children>
-                                <Label text="Recipe name" />
-                                <TextField fx:id="tfRecipeName" promptText="Nepali Dumplings" />
-                                <Label fx:id="recipeNameError" managed="false" styleClass="error-label" visible="false" />
+                                <Label text="Recipe name"/>
+                                <TextField fx:id="tfRecipeName" promptText="Nepali Dumplings"
+                                           styleClass="text-field-form"/>
+                                <Label fx:id="recipeNameError" managed="false" styleClass="error-label"
+                                       visible="false"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Description" />
-                                <TextArea fx:id="tfRecipeDescription" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="482.0" promptText="Description about recipe" wrapText="true" />
-                                <Label fx:id="descriptionError" managed="false" styleClass="error-label" visible="false" />
+                                <Label text="Description"/>
+                                <TextArea fx:id="tfRecipeDescription" maxHeight="150.0" minHeight="150.0"
+                                          prefHeight="150.0" prefWidth="482.0" promptText="Description about recipe"
+                                          wrapText="true" styleClass="text-field-form"/>
+                                <Label fx:id="descriptionError" managed="false" styleClass="error-label"
+                                       visible="false"/>
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="800.0" spacing="4.0">
+                            <children>
+                                <Label text="Total Servings"/>
+                                <TextField fx:id="tfTotalServings" styleClass="text-field-form"/>
+                                <Label fx:id="totalServingError" managed="false" styleClass="error-label"
+                                       visible="false"/>
+                            </children>
+                        </VBox>
+
+                        <VBox prefWidth="800.0" spacing="4.0">
+                            <children>
+                                <Label text="Total Preparation Time"/>
+                                <TextField fx:id="tvPreparationTime" styleClass="text-field-form"/>
+                                <Label fx:id="preparationTimeError" managed="false" styleClass="error-label"
+                                       visible="false"/>
                             </children>
                         </VBox>
                         <VBox spacing="6">
-                            <Label text="Categories" />
+                            <Label text="Categories"/>
+                            <GridPane fx:id="gridCategories" hgap="6" vgap="6"/>
                             <HBox spacing="6">
-                                <TextField fx:id="tfCategories" promptText="Categories" styleClass="text-field-disabled" />
-                                <Button onAction="#onAddCategories" text="Add More Categories" />
+                                <Button onAction="#onAddCategories" text="Add More Categories"/>
                             </HBox>
-                            <Label fx:id="categoriesError" managed="false" styleClass="error-label" visible="false" />
-                        </VBox>
-                        
-                        <VBox spacing="6">
-                           <HBox maxWidth="600" minWidth="600">
-                               <Label style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-pref-width: 400;" text="Add Ingredients" />
-                               <Button alignment="TOP_LEFT" contentDisplay="RIGHT" onAction="#onAddIngredient" text="Add More Ingredients" textAlignment="RIGHT" />
-                           </HBox>
-                            <TableView fx:id="ingredientsTable" maxHeight="300" maxWidth="800" minHeight="300" minWidth="800" styleClass="table-view">
-                                <columns>
-                                    <TableColumn fx:id="ingredientNameColumn" prefWidth="200" text="Ingredient Name" />
-                                    <TableColumn fx:id="ingredientQtyColumn" prefWidth="200" text="Quantity" />
-                                    <TableColumn fx:id="ingredientUnitColumn" prefWidth="200" text="Unit" />
-                                    <TableColumn fx:id="actionsColumn" prefWidth="200" text="Actions" />
-                                </columns>
-                            </TableView>
-                     <VBox.margin>
-                        <Insets top="15.0" />
-                     </VBox.margin>
+                            <Label fx:id="categoriesError" managed="false" styleClass="error-label" visible="false"/>
                         </VBox>
 
                         <VBox spacing="6">
-                            <HBox maxWidth="600" minWidth="600">
-                                <Label style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-pref-width: 400;" text="Add Steps" />
-                                <Button alignment="TOP_LEFT" contentDisplay="RIGHT" onAction="#onAddStep" text="Add Steps" textAlignment="RIGHT" />
+                            <HBox maxWidth="800" minWidth="800" alignment="CENTER">
+                                <Label style="-fx-font-size: 18px; -fx-font-weight: 600;"
+                                       text="Add Ingredients"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button alignment="TOP_LEFT" contentDisplay="RIGHT" onAction="#onAddIngredient"
+                                        text="Add More Ingredients" textAlignment="RIGHT"/>
                             </HBox>
-                            <TableView fx:id="stepsTable" maxHeight="300" maxWidth="800" minHeight="300" minWidth="800" styleClass="table-view">
+                            <TableView fx:id="ingredientsTable" minHeight="200" maxHeight="200" VBox.vgrow="ALWAYS"
+                                       maxWidth="800"
+                                       minWidth="800" styleClass="table-view">
                                 <columns>
-                                    <TableColumn fx:id="stepNameColumn" prefWidth="200" text="Steps Name" />
-                                    <TableColumn fx:id="stepDescColumn" prefWidth="400" text="Steps Description" />
-                                    <TableColumn fx:id="stepActionsColumn" prefWidth="200" text="Actions" />
+                                    <TableColumn fx:id="ingredientNameColumn" prefWidth="200"
+                                                 text="Ingredient Name"/>
+                                    <TableColumn fx:id="ingredientQtyColumn" prefWidth="180" text="Quantity"/>
+                                    <TableColumn fx:id="ingredientUnitColumn" prefWidth="180" text="Unit"/>
+                                    <TableColumn fx:id="actionsColumn" prefWidth="200" text="Actions"/>
                                 </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
                             </TableView>
-                            <VBox.margin>
-                                <Insets top="15.0" />
-                            </VBox.margin>
+                            <Label fx:id="ingredientError" managed="false" styleClass="error-label" visible="false"/>
                         </VBox>
 
-<!--                        <VBox style="-fx-padding: 20 0 0 0">-->
-<!--                            <Text style="-fx-font-size: 20px; -fx-font-weight: 800;" text="Add preparation steps" />-->
-<!--                        </VBox>-->
-
-<!--                        <VBox fx:id="vBoxAddedSteps" prefWidth="528" spacing="6">-->
-
-<!--                        </VBox>-->
-
-                        <Label fx:id="stepError" managed="false" styleClass="error-label" visible="false" />
-<!--                        <Button onAction="#onAddStep" text="Add Step" />-->
-                        <HBox alignment="CENTER_LEFT" spacing="20">
+                        <VBox spacing="6">
+                            <HBox maxWidth="800" minWidth="800" alignment="CENTER">
+                                <Label style="-fx-font-size: 18px; -fx-font-weight: 600;"
+                                       text="Add Steps"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button alignment="TOP_LEFT" contentDisplay="RIGHT" onAction="#onAddStep"
+                                        text="Add Steps" textAlignment="RIGHT"/>
+                            </HBox>
+                            <TableView fx:id="stepsTable" maxHeight="200" maxWidth="800" minHeight="200" minWidth="800"
+                                       styleClass="table-view">
+                                <columns>
+                                    <TableColumn fx:id="stepNameColumn" prefWidth="200" text="Steps Name"/>
+                                    <TableColumn fx:id="stepDescColumn" prefWidth="400" text="Steps Description"/>
+                                    <TableColumn fx:id="stepActionsColumn" prefWidth="150" text="Actions"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                            </TableView>
+                            <Label fx:id="stepError" managed="false" styleClass="error-label" visible="false"/>
+                        </VBox>
+                        <VBox>
+                            <HBox alignment="CENTER_LEFT" spacing="20">
+                                <children>
+                                    <VBox alignment="CENTER" maxHeight="100" maxWidth="100" minHeight="100"
+                                          minWidth="100"
+                                          onMouseClicked="#onSelectImage" spacing="6.0"
+                                          style="-fx-background-color: #8bbdf3; -fx-background-radius: 12px">
+                                        <children>
+                                            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
+                                                       preserveRatio="true" style="-fx-background-radius: 10;">
+                                                <image>
+                                                    <Image url="@../../../assets/ic_add_image.png"/>
+                                                </image>
+                                            </ImageView>
+                                            <Label text="Add Image"/>
+                                        </children>
+                                        <padding>
+                                            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0"/>
+                                        </padding>
+                                    </VBox>
+                                    <HBox fx:id="hBoxImageSection"/>
+                                </children>
+                            </HBox>
+                            <Label fx:id="imageError" managed="false" styleClass="error-label" visible="false"/>
+                        </VBox>
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <VBox alignment="CENTER" maxHeight="100" maxWidth="100" minHeight="100" minWidth="100" onMouseClicked="#onSelectImage" spacing="6.0" style="-fx-background-color: #8bbdf3; -fx-background-radius: 12px">
-                                    <children>
-                                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-background-radius: 10;">
-                                            <image>
-                                                <Image url="@../../../assets/ic_add_image.png" />
-                                            </image>
-                                        </ImageView>
-                                        <Label text="Add Image" />
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
-                                    </padding>
-                                </VBox>
-                                <HBox fx:id="hBoxImageSection" />
-                            </children>
-                        </HBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
-                            <children>
-                                <Label text="Video link" />
-                                <TextField fx:id="tfVideoLink" />
+                                <Label text="Video link"/>
+                                <TextField fx:id="tfVideoLink" styleClass="text-field-form"/>
+                                <Label fx:id="videoError" managed="false" styleClass="error-label" visible="false"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Calories" />
-                                <TextField fx:id="tfCalories" />
+                                <Label text="Calories"/>
+                                <TextField fx:id="tfCalories" styleClass="text-field-form"/>
+                                <Label fx:id="caloriesError" managed="false" styleClass="error-label" visible="false"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label fx:id="tfProtein" text="Protein" />
-                                <TextField />
+                                <Label text="Protein"/>
+                                <TextField fx:id="tfProtein" styleClass="text-field-form"/>
+                                <Label fx:id="proteinError" managed="false" styleClass="error-label" visible="false"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Fat" />
-                                <TextField fx:id="tfFat" />
+                                <Label text="Fat"/>
+                                <TextField fx:id="tfFat" styleClass="text-field-form"/>
+                                <Label fx:id="fatError" managed="false" styleClass="error-label" visible="false"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Carbohydrates" />
-                                <TextField fx:id="tfCarbohydrates" />
+                                <Label text="Carbohydrates"/>
+                                <TextField fx:id="tfCarbohydrates" styleClass="text-field-form"/>
+                                <Label fx:id="carbohydratesError" managed="false" styleClass="error-label"
+                                       visible="false"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Other" />
-                                <TextField fx:id="tfOther" />
+                                <Label text="Other"/>
+                                <TextField fx:id="tfOther" styleClass="text-field-form"/>
                             </children>
                         </VBox>
-                        <VBox prefWidth="528.0" spacing="4.0">
+                        <VBox prefWidth="800.0" spacing="4.0">
                             <children>
-                                <Label text="Warnings and Allergies" />
-                                <TextField fx:id="tfWarnings" />
+                                <Label text="Warnings and Allergies"/>
+                                <TextField fx:id="tfWarnings" styleClass="text-field-form"/>
                             </children>
                         </VBox>
-                        <HBox />
-                        <Button onAction="#onAddRecipe" text="Add Recipe" />
+                        <Region prefHeight="20.0" prefWidth="200.0"/>
+                        <Button fx:id="btnUpdateRecipe" onAction="#onAddRecipe" text="Add Recipe"/>
                     </children>
                 </VBox>
             </ScrollPane>
@@ -164,20 +205,21 @@
     </center>
     <top>
         <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
-                <HBox alignment="CENTER_LEFT" spacing="16.0">
-                    <children>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#onBackPressed" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../../assets/ic_back.png" />
-                            </image>
-                        </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Recipe">
-                            <font>
-                                <Font name="System Bold" size="20.0" />
-                            </font>
-                        </Text>
-                    </children>
-                </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="16.0">
+                <children>
+                    <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#onBackPressed" pickOnBounds="true"
+                               preserveRatio="true">
+                        <image>
+                            <Image url="@../../../assets/ic_back.png"/>
+                        </image>
+                    </ImageView>
+                    <Text fx:id="textTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Recipe">
+                        <font>
+                            <Font name="System Bold" size="20.0"/>
+                        </font>
+                    </Text>
+                </children>
+            </HBox>
         </VBox>
     </top>
 </BorderPane>

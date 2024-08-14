@@ -71,11 +71,14 @@ public class RecipeController extends BaseRecipeListing {
     private void loadSelectedCategories() {
         Platform.runLater(() -> {
             categoryGrid.getChildren().clear();
-            for (int i = 0; i < userCategoryService.getSelectedCategories().size(); i++) {
-                AnchorPane anchorPane = new AnchorPane();
-                Label label = new Label(userCategoryService.getSelectedCategories().get(i).getCategoryName());
-                anchorPane.getChildren().add(label);
-                categoryGrid.add(anchorPane, i % 4, userCategoryService.getSelectedCategories().size() / 4);
+            var rowItems = 10;
+            var categories = userCategoryService.getSelectedCategories();
+            for (int i = 0; i < categories.size(); i++) {
+                Label categoryLabel = new Label(categories.get(i).getCategoryName());
+                categoryLabel.getStyleClass().add("grid-item");
+                int row = i / rowItems;
+                int col = i % rowItems;
+                categoryGrid.add(categoryLabel, col, row);
             }
         });
 

@@ -31,15 +31,14 @@ public class MyRecipeController extends BaseRecipeListing {
     }
 
     private void onAddRecipe(ActionEvent actionEvent) {
-        NavigationUtil.insertChild("add-recipe-view.fxml");
+        AddRecipeController.navigateToAddRecipe();
     }
 
     private void fetchRecipes() {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getRecipeByUserId(UserDetailStore.getInstance().getUserId(), response -> {
             if (response.isSuccess()) {
-                if (!response.getData().isEmpty())
-                    loadRecipeComponents(response.getData());
+                loadRecipeComponents(response.getData());
             } else {
                 logger.error("Failed to fetch recipes {}", response.getMessage());
             }
