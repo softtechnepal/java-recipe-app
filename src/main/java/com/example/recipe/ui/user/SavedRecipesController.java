@@ -17,6 +17,8 @@ public class SavedRecipesController extends BaseRecipeListing {
     public VBox progressContainer;
     @FXML
     public TextField searchField;
+    @FXML
+    public VBox noRecipeFound;
 
     @FXML
     public void initialize() {
@@ -28,12 +30,7 @@ public class SavedRecipesController extends BaseRecipeListing {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getFavoriteRecipes(response -> {
             if (response.isSuccess()) {
-                if (!response.getData().isEmpty()) {
-                    loadRecipeComponents(response.getData());
-                } else {
-                    Platform.runLater(() -> progressContainer.setVisible(false));
-                    logger.info("No saved recipes found");
-                }
+                loadRecipeComponents(response.getData(), noRecipeFound);
             } else {
                 logger.error("Failed to fetch saved recipes {}", response.getMessage());
             }

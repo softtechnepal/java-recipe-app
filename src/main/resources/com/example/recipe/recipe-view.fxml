@@ -30,7 +30,10 @@
                         <!-- Content goes here -->
                     </GridPane>
                 </ScrollPane>
-
+                <VBox fx:id="noRecipeFound" alignment="CENTER" minHeight="500" spacing="20" visible="false"
+                      HBox.hgrow="ALWAYS">
+                    <Label text="No recipes found" style="-fx-font-size:22px; -fx-text-fill: #333 "/>
+                </VBox>
                 <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false"
                       HBox.hgrow="ALWAYS">
                     <ProgressIndicator minHeight="60" minWidth="60"/>

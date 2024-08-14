@@ -4,7 +4,6 @@ import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
 import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
-import com.example.recipe.utils.NavigationUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +23,8 @@ public class MyRecipeController extends BaseRecipeListing {
     public VBox progressContainer;
     @FXML
     public TextField searchField;
+    @FXML
+    public VBox noRecipeFound;
 
     private static final UserRecipeService userRecipeService = new UserRecipeService();
 
@@ -44,7 +45,7 @@ public class MyRecipeController extends BaseRecipeListing {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getRecipeByUserId(UserDetailStore.getInstance().getUserId(), response -> {
             if (response.isSuccess()) {
-                loadRecipeComponents(response.getData());
+                loadRecipeComponents(response.getData(), noRecipeFound);
             } else {
                 logger.error("Failed to fetch recipes {}", response.getMessage());
             }

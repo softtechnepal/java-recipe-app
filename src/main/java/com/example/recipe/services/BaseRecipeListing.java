@@ -37,11 +37,13 @@ public abstract class BaseRecipeListing {
 
     private final TaskManager taskManager = TaskManager.getInstance();
 
-    public void loadRecipeComponents(List<Recipe> data) {
+    public void loadRecipeComponents(List<Recipe> data, VBox noRecipeFound) {
         if (data.isEmpty()) {
             getProgressContainer().setVisible(false);
+            noRecipeFound.setVisible(true);
             return;
         }
+        noRecipeFound.setVisible(false);
         if (loadRecipeIfExists(data)) return;
 
         final Task<Void> loadingTask;
