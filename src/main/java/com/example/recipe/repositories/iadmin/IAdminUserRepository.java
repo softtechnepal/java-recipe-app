@@ -10,4 +10,5 @@ public interface IAdminUserRepository {
     DbResponse<User> getUserById(long userId);
     DbResponse<User> toggleUserStatus(long userId, String status);
     DbResponse<ArrayList<User>> getAllUsersByParams(String pararms);
+    DbResponse<Void> changePassword(String oldPassword, String newPassword);
 }
