@@ -6,11 +6,15 @@ import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.domain.response.LoginResponse;
 import com.example.recipe.services.AuthenticationService;
 import com.example.recipe.services.UserDetailStore;
+import com.example.recipe.ui.dialogs.EmailVerificationDialog;
+import com.example.recipe.ui.dialogs.UpdatePasswordDialog;
 import com.example.recipe.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class LoginController {
     @FXML
@@ -33,6 +37,7 @@ public class LoginController {
     private Button loginButton;
 
     public final static String LOGIN_ROUTE = "login-view.fxml";
+    private final AuthenticationService authenticationService = new AuthenticationService();
 
     @FXML
     public void initialize() {
@@ -55,7 +60,6 @@ public class LoginController {
         LoginRequest loginRequest = new LoginRequest(username, password);
 
         if (validateLogin(loginRequest)) {
-            AuthenticationService authenticationService = new AuthenticationService();
             authenticationService.authenticate(loginRequest, this::handleLoginResponse);
         }
     }
@@ -102,12 +106,56 @@ public class LoginController {
         NavigationUtil.navigateTo("register-view.fxml");
     }
 
+
     @FXML
     private void handleForgotPassword() {
-        // Navigate to forgot password screen
+        EmailVerificationDialog dialog = new EmailVerificationDialog(
+                "Forgot Password",
+                "Enter your email address",
+                "Email",
+                "Verify my email",
+                this::handleEmailVerification
+        );
+        dialog.showAndWait();
     }
 
-    public void handleContinueAsGuest() {
+    private void handleEmailVerification(EmailVerificationDialog.DialogResponse data) {
+        authenticationService.validateEmail(data.getData(), (response -> {
+            if (response.isSuccess()) {
+                showOtpDialog(data.getData(), data.getStage());
+            } else {
+                DialogUtil.showErrorDialog("Error", response.getMessage());
+            }
+        }));
+    }
+
+    private void showOtpDialog(String email, Stage stage) {
+        EmailVerificationDialog dialog = new EmailVerificationDialog(
+                "OTP Verification",
+                "Enter the OTP sent to your email",
+                "OTP",
+                "Verify OTP",
+                data -> {
+                    if (authenticationService.isValidOtp(data.getData())) {
+                        showChangePassword(email);
+                        stage.close();
+                        data.getStage().close();
+                    } else {
+                        DialogUtil.showErrorDialog("Error", "Invalid OTP");
+                    }
+                }
+        );
+        dialog.showAndWait();
+    }
+
+    private void showChangePassword(String email) {
+        var dialog = new UpdatePasswordDialog(email, authenticationService, (value) -> {
+            DialogUtil.showInfoDialog("Success", "Password updated successfully");
+        });
+        dialog.showAndWait();
+    }
+
+    public void handleContinueAsGuest(MouseEvent mouseEvent) {
         NavigationUtil.navigateTo("dashboard-view.fxml");
     }
 }

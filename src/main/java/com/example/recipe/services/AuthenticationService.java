@@ -23,8 +23,19 @@ public class AuthenticationService {
         authRepository.register(register, result);
     }
 
+    public void validateEmail(String email, DatabaseCallback<String> result) {
+        authRepository.validateEmail(email, result);
+    }
+
     public DbResponse<String> forgotPassword(String email) {
         return authRepository.forgotPassword(email);
     }
 
+    public boolean isValidOtp(String otpCode) {
+        return otpCode.equals("1234");
+    }
+
+    public void updatePassword(String email, String password, DatabaseCallback<String> callback) {
+        authRepository.updatePassword(email, password, callback);
+    }
 }

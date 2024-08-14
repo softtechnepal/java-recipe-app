@@ -12,4 +12,8 @@ public interface AuthRepository {
     void register(UserRequest register, DatabaseCallback<String> result);
 
     DbResponse<String> forgotPassword(String email);
+
+    void validateEmail(String email, DatabaseCallback<String> result);
+
+    void updatePassword(String email, String password, DatabaseCallback<String> callback);
 }

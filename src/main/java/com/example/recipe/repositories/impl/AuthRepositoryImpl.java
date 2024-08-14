@@ -122,4 +122,48 @@ public class AuthRepositoryImpl implements AuthRepository {
     public DbResponse<String> forgotPassword(String email) {
         return DbResponse.failure("Not implemented");
     }
+
+    @Override
+    public void validateEmail(String email, DatabaseCallback<String> result) {
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                if (userExistsByEmail(connection, email)) {
+                    return DbResponse.success("Email is valid", "Email is valid");
+                }
+                return DbResponse.failure("Email not found in the system");
+            } catch (Exception e) {
+                return DbResponse.failure(e.getMessage());
+            }
+        }, result);
+    }
+
+    @Override
+    public void updatePassword(String email, String password, DatabaseCallback<String> callback) {
+        DatabaseThread.runDataOperation(() -> {
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                String updateQuery = "UPDATE users SET password = ? WHERE email = ?";
+                try (PreparedStatement stmt = connection.prepareStatement(updateQuery)) {
+                    stmt.setString(1, PasswordUtil.hashPassword(password));
+                    stmt.setString(2, email);
+                    stmt.executeUpdate();
+                    return DbResponse.success("Password updated successfully", email);
+                }
+            } catch (Exception e) {
+                return DbResponse.failure(e.getMessage());
+            }
+        }, callback);
+    }
+
+    private boolean userExistsByEmail(Connection connection, String email) {
+        String query = "SELECT 1 FROM users WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            logger.error("Error while checking if user exists by email", e);
+            return false;
+        }
+    }
 }
