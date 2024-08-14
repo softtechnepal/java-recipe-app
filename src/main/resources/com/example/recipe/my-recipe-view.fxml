@@ -16,14 +16,12 @@
 <BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.MyRecipeController">
     <center>
-        <VBox fx:id="containerVBox" BorderPane.alignment="CENTER">
-            <GridPane fx:id="categoryGrid" BorderPane.alignment="CENTER">
-                <!-- Content goes here -->
-            </GridPane>
+        <VBox BorderPane.alignment="CENTER" style="-fx-padding: 8px">
             <!-- My Recipes -->
             <StackPane>
-                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="recipe-card-grid">
+                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="no-scroll-bars"
+                            style="-fx-background-color: transparent;">
+                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                         <!-- Content goes here -->
                     </GridPane>
                 </ScrollPane>

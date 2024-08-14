@@ -272,6 +272,10 @@ public class RecipeDetailController {
 
         voicePlayerTask.setOnSucceeded(event -> {
             logger.info("Task completed");
+            if (recentPauseIcon != null && recentPlayIcon != null) {
+                ViewUtil.setVisibility(recentPauseIcon, false);
+                ViewUtil.setVisibility(recentPlayIcon, true);
+            }
         });
 
         voicePlayerTask.setOnCancelled(event -> {

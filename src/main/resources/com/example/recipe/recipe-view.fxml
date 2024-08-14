@@ -18,7 +18,7 @@
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeController">
     <center>
         <VBox fx:id="containerVBox" BorderPane.alignment="CENTER">
-            <GridPane fx:id="categoryGrid" BorderPane.alignment="CENTER" vgap="12" hgap="12"
+            <GridPane fx:id="categoryGrid" BorderPane.alignment="CENTER"
                       style="-fx-padding: 16px 40px 0px 40px">
                 <!-- Content goes here -->
             </GridPane>

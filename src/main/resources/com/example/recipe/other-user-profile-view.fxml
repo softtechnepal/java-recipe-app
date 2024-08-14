@@ -28,36 +28,39 @@
                 </children>
             </VBox>
         </HBox>
-        <VBox style="-fx-padding: 24px" spacing="30">
-            <HBox spacing="30" alignment="CENTER_LEFT">
-                <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
-                           pickOnBounds="true" cache="true">
-                    <image>
-                        <Image url="@../../../assets/users.png"/>
-                    </image>
-                    <clip>
-                        <Circle radius="75" centerX="75" centerY="75"/>
-                    </clip>
-                </ImageView>
-                <VBox spacing="8">
-                    <Label fx:id="fullName" style="-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold"
-                           text="Full Name">
-                        <padding>
-                            <Insets top="12.0"/>
-                        </padding>
-                    </Label>
-                    <Label fx:id="usernameLabel" style="-fx-font-size: 16;" text="Username"/>
-                    <Label fx:id="emailLabel" style="-fx-font-size: 16;" text="Email"/>
-                </VBox>
-            </HBox>
+        <VBox spacing="4" style="-fx-padding: 8px">
+            <VBox style="-fx-padding: 18px" spacing="16">
+                <HBox spacing="30" alignment="CENTER_LEFT">
+                    <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0"
+                               pickOnBounds="true" cache="true">
+                        <image>
+                            <Image url="@../../../assets/users.png"/>
+                        </image>
+                        <clip>
+                            <Circle radius="75" centerX="75" centerY="75"/>
+                        </clip>
+                    </ImageView>
+                    <VBox spacing="8">
+                        <Label fx:id="fullName" style="-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold"
+                               text="Full Name">
+                            <padding>
+                                <Insets top="12.0"/>
+                            </padding>
+                        </Label>
+                        <Label fx:id="usernameLabel" style="-fx-font-size: 16;" text="Username"/>
+                        <Label fx:id="emailLabel" style="-fx-font-size: 16;" text="Email"/>
+                    </VBox>
+                </HBox>
+                <Label style="-fx-text-fill: black; -fx-font-size: 24px; -fx-font-weight: bold" text="Recipes"/>
+                <Separator/>
+            </VBox>
             <!-- My Recipes -->
-            <Label style="-fx-text-fill: black; -fx-font-size: 24px; -fx-font-weight: bold" text="Recipes"/>
-            <Separator/>
             <StackPane>
-                <ScrollPane style="-fx-background-color: white; -fx-background: white;" styleClass="no-scroll-bars"
+                <ScrollPane style="-fx-background-color: white; -fx-background: white;"
+                            styleClass="no-scroll-bars"
                             HBox.hgrow="ALWAYS"
                             VBox.vgrow="ALWAYS">
-                    <GridPane fx:id="menuGrid" hgap="16" style="-fx-background-color: white" vgap="16">
+                    <GridPane fx:id="menuGrid" style="-fx-background-color: white">
                     </GridPane>
                 </ScrollPane>
                 <VBox fx:id="noRecipeFound" alignment="CENTER" minHeight="500" spacing="20" visible="false"
