@@ -48,6 +48,10 @@ public class DashboardController {
         }
 
         activateMenuItem(menuItems.get(0));
+
+        if (!UserDetailStore.getInstance().isLoggedIn()) {
+            logoutMenuItem.setLabel("Login to continue");
+        }
     }
 
     private void activateMenuItem(CustomMenuItem menuItem) {
@@ -59,6 +63,10 @@ public class DashboardController {
     }
 
     public void onLogout(MouseEvent mouseEvent) {
+        if (!UserDetailStore.getInstance().isLoggedIn()) {
+            NavigationUtil.navigateTo(LoginController.LOGIN_ROUTE);
+            return;
+        }
         if (DialogUtil.showLogoutConfirmation()) {
             NavigationUtil.logout();
         }
