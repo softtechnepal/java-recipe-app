@@ -6,10 +6,10 @@ import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.ui.dialogs.AddReviewDialog;
 import com.example.recipe.ui.dialogs.ReviewListingDialog;
-import com.example.recipe.utils.DialogUtil;
-import com.example.recipe.utils.ImageUtil;
-import com.example.recipe.utils.NavigationUtil;
+import com.example.recipe.utils.*;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -17,6 +17,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
@@ -26,12 +27,11 @@ import java.awt.*;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.example.recipe.Constants.SPEAKING_TASK_ID;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class RecipeDetailController {
@@ -81,6 +81,9 @@ public class RecipeDetailController {
     public Label lbServings;
     @FXML
     public ImageView profileImage;
+
+    private HBox recentPlayIcon;
+    private HBox recentPauseIcon;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -192,13 +195,106 @@ public class RecipeDetailController {
         steps.sort(Comparator.comparingInt(Steps::getStepOrder));
         this.recipeSteps.getChildren().clear();
         for (Steps step : steps) {
+            HBox container = new HBox();
+            container.setAlignment(Pos.CENTER_LEFT);
+
             Label stepLabel = new Label(step.getStepName());
             stepLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 20px");
             Text stepDescription = new Text(step.getStepDescription());
             stepDescription.setWrappingWidth(790);
             stepDescription.setStyle("-fx-font-weight: normal; -fx-font-size: 16px; -fx-text-fill: #333333;");
             Separator separator = new Separator();
-            this.recipeSteps.getChildren().addAll(stepLabel, stepDescription, separator);
+            container.getChildren().addAll(stepLabel, playerControls(step.getStepDescription()));
+
+            this.recipeSteps.getChildren().addAll(container, stepDescription, separator);
+        }
+    }
+
+    private HBox playerControls(String description) {
+        HBox playerControls = new HBox();
+        HBox.setHgrow(playerControls, Priority.ALWAYS);
+        playerControls.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox playIcon = getIcon("src/main/resources/assets/ic_play.png");
+        HBox pauseIcon = getIcon("src/main/resources/assets/ic_stop.png");
+        pauseIcon.setVisible(false);
+        pauseIcon.setManaged(false);
+
+        playIcon.setOnMouseClicked(mouseEvent -> {
+            logger.info("Playing audio");
+            startSpeaking(description, playIcon, pauseIcon);
+        });
+
+        pauseIcon.setOnMouseClicked(mouseEvent -> {
+            stopSpeaking();
+        });
+
+
+        playerControls.getChildren().addAll(playIcon, pauseIcon);
+        return playerControls;
+    }
+
+    private HBox getIcon(String iconPath) {
+        HBox imageContainer = new HBox();
+        imageContainer.setMaxHeight(25);
+        imageContainer.setMaxWidth(25);
+        ImageView imageView = new ImageView();
+        ImageUtil.loadImageAsync(iconPath, imageView);
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        imageView.setPreserveRatio(true);
+        imageView.setStyle("-fx-cursor: hand; -fx-padding: 5px; -fx-background-color: white");
+        imageContainer.getChildren().add(imageView);
+        return imageContainer;
+    }
+
+    private void startSpeaking(String description, HBox playIcon, HBox pauseIcon) {
+        Task<Void> voicePlayerTask = new Task<>() {
+            @Override
+            protected Void call() {
+                ViewUtil.setVisibility(playIcon, false);
+                ViewUtil.setVisibility(pauseIcon, true);
+                TextToSpeech.speak(description);
+                return null;
+            }
+        };
+
+        TaskManager.getInstance().startTask(voicePlayerTask, SPEAKING_TASK_ID);
+
+        voicePlayerTask.setOnFailed(event -> {
+            logger.error("Task failed");
+            if (recentPauseIcon != null && recentPlayIcon != null) {
+                ViewUtil.setVisibility(recentPauseIcon, false);
+                ViewUtil.setVisibility(recentPlayIcon, true);
+            }
+            TextToSpeech.stopSpeaking();
+        });
+
+        voicePlayerTask.setOnSucceeded(event -> {
+            logger.info("Task completed");
+            if (recentPauseIcon != null && recentPlayIcon != null) {
+                ViewUtil.setVisibility(recentPauseIcon, false);
+                ViewUtil.setVisibility(recentPlayIcon, true);
+            }
+        });
+
+        voicePlayerTask.setOnCancelled(event -> {
+            logger.info("Task cancelled");
+            if (recentPauseIcon != null && recentPlayIcon != null) {
+                ViewUtil.setVisibility(recentPauseIcon, false);
+                ViewUtil.setVisibility(recentPlayIcon, true);
+            }
+
+            TextToSpeech.stopSpeaking();
+        });
+        recentPlayIcon = playIcon;
+        recentPauseIcon = pauseIcon;
+    }
+
+    private void stopSpeaking() {
+        var task = TaskManager.getInstance().getTask(SPEAKING_TASK_ID);
+        if (task != null) {
+            task.cancel();
         }
     }
 
@@ -237,7 +333,7 @@ public class RecipeDetailController {
     }
 
     public void onBackPressed(MouseEvent mouseEvent) {
-
+        NavigationUtil.goBack();
     }
 
     public void onViewReviews(MouseEvent mouseEvent) {

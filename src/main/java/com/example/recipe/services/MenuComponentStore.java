@@ -47,6 +47,12 @@ public class MenuComponentStore {
         }
     }
 
+    public void clearAllMenuComponents() {
+        allMenuComponents.clear();
+        myMenuComponents.clear();
+        favouriteMenuComponents.clear();
+    }
+
     public List<VBox> getMenuComponents(MenuListingType menuListingType) {
         if (menuListingType == MenuListingType.ALL_RECIPE) {
             return allMenuComponents.stream().map(UiModel::getvBoxes).toList();

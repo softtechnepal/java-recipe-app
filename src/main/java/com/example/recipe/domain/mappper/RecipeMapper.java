@@ -8,14 +8,14 @@ import com.example.recipe.domain.recipe.Review;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class RecipeMapper {
+
     public static List<Recipe> mapResultSetToRecipes(ResultSet resultSet, boolean fromSaved) throws SQLException {
-        Map<Long, Recipe> recipeMap = new HashMap<>();
+        Map<Long, Recipe> recipeMap = new LinkedHashMap<>(); // Use LinkedHashMap to maintain insertion order
 
         boolean hasIsSavedColumn = false;
         if (!fromSaved) {
@@ -62,7 +62,6 @@ public class RecipeMapper {
         }
         return new ArrayList<>(recipeMap.values());
     }
-
 
     public static Recipe mapRecipe(ResultSet resultSet) throws SQLException {
         Recipe recipe = new Recipe();

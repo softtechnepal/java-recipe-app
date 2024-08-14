@@ -2,18 +2,23 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<VBox id="menuItemCard" prefHeight="300.0" prefWidth="335.0" styleClass="elevated-card"
+<?import javafx.scene.shape.Rectangle?>
+<VBox id="menuItemCard" prefHeight="300.0" prefWidth="280.0" styleClass="elevated-card"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:id="root"
       fx:controller="com.example.recipe.ui.user.MenuItemController"
       style="-fx-cursor: hand"
       onMouseClicked="#navigateToDetail">
     <children>
-        <ImageView fx:id="recipeImage" cache="true" cacheHint="SCALE" fitHeight="220" fitWidth="315">
+        <ImageView fx:id="recipeImage" cache="true" cacheHint="SCALE" fitHeight="210" fitWidth="265">
             <image>
             </image>
+            <clip>
+                <Rectangle width="265" height="210" arcWidth="32" arcHeight="32"/>
+            </clip>
         </ImageView>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="12.0">
             <children>
@@ -26,12 +31,6 @@
                                        text="Russian Salad" VBox.vgrow="ALWAYS"/>
                             </children>
                         </VBox>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../../assets/ic_start.png"/>
-                            </image>
-                        </ImageView>
-                        <Label fx:id="rating" style="-fx-text-fill: #ADADAD" text="4.5"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="25.0" prefWidth="284.0" spacing="12.0">

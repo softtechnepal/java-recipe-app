@@ -18,19 +18,22 @@
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.RecipeController">
     <center>
         <VBox fx:id="containerVBox" BorderPane.alignment="CENTER">
-            <GridPane fx:id="categoryGrid" BorderPane.alignment="CENTER" vgap="12" hgap="12"
+            <GridPane fx:id="categoryGrid" BorderPane.alignment="CENTER"
                       style="-fx-padding: 16px 40px 0px 40px">
                 <!-- Content goes here -->
             </GridPane>
             <!-- My Recipes -->
             <StackPane>
                 <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="no-scroll-bars"
-                            style="-fx-background-color: transparent; -fx-padding: 16px 24px 24px 24px">
-                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" vgap="24" hgap="24">
+                            style="-fx-background-color: transparent; -fx-padding: 8px">
+                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                         <!-- Content goes here -->
                     </GridPane>
                 </ScrollPane>
-
+                <VBox fx:id="noRecipeFound" alignment="CENTER" minHeight="500" spacing="20" visible="false"
+                      HBox.hgrow="ALWAYS">
+                    <Label text="No recipes found" style="-fx-font-size:22px; -fx-text-fill: #333 "/>
+                </VBox>
                 <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false"
                       HBox.hgrow="ALWAYS">
                     <ProgressIndicator minHeight="60" minWidth="60"/>
@@ -52,7 +55,7 @@
                         <Button styleClass="table-header-button" nodeOrientation="RIGHT_TO_LEFT"
                                 onMouseClicked="#onFilterClicked" text="Filter By Category">
                             <graphic>
-                                <ImageView fx:id="filterIcon" fitWidth="16" fitHeight="16" preserveRatio="true">
+                                <ImageView fx:id="filterIcon" fitWidth="14" fitHeight="14" preserveRatio="true">
                                     <Image url="@../../../assets/sidemenu/tag_active.png"/>
                                 </ImageView>
                             </graphic>

@@ -37,11 +37,13 @@ public abstract class BaseRecipeListing {
 
     private final TaskManager taskManager = TaskManager.getInstance();
 
-    public void loadRecipeComponents(List<Recipe> data) {
+    public void loadRecipeComponents(List<Recipe> data, VBox noRecipeFound) {
         if (data.isEmpty()) {
             getProgressContainer().setVisible(false);
+            noRecipeFound.setVisible(true);
             return;
         }
+        noRecipeFound.setVisible(false);
         if (loadRecipeIfExists(data)) return;
 
         final Task<Void> loadingTask;
@@ -127,7 +129,8 @@ public abstract class BaseRecipeListing {
     }
 
     protected void searchRecipes(String query) {
-        List<UiModel> filteredResult = menuComponentStore.getAllMenuModel().stream().filter(vBox -> {
+        var currentRecipes = menuComponentStore.getMenuModel(getMenuListingType());
+        List<UiModel> filteredResult = currentRecipes.stream().filter(vBox -> {
             MenuItemController controller = vBox.getMenuItemController();
             return controller.getRecipe().getTitle().toLowerCase().contains(query.toLowerCase());
         }).toList();
@@ -140,11 +143,12 @@ public abstract class BaseRecipeListing {
     }
 
     public void updateGridPane(List<VBox> menuItems) {
+        int colums = 4;
         Platform.runLater(() -> {
             getProgressContainer().setVisible(false);
             getMenuGrid().getChildren().clear();
             for (int i = 0; i < menuItems.size(); i++) {
-                getMenuGrid().add(menuItems.get(i), i % 3, i / 3);
+                getMenuGrid().add(menuItems.get(i), i % colums, i / colums);
                 GridPane.setMargin(menuItems.get(i), new Insets(10));
             }
         });

@@ -130,7 +130,6 @@ public class RegisterController {
     }
 
     public void handleContinueAsGuest(MouseEvent mouseEvent) {
-        // TODO(prachan): Implement this method
-
+        NavigationUtil.navigateTo("dashboard-view.fxml");
     }
 }

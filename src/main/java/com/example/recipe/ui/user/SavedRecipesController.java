@@ -4,6 +4,7 @@ import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -14,22 +15,22 @@ public class SavedRecipesController extends BaseRecipeListing {
     public GridPane menuGrid;
     @FXML
     public VBox progressContainer;
+    @FXML
+    public TextField searchField;
+    @FXML
+    public VBox noRecipeFound;
 
     @FXML
     public void initialize() {
         fetchSavedRecipes();
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchRecipes(newValue));
     }
 
     private void fetchSavedRecipes() {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getFavoriteRecipes(response -> {
             if (response.isSuccess()) {
-                if (!response.getData().isEmpty()) {
-                    loadRecipeComponents(response.getData());
-                } else {
-                    Platform.runLater(() -> progressContainer.setVisible(false));
-                    logger.info("No saved recipes found");
-                }
+                loadRecipeComponents(response.getData(), noRecipeFound);
             } else {
                 logger.error("Failed to fetch saved recipes {}", response.getMessage());
             }

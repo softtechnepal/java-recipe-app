@@ -46,4 +46,8 @@ public class UserDetailStore {
     public void setUserId(long userId) {
         this.userId = userId;
     }
+
+    public boolean isLoggedIn() {
+        return userId != 0;
+    }
 }

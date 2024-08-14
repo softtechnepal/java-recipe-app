@@ -2,11 +2,10 @@
 package com.example.recipe.ui.user;
 
 import com.example.recipe.components.CustomMenuItem;
+import com.example.recipe.services.MenuComponentStore;
 import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.ui.common.authentication.LoginController;
-import com.example.recipe.utils.ImageUtil;
-import com.example.recipe.utils.NavigationUtil;
-import com.example.recipe.utils.SingletonObjects;
+import com.example.recipe.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,7 +59,9 @@ public class DashboardController {
     }
 
     public void onLogout(MouseEvent mouseEvent) {
-        UserDetailStore.getInstance().clear();
-        NavigationUtil.navigateTo(LoginController.LOGIN_ROUTE);
+        if (DialogUtil.showLogoutConfirmation()) {
+            NavigationUtil.logout();
+        }
+
     }
 }

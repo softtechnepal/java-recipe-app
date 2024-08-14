@@ -4,11 +4,11 @@ import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
 import com.example.recipe.services.UserDetailStore;
 import com.example.recipe.services.user.UserRecipeService;
-import com.example.recipe.utils.NavigationUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -21,6 +21,10 @@ public class MyRecipeController extends BaseRecipeListing {
     public Button btnAddRecipe;
     @FXML
     public VBox progressContainer;
+    @FXML
+    public TextField searchField;
+    @FXML
+    public VBox noRecipeFound;
 
     private static final UserRecipeService userRecipeService = new UserRecipeService();
 
@@ -28,6 +32,9 @@ public class MyRecipeController extends BaseRecipeListing {
     public void initialize() {
         btnAddRecipe.setOnAction(this::onAddRecipe);
         fetchRecipes();
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchRecipes(newValue);
+        });
     }
 
     private void onAddRecipe(ActionEvent actionEvent) {
@@ -38,7 +45,7 @@ public class MyRecipeController extends BaseRecipeListing {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getRecipeByUserId(UserDetailStore.getInstance().getUserId(), response -> {
             if (response.isSuccess()) {
-                loadRecipeComponents(response.getData());
+                loadRecipeComponents(response.getData(), noRecipeFound);
             } else {
                 logger.error("Failed to fetch recipes {}", response.getMessage());
             }

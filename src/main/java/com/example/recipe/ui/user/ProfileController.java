@@ -7,15 +7,21 @@ import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -139,6 +145,22 @@ public class ProfileController {
             } catch (Exception e) {
                 DialogUtil.showErrorDialog("Error", "Error while uploading image");
             }
+        }
+    }
+
+    public void onChangePassword(MouseEvent mouseEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/recipe/change-password-dialog.fxml"));
+            Parent root = loader.load();
+            ChangePasswordController controller = loader.getController();
+            Stage stage = new Stage();
+            controller.setDialogStage(stage);
+            stage.setTitle("Change Password");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            DialogUtil.showErrorDialog("Error", "Unable to load change password dialog.");
         }
     }
 }

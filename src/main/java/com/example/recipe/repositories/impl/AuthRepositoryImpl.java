@@ -24,11 +24,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     public void login(LoginRequest loginRequest, DatabaseCallback<LoginResponse> result) {
         DatabaseThread.runDataOperation(() -> {
             try (Connection connection = DatabaseConfig.getConnection()) {
-                if (userExists(connection, loginRequest.getUsername())) {
-                    return authenticateUser(connection, loginRequest);
-                } else {
-                    return DbResponse.failure("Invalid username or password");
-                }
+                return authenticateUser(connection, loginRequest);
             } catch (Exception e) {
                 logger.error("Error while logging in", e);
                 return DbResponse.failure(e.getMessage());

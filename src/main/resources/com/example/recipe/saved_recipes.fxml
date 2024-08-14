@@ -13,37 +13,41 @@
 
 
 <BorderPane prefHeight="1680" prefWidth="1680" xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1"  fx:controller="com.example.recipe.ui.user.SavedRecipesController">
-<center>
-    <VBox fx:id="containerVBox" BorderPane.alignment="CENTER">
-        <GridPane fx:id="categoryGrid"  BorderPane.alignment="CENTER">
-            <!-- Content goes here -->
-        </GridPane>
-        <!-- My Recipes -->
-        <StackPane>
-            <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" >
-                    <!-- Content goes here -->
-                </GridPane>
-            </ScrollPane>
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.recipe.ui.user.SavedRecipesController">
+    <center>
+        <VBox BorderPane.alignment="CENTER" style="-fx-padding: 8px">
+            <!-- My Recipes -->
+            <StackPane>
+                <ScrollPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" styleClass="no-scroll-bars"
+                            style="-fx-background-color: transparent;">
+                    <GridPane fx:id="menuGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <!-- Content goes here -->
+                    </GridPane>
+                </ScrollPane>
+                <VBox fx:id="noRecipeFound" alignment="CENTER" minHeight="500" spacing="20" visible="false"
+                      HBox.hgrow="ALWAYS">
+                    <Label text="No recipes found" style="-fx-font-size:22px; -fx-text-fill: #333 "/>
+                </VBox>
+                <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false"
+                      HBox.hgrow="ALWAYS">
+                    <ProgressIndicator minHeight="60" minWidth="60"/>
+                    <Label styleClass="table-header-main" text="Loading Recipes..."/>
+                </VBox>
+            </StackPane>
+        </VBox>
+    </center>
+    <top>
+        <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
+            <children>
+                <Text styleClass="table-header-main" text="Saved Recipes"/>
+                <Text styleClass="table-header-desc"
+                      text="This is the list of recipes that all the users have created throughout the application"/>
+                <HBox spacing="700.0" VBox.vgrow="ALWAYS">
+                    <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search"
+                               HBox.hgrow="ALWAYS" fx:id="searchField"/>
 
-            <VBox fx:id="progressContainer" alignment="CENTER" minHeight="500" spacing="20" visible="false" HBox.hgrow="ALWAYS">
-                <ProgressIndicator minHeight="60" minWidth="60"/>
-                <Label styleClass="table-header-main" text="Loading Recipes..."/>
-            </VBox>
-        </StackPane>
-    </VBox>
-</center>
-<top>
-    <VBox styleClass="table-header" BorderPane.alignment="TOP_LEFT">
-        <children>
-            <Text styleClass="table-header-main" text="Saved Recipes" />
-            <Text styleClass="table-header-desc" text="This is the list of recipes that all the users have created throughout the application" />
-            <HBox spacing="700.0" VBox.vgrow="ALWAYS">
-                <TextField promptText="Please search recipe using recipe title" styleClass="table-header-search" HBox.hgrow="ALWAYS" fx:id="searchField"/>
-
-            </HBox>
-        </children>
-    </VBox>
-</top>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
 </BorderPane>

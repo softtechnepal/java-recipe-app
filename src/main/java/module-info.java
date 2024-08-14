@@ -13,6 +13,7 @@ module com.example.recipe {
     requires org.slf4j;
     requires jbcrypt;
     requires java.desktop;
+    requires freetts;
 
     opens com.example.recipe to javafx.fxml;
     exports com.example.recipe;

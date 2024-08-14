@@ -13,9 +13,9 @@
     <children>
         <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
               AnchorPane.topAnchor="0.0"
-              spacing="24"
         >
-            <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="16.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="16.0"
+                  style="-fx-background-color: #fdd87f; -fx-padding: 24px">
                 <children>
                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
                                onMouseClicked="#onBackPressed">
@@ -32,7 +32,7 @@
             </HBox>
             <ScrollPane style="-fx-background-color: transparent; -fx-background: transparent;"
                         styleClass="no-scroll-bars">
-                <HBox alignment="CENTER_LEFT">
+                <HBox alignment="CENTER_LEFT" style="-fx-padding: 24px;">
                     <children>
                         <VBox maxWidth="300.0" minWidth="830.0" prefHeight="200.0" spacing="16.0" HBox.hgrow="ALWAYS">
                             <HBox.margin>
@@ -54,7 +54,7 @@
                                                        pickOnBounds="true"
                                                        cache="true">
                                                 <image>
-                                                    <Image url="@../../../assets/users.png"/>
+                                                    <Image url="@../../../assets/profile_placeholder_img.png"/>
                                                 </image>
                                                 <clip>
                                                     <Circle radius="20" centerX="20" centerY="20"/>
@@ -66,9 +66,11 @@
                                     </children>
                                 </VBox>
                                 <HBox spacing="24.0">
-                                    <Label fx:id="lbPreTime" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
+                                    <Label fx:id="lbPreTime"
+                                           style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
                                     <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="10.0"/>
-                                    <Label fx:id="lbServings" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
+                                    <Label fx:id="lbServings"
+                                           style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333"/>
                                     <Separator orientation="VERTICAL" prefHeight="40.0" prefWidth="10.0"/>
                                     <Text fx:id="recipeCreateDate" strokeType="OUTSIDE" strokeWidth="0.0"
                                           text="August 24, 2024"/>
@@ -154,7 +156,4 @@
             </ScrollPane>
         </VBox>
     </children>
-    <padding>
-        <Insets left="24.0" right="24.0" top="24.0"/>
-    </padding>
 </AnchorPane>

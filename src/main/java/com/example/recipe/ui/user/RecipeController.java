@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -28,7 +27,8 @@ public class RecipeController extends BaseRecipeListing {
     public Text navTitle;
     @FXML
     public TextField searchField;
-
+    @FXML
+    public VBox noRecipeFound;
 
     private final UserCategoryService userCategoryService = new UserCategoryService();
 
@@ -46,7 +46,7 @@ public class RecipeController extends BaseRecipeListing {
         Platform.runLater(() -> progressContainer.setVisible(true));
         userRecipeService.getAllRecipes(response -> {
             if (response.isSuccess()) {
-                loadRecipeComponents(response.getData());
+                loadRecipeComponents(response.getData(), noRecipeFound);
             } else {
                 logger.error("Failed to fetch recipes {}", response.getMessage());
             }

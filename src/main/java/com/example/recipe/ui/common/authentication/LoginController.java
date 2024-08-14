@@ -62,7 +62,7 @@ public class LoginController {
 
     private void handleLoginResponse(DbResponse<LoginResponse> response) {
         LoggerUtil.logger.error("Login response: {}", response instanceof DbResponse.Success ? "Success" : "Failure");
-        if (response instanceof DbResponse.Success) {
+        if (response.isSuccess()) {
             UserDetailStore userDetailStore = UserDetailStore.getInstance();
             userDetailStore.setUserEmail(response.getData().getEmail());
             userDetailStore.setUserId(response.getData().getId());
@@ -77,7 +77,7 @@ public class LoginController {
             }
             SingletonUser.getInstance().setLoginResponse(response.getData());
             NavigationUtil.navigateTo("dashboard-view.fxml");
-        } else if (response instanceof DbResponse.Failure) {
+        } else {
             DialogUtil.showErrorDialog("Login Failed", response.getMessage());
         }
     }
@@ -108,6 +108,6 @@ public class LoginController {
     }
 
     public void handleContinueAsGuest() {
-        // Navigate to home screen as guest
+        NavigationUtil.navigateTo("dashboard-view.fxml");
     }
 }

@@ -1,5 +1,8 @@
 package com.example.recipe.utils;
 
+import com.example.recipe.services.MenuComponentStore;
+import com.example.recipe.services.UserDetailStore;
+import com.example.recipe.ui.common.authentication.LoginController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -7,15 +10,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Stack;
 
+import static com.example.recipe.Constants.SPEAKING_TASK_ID;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class NavigationUtil {
@@ -23,9 +26,11 @@ public class NavigationUtil {
     private static final String CSS_PATH = "/com/example/recipe/css/main.css";
     private static String currentChild = "";
     private static final Map<String, Object> currentParams = new HashMap<>();
+    private static Stack<NavigationStack> navigationStack = new Stack<>();
 
     public static void navigateTo(String fxmlFile) {
         // Ensure the following block runs on the JavaFX Application Thread
+        stopSpeaking();
         Platform.runLater(() -> {
                     try {
                         Stage primaryStage = SingletonObjects.getInstance().getPrimaryStage();
@@ -58,11 +63,11 @@ public class NavigationUtil {
         );
     }
 
-
     public static void insertChild(String fxmlFile) {
         if (fxmlFile.equals(currentChild)) {
             return;
         }
+        navigationStack.push(new NavigationStack(currentChild, currentParams));
         replaceChild(fxmlFile);
     }
 
@@ -70,6 +75,10 @@ public class NavigationUtil {
         if (fxmlFile.equals(currentChild)) {
             return;
         }
+        logger.info("Navigating back to {}", currentChild);
+        logger.info("Params: {}", currentParams);
+        Map<String, Object> paramsCopy = new HashMap<>(currentParams);
+        navigationStack.push(new NavigationStack(currentChild, paramsCopy));
         synchronized (currentParams) {
             currentParams.clear();
             currentParams.putAll(params);
@@ -79,6 +88,14 @@ public class NavigationUtil {
 
     private static void replaceChild(String fxmlFile) {
         try {
+            logger.error("Navigating to {}", fxmlFile);
+            if (!UserDetailStore.getInstance().isLoggedIn() && !fxmlFile.equals("recipe-view.fxml")) {
+                DialogUtil.showInfoDialog("Login Information", "Please login you explore more features");
+                navigateTo("login-view.fxml");
+                return;
+            }
+
+            stopSpeaking();
             currentChild = fxmlFile;
             HBox hBoxContainer = SingletonObjects.getInstance().getMainBox();
             URL profile = NavigationUtil.class.getResource(FXML_PATH + fxmlFile);
@@ -93,6 +110,10 @@ public class NavigationUtil {
         }
     }
 
+    private static void stopSpeaking() {
+        TaskManager.getInstance().stopTask(SPEAKING_TASK_ID);
+    }
+
     public static Object getParam(String key) {
         synchronized (currentParams) {
             return currentParams.get(key);
@@ -101,5 +122,51 @@ public class NavigationUtil {
 
     public static void refreshCurrentChild() {
         replaceChild(currentChild);
+    }
+
+    public static void goBack() {
+        if (navigationStack.isEmpty()) {
+            return;
+        }
+        NavigationStack currentStack = navigationStack.pop();
+        ;
+        synchronized (currentParams) {
+            currentParams.clear();
+            currentParams.putAll(currentStack.getParams());
+        }
+        replaceChild(currentStack.getPath());
+    }
+
+    public static class NavigationStack {
+        private final String path;
+        private final Map<String, ?> params;
+
+        public NavigationStack(String filePath, Map<String, ?> params) {
+            this.path = filePath;
+            this.params = params;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public Map<String, ?> getParams() {
+            return params;
+        }
+    }
+
+    public static void clearCache() {
+        navigationStack.clear();
+        currentChild = "";
+        currentParams.clear();
+    }
+
+
+    public static void logout() {
+        NavigationUtil.clearCache();
+        UserDetailStore.getInstance().clear();
+        MenuComponentStore.getInstance().clearAllMenuComponents();
+        TaskManager.getInstance().cancelAllTasks();
+        NavigationUtil.navigateTo(LoginController.LOGIN_ROUTE);
     }
 }

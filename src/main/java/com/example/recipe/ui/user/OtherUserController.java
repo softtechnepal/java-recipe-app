@@ -4,7 +4,6 @@ import com.example.recipe.Constants;
 import com.example.recipe.domain.enums.MenuListingType;
 import com.example.recipe.services.BaseRecipeListing;
 import com.example.recipe.services.UserService;
-import com.example.recipe.services.user.UserRecipeService;
 import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
@@ -30,6 +29,8 @@ public class OtherUserController extends BaseRecipeListing {
     public GridPane menuGrid;
     @FXML
     public VBox progressContainer;
+    @FXML
+    public VBox noRecipeFound;
 
     private Long userId;
 
@@ -66,7 +67,7 @@ public class OtherUserController extends BaseRecipeListing {
             if (response.isSuccess()) {
                 var recipes = response.getData();
                 if (recipes != null) {
-                    loadRecipeComponents(recipes);
+                    loadRecipeComponents(recipes, noRecipeFound);
                 }
             } else {
                 DialogUtil.showErrorDialog("Error", response.getMessage());
@@ -75,7 +76,7 @@ public class OtherUserController extends BaseRecipeListing {
     }
 
     public void onBackPressed(MouseEvent mouseEvent) {
-
+        NavigationUtil.goBack();
     }
 
     @Override

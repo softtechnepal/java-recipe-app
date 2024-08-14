@@ -55,6 +55,7 @@ public class CustomMenuItem extends HBox {
         this.getStyleClass().remove("inactive");
         this.getStyleClass().add("active");
         loadImage(activeIconPath.getValue());
+        NavigationUtil.clearCache();
         NavigationUtil.insertChild(getNavigateToPath());
     }
 
