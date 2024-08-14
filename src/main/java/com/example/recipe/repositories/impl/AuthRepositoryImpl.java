@@ -61,7 +61,8 @@ public class AuthRepositoryImpl implements AuthRepository {
                                 resultSet.getString("email"),
                                 resultSet.getString("first_name"),
                                 resultSet.getString("last_name"),
-                                resultSet.getBoolean("is_admin")
+                                resultSet.getBoolean("is_admin"),
+                                resultSet.getString("status")
                         );
                         return DbResponse.success("Login successful", loginResponse);
                     } else {
@@ -105,7 +106,7 @@ public class AuthRepositoryImpl implements AuthRepository {
             insertStmt.setString(3, register.getUsername());
             insertStmt.setString(4, register.getFirstName());
             insertStmt.setString(5, register.getLastName());
-            insertStmt.setBoolean(6, true); // todo Assuming new users are not admins by default
+            insertStmt.setBoolean(6, false); // todo Assuming new users are not admins by default
             insertStmt.executeUpdate();
         }
     }

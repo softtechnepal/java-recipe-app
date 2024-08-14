@@ -1,6 +1,7 @@
 package com.example.recipe.ui.common.authentication;
 
 import com.example.recipe.domain.common.DbResponse;
+import com.example.recipe.domain.enums.UserStatus;
 import com.example.recipe.domain.request.LoginRequest;
 import com.example.recipe.domain.response.LoginResponse;
 import com.example.recipe.services.AuthenticationService;
@@ -68,6 +69,10 @@ public class LoginController {
             userDetailStore.setUserName(response.getData().getUsername());
             if (response.getData().isAdmin()) {
                 NavigationUtil.navigateTo("admin/base-view.fxml");
+                return;
+            }
+            if (response.getData().getStatus().equals(UserStatus.DISABLED.name())) {
+                DialogUtil.showErrorDialog("Login Failed", "Your account is disabled. Please contact the administrator.");
                 return;
             }
             SingletonUser.getInstance().setLoginResponse(response.getData());
