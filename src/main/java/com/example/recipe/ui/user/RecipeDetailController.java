@@ -10,7 +10,9 @@ import com.example.recipe.utils.DialogUtil;
 import com.example.recipe.utils.ImageUtil;
 import com.example.recipe.utils.NavigationUtil;
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -22,10 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.example.recipe.utils.LoggerUtil.logger;
 
@@ -74,6 +79,8 @@ public class RecipeDetailController {
     public Label lbPreTime;
     @FXML
     public Label lbServings;
+    @FXML
+    public ImageView profileImage;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -148,6 +155,10 @@ public class RecipeDetailController {
 
         // Set Recipe Description
         recipeDescription.setText(data.getDescription());
+
+        if (data.getUser().getProfilePicture() != null) {
+            ImageUtil.loadImageAsync(data.getUser().getProfilePicture(), profileImage);
+        }
 
         // Set Recipe Create Date
         recipeCreateDate.setText(data.getCreatedAt().toString());
@@ -289,14 +300,61 @@ public class RecipeDetailController {
             DialogUtil.showErrorDialog("Error", "No video found for this recipe");
             return;
         }
+        openUrl(currentRecipe.getVideoUrl());
+    }
+
+    private void openUrl(String url) {
         try {
-            URI uri = new URI(currentRecipe.getVideoUrl());
+            URI uri = new URI(url);
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(uri);
             }
         } catch (Exception e) {
             logger.error("Error: ", e);
-            DialogUtil.showErrorDialog("Error", "Failed to open video");
+            DialogUtil.showErrorDialog("Error", "Failed to open URL");
         }
+    }
+
+    public void onShareRecipe(MouseEvent mouseEvent) {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem gmailItem = getMenuItemGmail();
+
+        MenuItem facebookItem = new MenuItem("Share on Facebook");
+        facebookItem.setOnAction(e -> {
+            if (currentRecipe.getVideoUrl() == null || currentRecipe.getVideoUrl().isEmpty()) {
+                DialogUtil.showErrorDialog("Error", "No video found to share for this recipe.");
+                return;
+            }
+            String url = "https://www.facebook.com/sharer/sharer.php?u=" + URLEncoder.encode(currentRecipe.getVideoUrl(), StandardCharsets.UTF_8);
+            openUrl(url);
+        });
+
+        contextMenu.getItems().addAll(gmailItem, facebookItem);
+
+        contextMenu.show((Label) mouseEvent.getSource(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+    }
+
+    private MenuItem getMenuItemGmail() {
+        MenuItem gmailItem = new MenuItem("Share via Gmail");
+        gmailItem.setOnAction(e -> {
+            String subject = URLEncoder.encode("Check out this recipe", StandardCharsets.UTF_8);
+            String body = shareRecipeBody();
+            String url = "https://mail.google.com/mail/?view=cm&fs=1&to=&su=" + subject + "&body=" + body + "&ui=2&tf=1";
+            openUrl(url);
+        });
+        return gmailItem;
+    }
+
+    private String shareRecipeBody() {
+        String stepsFormatted = currentRecipe.getSteps().stream()
+                .map(step -> step.getStepName() + ":\n" + step.getStepDescription())
+                .collect(Collectors.joining("\n\n"));
+
+        return URLEncoder.encode(
+                currentRecipe.getTitle() + " - " + currentRecipe.getDescription() + "\n\n" +
+                        "Steps:\n" + stepsFormatted + "\n\nWatch Video: " + currentRecipe.getVideoUrl(),
+                StandardCharsets.UTF_8
+        );
     }
 }
