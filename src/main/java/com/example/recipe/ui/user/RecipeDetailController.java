@@ -9,7 +9,6 @@ import com.example.recipe.ui.dialogs.ReviewListingDialog;
 import com.example.recipe.utils.*;
 //import com.example.recipe.utils.TextToSpeech;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContextMenu;
@@ -20,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
@@ -34,6 +32,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.recipe.Constants.SPEAKING_TASK_ID;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class RecipeDetailController {
@@ -83,8 +82,9 @@ public class RecipeDetailController {
     public Label lbServings;
     @FXML
     public ImageView profileImage;
-    private ImageView playIcon;
-    private ImageView pauseIcon;
+
+    private HBox recentPlayIcon;
+    private HBox recentPauseIcon;
 
     public static void navigate(Map<String, Long> params) {
         NavigationUtil.insertChild("recipe-details-view.fxml", params);
@@ -93,7 +93,6 @@ public class RecipeDetailController {
     private Long recipeId;
     private final UserRecipeService userRecipeService = new UserRecipeService();
     private Recipe currentRecipe;
-    Task<Void> voicePlayerTask;
 
     @FXML
     private void initialize() {
@@ -216,75 +215,83 @@ public class RecipeDetailController {
         HBox playerControls = new HBox();
         HBox.setHgrow(playerControls, Priority.ALWAYS);
         playerControls.setAlignment(Pos.CENTER_RIGHT);
-        playIcon = getIcon("src/main/resources/assets/ic_play.png");
 
-        pauseIcon = getIcon("src/main/resources/assets/ic_stop.png");
-        ViewUtil.setVisibility(pauseIcon, false);
+        HBox playIcon = getIcon("src/main/resources/assets/ic_play.png");
+        HBox pauseIcon = getIcon("src/main/resources/assets/ic_stop.png");
+        pauseIcon.setVisible(false);
+        pauseIcon.setManaged(false);
 
         playIcon.setOnMouseClicked(mouseEvent -> {
-            ViewUtil.setVisibility(playIcon, false);
-            ViewUtil.setVisibility(pauseIcon, true);
-            //startSpeaking(description);
+            logger.info("Playing audio");
+            startSpeaking(description, playIcon, pauseIcon);
         });
 
         pauseIcon.setOnMouseClicked(mouseEvent -> {
-            ViewUtil.setVisibility(playIcon, true);
-            ViewUtil.setVisibility(pauseIcon, false);
             stopSpeaking();
         });
+
 
         playerControls.getChildren().addAll(playIcon, pauseIcon);
         return playerControls;
     }
 
-    private ImageView getIcon(String iconPath) {
+    private HBox getIcon(String iconPath) {
+        HBox imageContainer = new HBox();
+        imageContainer.setMaxHeight(25);
+        imageContainer.setMaxWidth(25);
         ImageView imageView = new ImageView();
         ImageUtil.loadImageAsync(iconPath, imageView);
         imageView.setFitHeight(20);
         imageView.setFitWidth(20);
         imageView.setPreserveRatio(true);
-        imageView.setCache(true);
-        imageView.setStyle("-fx-cursor: hand; -fx-padding: 5px");
-        return imageView;
+        imageView.setStyle("-fx-cursor: hand; -fx-padding: 5px; -fx-background-color: white");
+        imageContainer.getChildren().add(imageView);
+        return imageContainer;
     }
 
-    private void startSpeaking(String description) {
-        if (voicePlayerTask != null) {
-            voicePlayerTask.cancel();
-        }
-        voicePlayerTask = new Task<>() {
+    private void startSpeaking(String description, HBox playIcon, HBox pauseIcon) {
+        Task<Void> voicePlayerTask = new Task<>() {
             @Override
             protected Void call() {
+                ViewUtil.setVisibility(playIcon, false);
+                ViewUtil.setVisibility(pauseIcon, true);
                 TextToSpeech.speak(description);
                 return null;
             }
         };
 
-        new Thread(voicePlayerTask).start();
+        TaskManager.getInstance().startTask(voicePlayerTask, SPEAKING_TASK_ID);
+
+        voicePlayerTask.setOnFailed(event -> {
+            logger.error("Task failed");
+            if (recentPauseIcon != null && recentPlayIcon != null) {
+                ViewUtil.setVisibility(recentPauseIcon, false);
+                ViewUtil.setVisibility(recentPlayIcon, true);
+            }
+            TextToSpeech.stopSpeaking();
+        });
 
         voicePlayerTask.setOnSucceeded(event -> {
             logger.info("Task completed");
-            if (playIcon == null || pauseIcon == null) {
-                return;
-            }
-            ViewUtil.setVisibility(playIcon, true);
-            ViewUtil.setVisibility(pauseIcon, false);
         });
 
         voicePlayerTask.setOnCancelled(event -> {
             logger.info("Task cancelled");
-            TextToSpeech.stopSpeaking();
-            if (playIcon == null || pauseIcon == null) {
-                return;
+            if (recentPauseIcon != null && recentPlayIcon != null) {
+                ViewUtil.setVisibility(recentPauseIcon, false);
+                ViewUtil.setVisibility(recentPlayIcon, true);
             }
-            ViewUtil.setVisibility(playIcon, true);
-            ViewUtil.setVisibility(pauseIcon, false);
+
+            TextToSpeech.stopSpeaking();
         });
+        recentPlayIcon = playIcon;
+        recentPauseIcon = pauseIcon;
     }
 
     private void stopSpeaking() {
-        if (voicePlayerTask != null) {
-            voicePlayerTask.cancel();
+        var task = TaskManager.getInstance().getTask(SPEAKING_TASK_ID);
+        if (task != null) {
+            task.cancel();
         }
     }
 

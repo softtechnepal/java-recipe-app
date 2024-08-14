@@ -27,9 +27,6 @@ public class TextToSpeech {
 
     public static void speak(String message) {
         try {
-            if (voice != null) {
-                voice.deallocate();
-            }
             voice = voiceManager.getVoice(getVoices().get(0));
             if (voice == null) {
                 System.err.println("Cannot find voice: kevin16");
@@ -59,8 +56,10 @@ public class TextToSpeech {
 
     public static void stopSpeaking() {
         try {
-            if (voice != null)
+            if (voice != null) {
                 voice.deallocate();
+                voice = null;
+            }
         } catch (Exception e) {
             logger.error("Error occurred while stopping speech: {}", e.getMessage());
         }

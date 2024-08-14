@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.example.recipe.Constants.SPEAKING_TASK_ID;
 import static com.example.recipe.utils.LoggerUtil.logger;
 
 public class NavigationUtil {
@@ -26,6 +27,7 @@ public class NavigationUtil {
 
     public static void navigateTo(String fxmlFile) {
         // Ensure the following block runs on the JavaFX Application Thread
+        stopSpeaking();
         Platform.runLater(() -> {
                     try {
                         Stage primaryStage = SingletonObjects.getInstance().getPrimaryStage();
@@ -58,6 +60,9 @@ public class NavigationUtil {
         );
     }
 
+    private static void stopSpeaking() {
+        TaskManager.getInstance().stopTask(SPEAKING_TASK_ID);
+    }
 
     public static void insertChild(String fxmlFile) {
         if (fxmlFile.equals(currentChild)) {
@@ -79,6 +84,7 @@ public class NavigationUtil {
 
     private static void replaceChild(String fxmlFile) {
         try {
+            stopSpeaking();
             currentChild = fxmlFile;
             HBox hBoxContainer = SingletonObjects.getInstance().getMainBox();
             URL profile = NavigationUtil.class.getResource(FXML_PATH + fxmlFile);
